@@ -1,5 +1,5 @@
 
-import {BrowserRouter,Route,Routes } from 'react-router-dom'
+import {BrowserRouter,Route,Routes } from 'react-router'
 import './index.css'
 import Index from './index.tsx'
 
