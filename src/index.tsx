@@ -1,11 +1,20 @@
+
+import { useState } from 'react'
 import GoogleLogo from './assets/icons/googleLogo.png'
 import homeImage from './assets/images/home image.png'
 import videoRecording from './assets/icons/video-recording.png'
 import { useState } from 'react';
 import SessionModal from './components/SessionalModal'
 
+
 const App = () => {
+
+const App = () => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [email, setEmail] = useState('')
+
+
   return (
     <div className='h-screen'>
       <header className=" w-[80%] mx-auto mt-20 flex justify-between items-center">
@@ -33,7 +42,22 @@ const App = () => {
         </div>
         <div className="md:w-[40%] w-full space-y-3">
           <label htmlFor="email" className="sr-only ">Email</label>
+
           <input type="text" name="Email" id="email" className="bg-grey p-3 rounded-2xl w-full indent-3 font-inter-400" placeholder="Enter your email address"/>
+
+          <input 
+            type="text" 
+            name="Email" 
+            id="email" 
+            onChange={(e) => setEmail(e.target.value)} 
+            className="bg-grey p-3 rounded-2xl w-full indent-3 font-inter-400" 
+            placeholder="Enter your email address"
+          />
+          {email && <div >
+            <p className='text-text-grey underline font-inter-400 text-right'>Forget password?</p>
+            <label htmlFor="password" className="sr-only ">Password</label>
+            <input type="text" name="Email" id="password" className=" mt-2 bg-grey p-3 rounded-2xl w-full indent-3 font-inter-400" placeholder="Password"/>
+          </div>}
           <button className="font-inter-400 text-white p-3 bg-medium-green rounded-2xl w-full">Create a session</button>
           <p className="text-text-grey uppercase text-center font-inter-400">or</p>
           <button className='p-3 border border-border-color-grey w-full rounded-2xl flex justify-center items-center space-x-2'>
