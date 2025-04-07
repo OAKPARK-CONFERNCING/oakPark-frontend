@@ -27,7 +27,7 @@ const App = () => {
 
         
           <button onClick={() => setIsModalOpen(true)}
-          className="text-text-primary font-inter-700 border border-black rounded-2xl text-sm px-4 py-2"
+          className="hover:cursor-pointer text-text-primary font-inter-700 border border-black rounded-2xl text-sm px-4 py-2"
             >Join session</button>
       
       </header>
