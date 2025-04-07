@@ -7,7 +7,7 @@ import videoRecording from './assets/icons/video-recording.png'
 import SessionModal from './components/SessionalModal'
 
 
-
+const App = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
