@@ -7,7 +7,6 @@ import videoRecording from './assets/icons/video-recording.png'
 
 const App = () => {
 
-const App = () => {
   const [email, setEmail] = useState('')
 
   return (
