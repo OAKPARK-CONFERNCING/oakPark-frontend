@@ -3,12 +3,17 @@ import { useState } from 'react'
 import GoogleLogo from './assets/icons/googleLogo.png'
 import homeImage from './assets/images/home image.png'
 import videoRecording from './assets/icons/video-recording.png'
+import { useState } from 'react';
+import SessionModal from './components/SessionalModal'
 
 
 const App = () => {
 
 const App = () => {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState('')
+
 
   return (
     <div className='h-screen'>
@@ -21,9 +26,11 @@ const App = () => {
         </p>
         </div>
 
-        <div className="text-text-primary font-inter-700 border border-black rounded-2xl text-sm px-4 py-2">
-          Join session
-        </div>
+        
+          <button onClick={() => setIsModalOpen(true)}
+          className="text-text-primary font-inter-700 border border-black rounded-2xl text-sm px-4 py-2"
+            >Join session</button>
+      
       </header>
 
       <section className="w-[80%] mx-auto mt-20 flex-col md:flex-row flex justify-between space-y-10">
@@ -62,6 +69,9 @@ const App = () => {
       <section className="w-[90%] mx-auto mt-20">
         <img src={homeImage} alt="home image" className='w-full' />
       </section>
+
+      {/* The modal */}
+      <SessionModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   )
 }
