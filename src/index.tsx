@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import GoogleLogo from './assets/icons/googleLogo.png'
 import homeImage from './assets/images/home image.png'
@@ -5,7 +6,10 @@ import videoRecording from './assets/icons/video-recording.png'
 
 
 const App = () => {
+
+const App = () => {
   const [email, setEmail] = useState('')
+
   return (
     <div className='h-screen'>
       <header className=" w-[80%] mx-auto mt-20 flex justify-between items-center">
@@ -31,6 +35,9 @@ const App = () => {
         </div>
         <div className="md:w-[40%] w-full space-y-3">
           <label htmlFor="email" className="sr-only ">Email</label>
+
+          <input type="text" name="Email" id="email" className="bg-grey p-3 rounded-2xl w-full indent-3 font-inter-400" placeholder="Enter your email address"/>
+
           <input 
             type="text" 
             name="Email" 
@@ -41,7 +48,7 @@ const App = () => {
           />
           {email && <div >
             <p className='text-text-grey underline font-inter-400 text-right'>Forget password?</p>
-            <label htmlFor="password" className="sr-only ">Email</label>
+            <label htmlFor="password" className="sr-only ">Password</label>
             <input type="text" name="Email" id="password" className=" mt-2 bg-grey p-3 rounded-2xl w-full indent-3 font-inter-400" placeholder="Password"/>
           </div>}
           <button className="font-inter-400 text-white p-3 bg-medium-green rounded-2xl w-full">Create a session</button>
