@@ -35,10 +35,9 @@ const App = () => {
         <div className="md:w-[40%] w-full space-y-3">
           <label htmlFor="email" className="sr-only ">Email</label>
 
-          <input type="text" name="Email" id="email" className="bg-grey p-3 rounded-2xl w-full indent-3 font-inter-400" placeholder="Enter your email address"/>
 
           <input 
-            type="text" 
+            type="email" 
             name="Email" 
             id="email" 
             onChange={(e) => setEmail(e.target.value)} 
