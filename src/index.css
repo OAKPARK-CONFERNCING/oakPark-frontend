@@ -15,6 +15,11 @@
   src: url('./assets/fonts/Inter_18pt-Black.ttf');
 }
 
+@font-face {
+  font-family: inter-500;
+  src: url('./assets/fonts/Inter_18pt-Medium.ttf');
+}
+
 @theme{
   --color-header-text-primary: #487948;
   --color-medium-green: #4CAF50;
@@ -27,4 +32,6 @@
   --font-inter-400: inter-400;
   --font-inter-700: inter-700;
   --font-inter-900: inter-900;
+  --font-inter-500: inter-500;
+
 }
