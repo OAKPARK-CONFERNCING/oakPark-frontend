@@ -1,27 +1,3 @@
-
-// import {BrowserRouter,Route,Routes } from 'react-router'
-// import './index.css'
-// import Index from './index.tsx'
-// import Dashboard from './pages/Dashboard.tsx'
-// import History from './pages/history.tsx'
-// import Contact from './pages/contact.tsx'
-
-//  const App = () => {
-//    return (
-//     <BrowserRouter>
-//     <Routes> 
-//       <Route index path="/" element={<Index />} />
-//       <Route index path="/dashboard" element={<Dashboard />} />
-//       <Route index path="/history" element={<History />} />
-//       <Route index path="/contacts" element={<Contact />} />
-//     </Routes>
-//   </BrowserRouter>
-//    )
-//  }
- 
-//  export default App
-
-// App.tsx
 import  { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
 import Loader from "./loader/loader";
@@ -69,3 +45,27 @@ const App = () => {
 };
 
 export default App;
+
+// import {BrowserRouter,Route,Routes } from 'react-router'
+// import './index.css'
+// import Index from './index.tsx'
+// import Dashboard from './pages/Dashboard.tsx'
+// import History from './pages/history.tsx'
+// import Contact from './pages/contact.tsx'
+
+//  const App = () => {
+//    return (
+//     <BrowserRouter>
+//     <Routes> 
+//       <Route index path="/" element={<Index />} />
+//       <Route index path="/dashboard" element={<Dashboard />} />
+//       <Route index path="/history" element={<History />} />
+//       <Route index path="/contacts" element={<Contact />} />
+//     </Routes>
+//   </BrowserRouter>
+//    )
+//  }
+ 
+//  export default App
+
+// App.tsx
