@@ -20,12 +20,19 @@
   src: url('./assets/fonts/Inter_18pt-Medium.ttf');
 }
 
+@font-face {
+  font-family: inter-600;
+  src: url('./assets/fonts/Inter_18pt-SemiBold.ttf');
+}
+
 @theme{
   --color-header-text-primary: #487948;
   --color-medium-green: #4CAF50;
   --color-text-primary: #365137;
   --color-bg-secondary: #155617;
+  --color-fade-bg: #FBFBFB;
   --color-light-green: #E9F7E9;
+  --color-inActive-green: #8FA48F;
   --color-grey:#EEEEEE;
   --color-text-grey:#B7B7B7;
   --color-border-color-grey:#D5D5D5;
@@ -33,5 +40,5 @@
   --font-inter-700: inter-700;
   --font-inter-900: inter-900;
   --font-inter-500: inter-500;
-
+  --font-inter-600: inter-600;
 }
