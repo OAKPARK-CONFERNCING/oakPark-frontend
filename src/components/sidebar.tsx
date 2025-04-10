@@ -1,8 +1,7 @@
-import React from "react";
 import videoIcon from "../assets/icons/video-recording.png";
-import { ChevronRight, ChevronDown } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 // import { useState } from 'react';
-import { NavLink, Outlet,useNavigation } from "react-router"; // Make sure to import NavLink
+import { NavLink } from "react-router"; // Make sure to import NavLink
 import dashboard from "../assets/icons/dashboard.png";
 import contacts from "../assets/icons/contacts.png";
 import history from "../assets/icons/history.png";
@@ -80,12 +79,12 @@ function Sidebar() {
             {navigationItems.map((item) => (
               <li
                 key={item.id}
-                className={`${/* optional extra li styling */ ""}`}
+                className={``}
               >
                 <NavLink
                   to={item.url}
                   className={({ isActive }) =>
-                    `flex items-center w-full px-5 py-3 font-inter-700 text-left ${
+                    `flex items-center w-full px-5 py-3 font-inter-700 hover:scale-105 transition-all duration-300 ease-in-out text-left ${
                       isActive
                         ? "text-medium-green bg-medium-green/15 rounded-2xl"
                         : "text-gray-500 hover:text-gray-700"
