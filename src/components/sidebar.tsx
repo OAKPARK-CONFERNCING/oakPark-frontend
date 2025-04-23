@@ -8,6 +8,8 @@ import history from "../assets/icons/history.png";
 import historyColored from "../assets/icons/historyColored.png";
 import dashboardColored from "../assets/icons/dashboardColored.png";
 import contactsColored from "../assets/icons/contactsColored.png";
+import completedSessions from '../assets/icons/competed.png';
+import CompletedSessionsColored from '../assets/icons/competedColored.png'
 // import Video from "../assets/icons/video.png";
 // import Loader from "../loader/loader";
 
@@ -23,14 +25,21 @@ function Sidebar() {
             iconColored: dashboardColored,
         },
         {
-            id: "history",
-            url: "/history",
-            label: "History",
+            id:'CompletedSessions',
+            url:'/history',
+            label:'Completed Sessions',
+            icon:completedSessions,
+            iconColored:CompletedSessionsColored,
+        },
+        {
+            id: "ongoing",
+            url: "/ongoing",
+            label: "Ongoing Sessions",
             icon: history,
             iconColored: historyColored,
         },
         {
-            id: "contacts",
+            id: "Groups",
             url: "/contacts",
             label: "Contacts",
             icon: contacts,
@@ -39,8 +48,8 @@ function Sidebar() {
     ];
 
     return (
-        <div className="flex flex-row">
-            <aside className=" left w-[250px] h-screen border-r border-gray-200 bg-white flex flex-col  shadow-lg">
+        <div className="fixed left-0 top-0 h-screen w-[250px] bg-white  z-20">
+            <aside className="h-screen border-r border-gray-200 bg-white flex flex-col  shadow-lg">
                 <div className=" logo flex flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
                     <div className=" items-center justify-center mr-2">
                         <img

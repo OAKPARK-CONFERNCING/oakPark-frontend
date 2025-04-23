@@ -1,0 +1,145 @@
+{
+    "meetings": [
+      {
+        "meetingTitle": "Quarterly Financial Review",
+        "date": "2023-11-05T13:00:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Michael Chen", "email": "michael.chen@company.com", "messages": 25, "minutes": 55, "role": "Host"},
+          {"name": "Lisa Rodriguez", "email": "l.rodriguez@partner.com", "messages": 12, "minutes": 55, "role": "Guest"},
+          {"name": "Samuel Wilson", "email": "sam.wilson@company.com", "messages": 18, "minutes": 50, "role": "Member"}
+        ]
+      },
+      {
+        "meetingTitle": "Product Design Sprint",
+        "date": "2023-11-07T10:30:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Emily Zhang", "email": "emily.z@design.io", "messages": 42, "minutes": 35, "role": "Host"},
+          {"name": "Raj Patel", "email": "raj.p@uxteam.com", "messages": 28, "minutes": 35, "role": "Participant"},
+          {"name": "Sophie Martin", "email": "sophie@wireframe.co", "messages": 15, "minutes": 25, "role": "Guest"}
+        ]
+      },
+      {
+        "meetingTitle": "Marketing Strategy Q4",
+        "date": "2023-10-20T14:00:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Olivia Thompson", "email": "olivia@marketing.com", "messages": 30, "minutes": 60, "role": "Host"},
+          {"name": "James Carter", "email": "j.carter@agency.com", "messages": 8, "minutes": 60, "role": "Guest"},
+          {"name": "Aisha Khan", "email": "aisha.k@marketing.com", "messages": 20, "minutes": 60, "role": "Member"}
+        ]
+      },
+      {
+        "meetingTitle": "Technical Architecture Review",
+        "date": "2023-11-15T16:45:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Daniel Kim", "email": "daniel.k@eng.io", "messages": 15, "minutes": 25, "role": "Host"},
+          {"name": "Priya Sharma", "email": "priya.s@backend.com", "messages": 22, "minutes": 25, "role": "Member"},
+          {"name": "Chris O'Neil", "email": "chris@cloud.dev", "messages": 18, "minutes": 20, "role": "Guest"}
+        ]
+      },
+      {
+        "meetingTitle": "Customer Success Workshop",
+        "date": "2023-12-01T11:15:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Sarah Johnson", "email": "sarah@success.com", "messages": 40, "minutes": 90, "role": "Host"},
+          {"name": "Mark Lee", "email": "mark@clientcorp.com", "messages": 5, "minutes": 90, "role": "Guest"},
+          {"name": "Nadia Petrova", "email": "nadia@success.com", "messages": 25, "minutes": 90, "role": "Member"}
+        ]
+      },
+      {
+        "meetingTitle": "HR Policy Update",
+        "date": "2024-01-10T09:00:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Emma Davis", "email": "emma.d@hr.com", "messages": 28, "minutes": 45, "role": "Host"},
+          {"name": "Tom Wilson", "email": "tom.w@legal.com", "messages": 12, "minutes": 45, "role": "Guest"},
+          {"name": "Lucas Martin", "email": "lucas@hr.com", "messages": 18, "minutes": 45, "role": "Member"}
+        ]
+      },
+      {
+        "meetingTitle": "AI Integration Brainstorm",
+        "date": "2023-11-20T15:30:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Dr. Alan Turing", "email": "alan@airesearch.org", "messages": 50, "minutes": 120, "role": "Host"},
+          {"name": "Grace Hopper", "email": "grace@navy.mil", "messages": 35, "minutes": 120, "role": "Participant"},
+          {"name": "Yoshua Bengio", "email": "y.bengio@mila.quebec", "messages": 40, "minutes": 110, "role": "Guest"}
+        ]
+      },
+      {
+        "meetingTitle": "Sales Pipeline Review",
+        "date": "2023-11-25T10:00:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Richard Hendricks", "email": "richard@piedpiper.com", "messages": 30, "minutes": 30, "role": "Host"},
+          {"name": "Erlich Bachman", "email": "erlich@aviato.com", "messages": 15, "minutes": 30, "role": "Guest"},
+          {"name": "Dinesh Chugtai", "email": "dinesh@ppdev.com", "messages": 20, "minutes": 30, "role": "Member"}
+        ]
+      },
+      {
+        "meetingTitle": "Security Audit Debrief",
+        "date": "2023-11-30T14:00:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Anna Morales", "email": "anna@security.io", "messages": 22, "minutes": 60, "role": "Host"},
+          {"name": "Brian Lee", "email": "brian@auditcorp.com", "messages": 10, "minutes": 60, "role": "Guest"},
+          {"name": "Jamal Rivers", "email": "jamal@security.io", "messages": 16, "minutes": 55, "role": "Member"}
+        ]
+      },
+      {
+        "meetingTitle": "Team Retrospective",
+        "date": "2023-12-05T09:30:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Leila Mahmoud", "email": "leila@agileteam.com", "messages": 35, "minutes": 45, "role": "Host"},
+          {"name": "Carlos Mendoza", "email": "carlos@devshop.com", "messages": 18, "minutes": 45, "role": "Member"},
+          {"name": "Natalie Brooks", "email": "natalie@retros.io", "messages": 12, "minutes": 40, "role": "Guest"}
+        ]
+      },
+      {
+        "meetingTitle": "Legal Compliance Sync",
+        "date": "2023-12-10T13:00:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Harriet Jones", "email": "harriet@legalteam.com", "messages": 20, "minutes": 75, "role": "Host"},
+          {"name": "David Chen", "email": "david@lawpartner.com", "messages": 10, "minutes": 75, "role": "Guest"},
+          {"name": "Irene Adler", "email": "irene@legalteam.com", "messages": 15, "minutes": 70, "role": "Member"}
+        ]
+      },
+      {
+        "meetingTitle": "DevOps Standup",
+        "date": "2023-12-14T08:45:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Jake Collins", "email": "jake@devops.net", "messages": 25, "minutes": 20, "role": "Host"},
+          {"name": "Mina Park", "email": "mina@infrastructure.dev", "messages": 20, "minutes": 20, "role": "Member"},
+          {"name": "Leo Zhang", "email": "leo@platform.io", "messages": 18, "minutes": 18, "role": "Guest"}
+        ]
+      },
+      {
+        "meetingTitle": "Investor Relations Call",
+        "date": "2023-12-18T16:00:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Chloe Bennett", "email": "chloe@ventures.com", "messages": 32, "minutes": 40, "role": "Host"},
+          {"name": "Victor Hugo", "email": "victor@capitalgroup.com", "messages": 14, "minutes": 40, "role": "Guest"},
+          {"name": "Ethan Wells", "email": "ethan@ventures.com", "messages": 19, "minutes": 35, "role": "Member"}
+        ]
+      },
+      {
+        "meetingTitle": "UX Research Presentation",
+        "date": "2024-01-05T14:30:00Z",
+        "status": "Complete",
+        "participants": [
+          {"name": "Tina Morales", "email": "tina@uxhub.io", "messages": 45, "minutes": 50, "role": "Host"},
+          {"name": "Kevin Stone", "email": "kevin@researchlab.net", "messages": 20, "minutes": 50, "role": "Guest"},
+          {"name": "Maya Allen", "email": "maya@uxhub.io", "messages": 30, "minutes": 48, "role": "Member"}
+        ]
+      }
+    ]
+  }
+  
