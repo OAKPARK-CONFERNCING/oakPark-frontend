@@ -2,6 +2,7 @@ import data from '../data/data.json';
 import Searcbar from '../components/searchbar';
 import FormatDates from '../constants/constants';
 import viewIcon from '../assets/icons/viewIcon.png'
+import { Link } from 'react-router';
 
 function History() {
   return (
@@ -45,10 +46,10 @@ function History() {
               
             </div>
             <div className='flex gap-2'>
-              <button className='flex gap-2 px-10 border-2 border-medium-green font-inter-600 text-medium-green rounded-2xl p-2 cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out'>
+              <Link to={`/history/${item.id}`}  className='flex gap-2 px-10 border-2 border-medium-green font-inter-600 text-medium-green rounded-2xl p-2 cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out'>
                 <img src={viewIcon} className='w-4' />
                 <p>View</p>
-              </button>
+              </Link>
             </div>
             
           </div>

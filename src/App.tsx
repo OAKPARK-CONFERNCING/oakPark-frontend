@@ -54,6 +54,7 @@ import History from './pages/history.tsx'
 import Contact from './pages/contact.tsx'
 import AppLayout from './layout/AppLayout.tsx'
 import Ongoing from './pages/ongoing.tsx'
+import SessionDetails from './id/sessionDetails.tsx'
 
 
  const App = () => {
@@ -66,6 +67,7 @@ import Ongoing from './pages/ongoing.tsx'
         <Route  path="/history" element={<History />} />
         <Route path="/contacts" element={<Contact />} />
         <Route path='/ongoing' element={<Ongoing/>}/>
+        <Route path='/history/:id' element={<SessionDetails/>}/>
       </Route>
     </Routes>
   </BrowserRouter>
