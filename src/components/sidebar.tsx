@@ -94,7 +94,7 @@ function Sidebar() {
                                     to={item.url}
                                     className={({ isActive }) =>
                                         `flex items-center w-full px-5 py-3 font-inter-700 hover:scale-105 transition-all duration-300 ease-in-out text-left ${isActive
-                                            ? "text-medium-green bg-medium-green/15 rounded-2xl"
+                                            ? "text-medium-green bg-tab-button-bg rounded-2xl"
                                             : "text-gray-500 hover:text-gray-700"
                                         }`
                                     }

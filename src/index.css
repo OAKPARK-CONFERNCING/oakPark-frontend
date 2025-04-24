@@ -36,6 +36,7 @@
   --color-btn-primary:#d6fed7;
   --color-fade-bg: #FBFBFB;
   --color-light-green: #E9F7E9;
+  --color-tab-button-bg: #F3FFF3;
   --color-inActive-green: #8FA48F;
   --color-grey:#EEEEEE;
   --color-text-grey:#B7B7B7;
@@ -48,7 +49,7 @@
   --breakpoint-1xl: 1300px
 }
 
-@theme inline {
+@theme  {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -155,11 +156,27 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
+@layer utilities{
+  .tabs{
+    @apply cursor-pointer hover:scale-105 transition-all duration-200 ease-linear font-inter-600  data-[state=active]:bg-tab-button-bg data-[state=active]:border-0 py-2 px-4 rounded-3xl text-inActive-green hover:text-gray-700 data-[state=active]:outline-0 data-[state=active]:!shadow-none  flex-0 flex data-[state=active]:text-medium-green
   }
-  body {
-    @apply bg-background text-foreground;
-  }
+}
+
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  --_g: no-repeat radial-gradient(circle closest-side,#4CAF50 90%,#0000);
+  background: 
+    var(--_g) 0    0,
+    var(--_g) 0    100%,
+    var(--_g) 100% 100%;
+  background-size: 40% 40%;
+  animation:l11 1s infinite linear;
+}
+@keyframes l11 {
+    25% {background-position:100% 0   ,0 100%,100% 100%}
+    50% {background-position:100% 0   ,0 0   ,100% 100%}
+    75% {background-position:100% 0   ,0 0   ,0    100%}
+    100%{background-position:100% 100%,0 0   ,0    100%}
 }
