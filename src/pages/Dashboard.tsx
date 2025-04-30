@@ -4,7 +4,6 @@ import cardData from '../data/data.json';
 import { useState } from "react";
 
 const Dashboard = () => {
-  // Fix #1: Access the correct property from the imported JSON
   const [cards] = useState(cardData.cardData || []);
 
   return (
@@ -41,13 +40,13 @@ const Dashboard = () => {
       {/* ongoing */}
       <div className="mt-8">
         <h1 className="font-semibold font-inter-400 text-[#8FA48F] mb-4">Ongoing Sessions</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Fix #2: Map through cards array to render SessionCard components */}
+        <div className="flex flex-row items-center justify-evenly">
+       
           {cards.map(card => (
             <SessionCard
               key={card.id}
               title={card.title}
-              imageUrl={card.topimg} // Fix #3: Match property names
+              imageUrl={card.topimg} 
               category={card.category}
               progress={card.progress}
               timeRemaining={card.timeRemaining}
