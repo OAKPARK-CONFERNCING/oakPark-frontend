@@ -1,4 +1,60 @@
 {
+   "cardData":[
+  {
+    "id": 1,
+    "title": "INTRODUCTION TO Artificial Intelligence and Machine Learning",
+    "topimg": "/card1.png",
+    "category": "AI INTRODUCTION",
+    "timeRemaining": "30mins to go",
+    "progress": 66, 
+    "instructor": {
+      "name": "Emmanuel A.",
+      "email": "adelakunmanuel@gmail.com",
+      "avatar": "/avatar.png"
+    }
+  },
+  {
+    "id": 2,
+    "title": "INTRODUCTION TO Artificial Intelligence and Machine Learning",
+    "topimg": "/card2.png",
+    "category": "BIO-MEDICINE",
+    "timeRemaining": "10mins to go",
+    "progress": 66, 
+    "instructor": {
+      "name": "Emmanuel A.",
+      "email": "adelakunmanuel@gmail.com",
+      "avatar": "/avatar.png"
+    }
+  },
+  {
+    "id": 3,
+    "title": "INTRODUCTION TO Artificial Intelligence and Machine Learning",
+    "topimg": "/card3.png",
+    "category": "BIO-MEDICINE",
+    "timeRemaining": "5mins to go",
+    "progress": 66, 
+    "instructor": {
+      "name": "Emmanuel A.",
+      "email": "adelakunmanuel@gmail.com",
+      "avatar": "/avatar.png"
+    }
+  },
+  {
+    "id": 4,
+    "title": "INTRODUCTION TO Artificial Intelligence and Machine Learning",
+    "topimg": "/card2.png",
+    "category": "BIO-MEDICINE",
+    "timeRemaining": "30mins to go",
+    "progress": 66, 
+    "instructor": {
+      "name": "Emmanuel A.",
+      "email": "adelakunmanuel@gmail.com",
+      "avatar": "/avatar.png"
+    }
+  }
+],
+
+
   "meetings": [
     {
       "id": 1,
