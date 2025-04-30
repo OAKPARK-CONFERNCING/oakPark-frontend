@@ -17,6 +17,17 @@ function AppLayout() {
         return () => clearTimeout(timer);
     }, [location.pathname]);
 
+    const dynamicHeaderText = 
+        {
+            "/dashboard":"Welcome to your Dashboard",
+             "/history": "Sessions History",
+              "/ongoing": "Session History",
+               "/contacts": "Contacts "
+        }
+    
+
+    console.log(location.pathname);
+    
     return (
         <div className="flex flex-row flex-1 ">
             <Sidebar />
@@ -24,7 +35,8 @@ function AppLayout() {
                 <header className="fixed top-0 left-[250px] right-0 h-[70px] bg-white border-b border-gray-200  z-10">
                     <div className="flex flex-row items-center justify-between   mx-auto p-4 ">
                         <h1 className="font-inter-600 text-inActive-green">
-                            Session history{" "}
+                            {dynamicHeaderText[location.pathname as keyof typeof dynamicHeaderText] || "Default Header"}
+                        
                         </h1>
 
                         <button className="z-10 w-auto bg-medium-green hover:bg-medium-green/20 rounded-2xl flex items-center px-4 h-10">
