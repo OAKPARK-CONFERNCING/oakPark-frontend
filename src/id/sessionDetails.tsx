@@ -87,9 +87,8 @@ function sessionDetails() {
                                         </button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end">
-                                        <DropdownMenuItem>View Profile</DropdownMenuItem>
-                                        <DropdownMenuItem>Edit User</DropdownMenuItem>
-                                        <DropdownMenuItem className="text-red-600">Remove User</DropdownMenuItem>
+                                        <DropdownMenuItem>Delete Session</DropdownMenuItem>
+
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </div>

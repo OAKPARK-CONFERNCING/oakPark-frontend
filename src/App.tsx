@@ -55,6 +55,7 @@ import Contact from './pages/contact.tsx'
 import AppLayout from './layout/AppLayout.tsx'
 import Ongoing from './pages/ongoing.tsx'
 import SessionDetails from './id/sessionDetails.tsx'
+import VideoConference from './video/video-conference.tsx'
 
 
  const App = () => {
@@ -69,6 +70,7 @@ import SessionDetails from './id/sessionDetails.tsx'
         <Route path='/ongoing' element={<Ongoing/>}/>
         <Route path='/history/:id' element={<SessionDetails/>}/>
       </Route>
+      <Route path='/video' element={<VideoConference/>}/>
     </Routes>
   </BrowserRouter>
    )

@@ -70,8 +70,7 @@ function Participants({ users }: { users: { id: number, name: string, email: str
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
                                                 <DropdownMenuItem>View Profile</DropdownMenuItem>
-                                                <DropdownMenuItem>Edit User</DropdownMenuItem>
-                                                <DropdownMenuItem className="text-red-600">Remove User</DropdownMenuItem>
+
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                     </td>

@@ -35,11 +35,11 @@ interface MeetingListProps {
 
 function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction,status }: MeetingListProps) {
   return (
-    <section className='p-7'>
+    <>
       <div className='space-y-5'>
         {data.meetings.map((item: Meeting, index: number) => (
           item.status === statusFilter && (
-            <div key={index} className='flex w- items-center justify-around bg-white rounded-2xl p-5 border border-[#f4f4f4]'>
+            <div key={index} className='flex  items-center justify-around bg-white rounded-2xl p-5 border border-[#f4f4f4]'>
               <div className='flex gap-5 items-center justify-center'>
                 <div className='w-44 '>
                   <img src='https://picsum.photos/300/200' className='w-full rounded-2xl' alt="meeting thumbnail" />
@@ -63,14 +63,14 @@ function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction,
                     {item.participants.length}
                   </p>
                 </div>
-                <div>
+                {!item.status ==='Completed '&& <div>
                   <h2 className='text-sm font-inter-500 text-inActive-green uppercase'>
                     Date
                   </h2>
-                  <p className='text-base font-inter-500 text-text-primary'>
+                   <p className='text-base font-inter-500 text-text-primary'>
                     {FormatDates(item.date)}
                   </p>
-                </div>
+                </div>}
                 <p className='text-sm font-inter-500 text-inActive-green uppercase'>{status} </p>
               </div>
               <div className='flex gap-2'>
@@ -90,7 +90,7 @@ function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction,
           )
         ))}
       </div>
-    </section>
+    </>
   )
 }
 

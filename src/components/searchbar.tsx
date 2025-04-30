@@ -2,7 +2,7 @@ import { Search } from 'lucide-react'
 // import {useState} from 'react'
 // import ongoing from '../pages/ongoing'
 
-function searchbar({completedcount,ongoingcount}: { completedcount?: number , ongoingcount?:number }) {
+function searchbar({completedcount,ongoingcount}: { completedcount?: number , ongoingcount:number }) {
   // const [completedcount, setCompletedCount] = useState<number>(0)
 
   return (

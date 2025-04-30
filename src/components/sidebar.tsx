@@ -48,7 +48,7 @@ function Sidebar() {
     ];
 
     return (
-        <div className="fixed left-0 top-0 h-screen w-[250px] bg-white  z-20">
+        <div className="fixed left-0 top-0 h-screen w-[250px]  bg-white  z-20">
             <aside className="h-screen border-r border-gray-200 bg-white flex flex-col  shadow-lg">
                 <div className=" logo flex flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
                     <div className=" items-center justify-center mr-2">

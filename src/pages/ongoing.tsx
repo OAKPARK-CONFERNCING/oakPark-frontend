@@ -28,10 +28,13 @@ interface Data {
 
 function Ongoing() {
   const meetingsData = data as Data;
+
+  const completedCount = meetingsData.meetings.filter(meeting => meeting.status === 'Complete').length;
+  const ongoingCount = meetingsData.meetings.filter(meeting => meeting.status === "In Progress").length;
   
   return (
     <section className='p-7'>
-      <Searcbar completedcount={meetingsData.meetings.filter(meeting => meeting.status === 'In Progress').length} />
+      <Searcbar completedcount={completedCount}  ongoingcount={ ongoingCount} />
       <MeetingList 
         data={meetingsData}
         statusFilter="In Progress"
