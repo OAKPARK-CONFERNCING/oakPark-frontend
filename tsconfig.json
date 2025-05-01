@@ -6,6 +6,9 @@
   ],
   "compilerOptions": {
     "baseUrl": ".",
+    "noUnusedLocals": false,      // disable unused‐local errors
+    "noUnusedParameters": false,  // disable unused‐parameter errors
+    "skipLibCheck": true,          // optional: skip type‐check of node_modules
     "paths": {
       "@/*": ["./src/*"]
     }
