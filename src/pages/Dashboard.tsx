@@ -1,78 +1,62 @@
-import videoIcon from '../assets/icons/video-recording.png';
-import { Home, Clock, Users,ChevronRight  } from 'lucide-react';
-import { useState } from 'react';
-import React from 'react';
-
+import SessionCard from "@/components/SessionCard";
+import { SearchIcon } from "lucide-react";
+import cardData from '../data/data.json';
+import { useState } from "react";
 
 const Dashboard = () => {
-
-    const [activeLink, setActiveLink] = useState('history');
-  
-    const navigationItems = [
-      { id: 'dashboard', label: 'Dashboard', icon: <Home size={20} /> },
-      { id: 'history', label: 'History', icon: <Clock size={20} /> },
-      { id: 'contacts', label: 'Contacts', icon: <Users size={20} /> }
-    ];
+  const [cards] = useState(cardData.cardData || []);
 
   return (
-    <div className="flex flex-row">
-        <div className="left w-[250px]">
-            <div className="logo flex flex-row h-[70px] w-[249px] items-center border border-[#eeeeee]">
-                <div className='pl-8 items-center justify-center mr-2 '>
-                <img src={videoIcon} alt="Video recording icon" width={20} height={20} className='pt-[25px]' />
-                </div>
-                <span className="text-lg font-bold uppercase text-green-500 items-center">Stellar</span>
-            </div>
-
-        
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 rounded-2xl mt-6">
-          <div className="flex items-center">
-            <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-3">
-              <img 
-                src="/api/placeholder/40/40" 
-                alt="User avatar" 
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div>
-              <div className="text-gray-800 font-medium">Emmanuel A.</div>
-              <div className="text-xs text-gray-500">adelakunmanuel@gmail.com</div>
-            </div>
-          </div>
-          <ChevronRight size={16} className="text-gray-400" />
+    <div className="overflow-x-hidden">
+      {/* search and input */}
+      <div className="flex flex-row mt-4 border border-gray-200 rounded-full p-4 w-full gap-3">
+        <SearchIcon />
+        <input
+          type="text"
+          placeholder="Enter a Session title"
+          className="w-full"
+        />
+      </div>
+      
+      {/**banner */}
+      <div className="h-[287px] w-full bg-gradient-to-r from-blue-600 to-green-500 rounded-lg overflow-hidden shadow-lg flex flex-row m-2">
+        <div className="left w-3/4">
+          <h1 className="text-2xl text-white font-bold mb-3 pl-[60px] text-[40px] mt-[25px]">
+            Fast, reliable and secure conferencing
+          </h1>
+          <p className="text-base text-white opacity-90 w-[547px] h-[75px] pl-[60px] mt-[25px]">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </p>
         </div>
 
-        <nav className="mt-4 flex-1">
-        <ul>
-          {navigationItems.map((item) => (
-            <li key={item.id}>
-              <button
-                onClick={() => setActiveLink(item.id)}
-                className={`flex items-center w-full px-5 py-3 text-left ${
-                  activeLink === item.id 
-                    ? 'text-green-500 font-medium' 
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                <span className="mr-3">
-                  {React.cloneElement(item.icon, { 
-                    className: activeLink === item.id ? 'text-green-500' : 'text-gray-400' 
-                  })}
-                </span>
-                {item.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
+        <div className="right w-1/4">
+          <img src="/monitor.png" className="object-cover" alt="" />
+        </div>
       </div>
-
       
-        
-        <div className="right">right</div>
+      {/* ongoing */}
+      <div className="mt-8">
+        <h1 className="font-semibold font-inter-400 text-[#8FA48F] mb-4">Ongoing Sessions</h1>
+        <div className="flex flex-row items-center justify-evenly">
+       
+          {cards.map(card => (
+            <SessionCard
+              key={card.id}
+              title={card.title}
+              imageUrl={card.topimg} 
+              category={card.category}
+              progress={card.progress}
+              timeRemaining={card.timeRemaining}
+              instructor={card.instructor}
+            />
+          ))}
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

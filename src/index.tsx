@@ -15,7 +15,7 @@ const App = () => {
 
 
   return (
-    <div className='h-screen'>
+    <div className='h-screen max-w-[2000px] mx-auto'>
       <header className=" w-[80%] mx-auto mt-20 flex justify-between items-center">
         <div className='flex items-center space-x-1'>
         <img src={videoRecording} alt="video recorder icon" />
