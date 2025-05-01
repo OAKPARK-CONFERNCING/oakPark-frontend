@@ -49,11 +49,11 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
 
   const containerStyles = {
     width: width ? `${width}%` : isMain ? "100%" : "100%",
-    height: height ? `${height}px` : isMain ? "100%" : "100%",
+    height: height ? `${height}%` : isMain ? "100%" : "100%",
   }
 
   return (
-    <div className={cn("relative overflow-hidden bg-gray-800 rounded-2xl", isMain ? "w-full h-full" : "w-full h-[70vh]")} style={containerStyles}>
+    <div className={cn("relative overflow-hidden bg-gray-800 rounded-2xl", isMain ? "w-full h-full" : "w-full h-full")} style={containerStyles}>
       {participant.videoOn ? (
         <>
           {isLoading && (
@@ -63,7 +63,7 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
           )}
           <video
             ref={videoRef}
-            className={cn("w-full h-[90vh] object-cover", isLoading ? "opacity-0" : "opacity-100")}
+            className={cn("w-full h-full object-cover", isLoading ? "opacity-0" : "opacity-100")}
             autoPlay
             playsInline
             muted
@@ -74,7 +74,7 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
           </video>
         </>
       ) : (
-        <div className="w-full h-[90vh] flex items-center justify-center bg-gray-700">
+        <div className="w-full h-full flex items-center justify-center bg-gray-700">
           <div
             className={cn(
               "flex items-center object-cover justify-center rounded-full bg-green-600 text-white",

@@ -1,4 +1,5 @@
 
+
 import { MessageSquare } from "lucide-react"
 
 // Mock conversations
@@ -21,19 +22,22 @@ const conversations = [
 
 export default function ConversationsPanel() {
   return (
-    <div className="p-4">
-      <div className="space-y-4">
+    <div className="p-4 w-full">
+      <div className="space-y-4 w-full">
         {conversations.map((conversation) => (
-          <div key={conversation.id} className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-            <div className="flex items-start gap-3">
-              <div className="bg-green-100 p-2 rounded-full">
+          <div
+            key={conversation.id}
+            className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer w-full"
+          >
+            <div className="flex items-start gap-3 w-full">
+              <div className="bg-green-100 p-2 rounded-full flex-shrink-0">
                 <MessageSquare className="h-5 w-5 text-green-600" />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-medium">{conversation.title}</h3>
+                  <h3 className="font-medium truncate">{conversation.title}</h3>
                   {conversation.unread > 0 && (
-                    <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                    <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full flex-shrink-0">
                       {conversation.unread}
                     </span>
                   )}

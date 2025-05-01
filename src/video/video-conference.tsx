@@ -6,9 +6,16 @@ import {
   VideoOff,
   Share2,
   Users,
-  
+
 
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
 import { AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import ParticipantVideo from "@/components/participant-video";
@@ -25,6 +32,7 @@ import micOn from '@/assets/icons/micOn.png'
 import micOff from '@/assets/icons/mic-off.png'
 import closeCall from '@/assets/icons/call-end.png'
 import shareScreen from '@/assets/icons/share-screen.png'
+import { ToastProvider } from "@radix-ui/react-toast";
 
 
 // Types for participants
@@ -239,6 +247,12 @@ export default function VideoConference() {
     }
   }, [isMobile, isTablet]);
 
+  const titleShort = (title: string) => {
+    if (title.length > 50) {
+      return title.substring(0, 50) + '...'
+    }
+  }
+
   // Format meeting time as HH:MM:SS
   const formatTime = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);
@@ -293,25 +307,31 @@ export default function VideoConference() {
     participants.length - thumbnailParticipants.length - 1; // -1 for active participant
 
   return (
-    <div className="  bg-[#F7FFF8] flex flex-1 px-10">
-      <div className="flex flex-col min-h-screen w-[95%] mx-auto ">
+    <div className="  bg-[#F7FFF8] flex flex-1 px-5 mx-auto">
+      <div className="flex flex-col min-h-screen w-[100%] mx-auto ">
         {/* Header */}
         <header className="border border-light-green rounded-2xl my-5  bg-white px-4 py-2  flex justify-between items-center">
-        <div className='flex items-center space-x-1'>
-          <img src={videoRecording} alt="video recorder icon" />
-          <p className="font-inter-700 text-medium-green ">
-            
-            OakPark
-          </p>
+          <div className='flex items-center space-x-1'>
+            <img src={videoRecording} alt="video recorder icon" />
+            <p className="font-inter-700 text-medium-green ">
+
+              OakPark
+            </p>
           </div>
           <h1 className="hidden md:inline text-header-text-primary font-inter-700">
-              Workshop: An introduction to Artificial Intelligence and Machine
-              Learning
-            </h1>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  {titleShort('Workshop: An introduction to Artificial Intelligence and Machine Learning')}</TooltipTrigger>
+                <TooltipContent >Workshop: An introduction to Artificial Intelligence and Machine Learning</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </h1>
           <div className="flex items-center gap-4">
             <div className="bg-red-500 justify-center items-center flex rounded-xl  cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12">
               {/* <Video className="h-5 w-5" /> */}
-              <img src={videoRec} alt="video recorder icon"  className="w-7"/>
+              <img src={videoRec} alt="video recorder icon" className="w-7" />
             </div>
             <div className="inline-flex items-center gap-2 bg-btn-primary  text-sm font-inter-700 text-gray-700 rounded-xl px-5 py-3">
               <img src={clock} alt="clock icon" className="w-5 h-5" />
@@ -319,7 +339,7 @@ export default function VideoConference() {
             </div>
           </div>
         </header>
-  
+
         {/* Main content */}
         <div className="flex flex-1 ">
           {/* Video grid */}
@@ -331,10 +351,10 @@ export default function VideoConference() {
               </div>
               <ParticipantVideo participant={activeParticipant} isMain={true} />
             </div>
-  
+
             {/* Thumbnails at the bottom - NOT overlaid on main video */}
-            <div className=" p-2">
-              <div className="grid grid-cols-7 gap-2">
+            <div className=" pt-5">
+              <div className="grid grid-cols-7 gap-5 ">
                 {thumbnailParticipants.map((participant) => (
                   <div
                     key={participant.id}
@@ -350,18 +370,18 @@ export default function VideoConference() {
                       participant={participant}
                       isMain={false}
                       width={100}
-                      height={130}
+                      height={100}
                     />
                     <div className="absolute top-5  left-5 px-3 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
                       {participant.name}
                     </div>
                   </div>
                 ))}
-  
+
                 {/* "+X participants" indicator */}
                 {remainingParticipantsCount > 0 && (
                   <div
-                    className="relative cursor-pointer bg-green-100 flex items-center justify-center text-green-800 font-medium"
+                    className="rounded-2xl relative cursor-pointer bg-green-100 flex items-center justify-center text-green-800 font-medium"
                     style={{ width: "100%", height: "100%" }}
                     onClick={() => setIsSidebarOpen(true)}
                   >
@@ -375,90 +395,139 @@ export default function VideoConference() {
                 )}
               </div>
             </div>
-  
+
             {/* Controls */}
             <div className=" p-4 flex justify-center items-center gap-4">
-              <Button
-                variant="outline"
-                size="icon"
-                className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 ${isMicOn  ?'bg-medium-green ': 'bg-btn-primary'}`}
-                onClick={() => setIsMicOn(!isMicOn)}
-              >
-                {isMicOn ? (
-                  // <Mic className=" text-white " size={100} fontSize={100} />
-                  <img src={micOn} alt="mic on icon"  className="w-5"/>
-                ) : (
-                  // <MicOff className="h-5 w-5 text-medium-green" />
-                  <img src={micOff} alt="mic off icon" className="w-5" />
-                )}
-              </Button>
-  
-              <Button
-                variant="outline"
-                size="icon"
-                className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 ${isVideoOn  ?'bg-medium-green ': 'bg-btn-primary'}`}
-                onClick={() => setIsVideoOn(!isVideoOn)}
-              >
-                {isVideoOn ? (
-                  // <Video className="h-5 w-10 text-white" />
-                  <img src={videoOn} alt="video on icon" className="w-5"/>
-                ) : (
-                  // <VideoOff className="h-5 w-5 text-medium-green" />
-                  <img src={videoOff} alt="video off icon" className="w-5"/>
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 ${isShareScreen  ?'bg-medium-green ': 'bg-btn-primary'}`}
-                onClick={() => setIsShareScreen(!isShareScreen)}
-              >
-                {isShareScreen ? (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 ${isMicOn ? 'bg-medium-green ' : 'bg-btn-primary'}`}
+                      onClick={() => setIsMicOn(!isMicOn)}
+                    >
+                      {isMicOn ? (
+                        // <Mic className=" text-white " size={100} fontSize={100} />
+                        <img src={micOn} alt="mic on icon" className="w-5" />
+                      ) : (
+                        // <MicOff className="h-5 w-5 text-medium-green" />
+                        <img src={micOff} alt="mic off icon" className="w-5" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent >Microphone</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
-                  <img src={shareScreenOn} alt="video on icon" className="w-5"/>
-                ) : (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 ${isVideoOn ? 'bg-medium-green ' : 'bg-btn-primary'}`}
+                      onClick={() => setIsVideoOn(!isVideoOn)}
+                    >
+                      {isVideoOn ? (
+                        // <Video className="h-5 w-10 text-white" />
+                        <img src={videoOn} alt="video on icon" className="w-5" />
+                      ) : (
+                        // <VideoOff className="h-5 w-5 text-medium-green" />
+                        <img src={videoOff} alt="video off icon" className="w-5" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent >Video</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
-                  <img src={shareScreen} alt="video off icon" className="w-5"/>
-                )}
-              </Button>
-  
-              <Button variant="outline" size="icon" className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 `}>
-                <Share2 className="h-5 w-5 hover:text-medium-green text-white" />
-              </Button>
 
-  
-              <Button
-                variant="outline"
-                size="icon"
-                className={cn(
-                  "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16",
-                  isSidebarOpen ? "bg-medium-green" : "bg-btn-primary"
-                )}
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              >
-                <Users className={`h-5 w-5 ${isSidebarOpen ? 'text-white' : 'text-medium-green'}`} />
-              </Button>
-  
-              <Button variant="destructive" size="icon" className="rounded-3xl  cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16">
-                {/* <PhoneOff className="h-5 w-5" /> */}
-                <img src={closeCall} className="w-5" alt="call end icon" />
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 ${isShareScreen ? 'bg-medium-green ' : 'bg-btn-primary'}`}
+                      onClick={() => setIsShareScreen(!isShareScreen)}
+                    >
+                      {isShareScreen ? (
+
+                        <img src={shareScreenOn} alt="share screen icon" className="w-5" />
+                      ) : (
+
+                        <img src={shareScreen} alt="share screen icon" className="w-5" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Share Your Screen</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+
+              <TooltipProvider>
+                <Tooltip>
+
+                  <TooltipTrigger>
+                    <Button variant="outline" size="icon" className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 `}>
+                      <Share2 className="h-5 w-5 hover:text-medium-green text-white" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent >Share</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+
+
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={cn(
+                        "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16",
+                        isSidebarOpen ? "bg-medium-green" : "bg-btn-primary"
+                      )}
+                      onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                      <Users className={`h-5 w-5 ${isSidebarOpen ? 'text-white' : 'text-medium-green'}`} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent> Open side bar</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button variant="destructive" size="icon" className="rounded-3xl  cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16">
+                      {/* <PhoneOff className="h-5 w-5" /> */}
+                      <img src={closeCall} className="w-5" alt="call end icon" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent >End call</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
-  
-          
+
+
         </div>
       </div>
       {/* Sidebar with tabs */}
       <AnimatePresence>
-                      {isSidebarOpen && (
-                        <SidebarPanel
-                          participants={participants}
-                          onClose={() => setIsSidebarOpen(isSidebarOpen)}
-                          isMobile={isMobile}
-                        />
-                      )}
-          </AnimatePresence>
+        {isSidebarOpen && (
+          <SidebarPanel
+            participants={participants}
+            onClose={() => setIsSidebarOpen(isSidebarOpen)}
+            isMobile={isMobile}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
