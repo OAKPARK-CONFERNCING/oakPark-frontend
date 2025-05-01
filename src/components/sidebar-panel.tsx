@@ -65,8 +65,8 @@ export default function SidebarPanel({ participants, onClose, isMobile }: Sideba
     exit={{ width: 0, opacity: 0,x:"100%" }}
     transition={{ duration: 0.3, ease: "easeInOut",type: "spring", stiffness: 300, damping: 30 }}
       className={cn(
-        "bg-[#F7FFF8] border-gray-200 flex mt-5 ml-5 flex-col h-full",
-        isMobile ? "fixed top-0 right-0 bottom-0 z-50 w-3/4" : "",
+        "bg-[#F7FFF8] border-gray-200 overflow-y-auto flex mt-5 ml-5 flex-col h-full",
+        isMobile ? "fixed top-0 right-0 bottom-0 z-50 w-3/4 mt-0" : "",
       )}
       style={{
         width: sidebarWidth,
@@ -84,7 +84,7 @@ export default function SidebarPanel({ participants, onClose, isMobile }: Sideba
       )}
 
       {/* Tabs */}
-      <div className="flex-1 overflow-hidden flex flex-col">
+      <div className="flex-1  flex flex-col">
         {tabs.map((tab) => (
           <div key={tab.id} className="space-y-5 border mb-5 border-light-green cursor-pointer rounded-2xl">
             {/* Tab header */}
@@ -106,7 +106,7 @@ export default function SidebarPanel({ participants, onClose, isMobile }: Sideba
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="overflow-hidden "
+                  className="overflow-y-auto "
                 >
                   <div className="  max-h-[calc(100vh-200px)] overflow-y-auto">{tab.component}</div>
                 </motion.div>

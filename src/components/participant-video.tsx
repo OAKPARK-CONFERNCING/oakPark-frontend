@@ -1,4 +1,4 @@
-
+"use client"
 
 import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
@@ -47,13 +47,22 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
       .substring(0, 2)
   }
 
+  // Preserve percentage-based sizing from original code
   const containerStyles = {
     width: width ? `${width}%` : isMain ? "100%" : "100%",
     height: height ? `${height}%` : isMain ? "100%" : "100%",
+    aspectRatio: isMain ? undefined : undefined, // Remove aspect ratio constraint for main video
+    maxHeight: isMain ? "90vh" : undefined, // Allow main video to take up to 90% of viewport height
   }
 
   return (
-    <div className={cn("relative overflow-hidden bg-gray-800 rounded-2xl", isMain ? "w-full h-full" : "w-full h-full")} style={containerStyles}>
+    <div
+      className={cn(
+        "relative overflow-hidden bg-gray-800 rounded-2xl",
+        isMain ? "w-full h-full max-h-full" : "w-full h-full",
+      )}
+      style={containerStyles}
+    >
       {participant.videoOn ? (
         <>
           {isLoading && (
@@ -63,7 +72,7 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
           )}
           <video
             ref={videoRef}
-            className={cn("w-full h-full object-cover", isLoading ? "opacity-0" : "opacity-100")}
+            className={cn("w-full h-full object-cover max-h-full", isLoading ? "opacity-0" : "opacity-100")}
             autoPlay
             playsInline
             muted
