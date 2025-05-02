@@ -56,9 +56,9 @@ export default function SidebarPanel({ participants, onClose, isMobile }: Sideba
 
   return (
     <motion.aside
-    initial={{ width: 0, opacity: 0,x:"100%" }}
-    animate={{ width: "auto", opacity: 1,x:"0%" }}
-    exit={{ width: 0, opacity: 0,x:"100%" }}
+    initial={{ width: 0, opacity: 0, }}
+    animate={{ width: "auto", opacity: 1, }}
+    exit={{ width: 0, opacity: 0, }}
     transition={{ duration: 0.3, ease: "easeInOut",type: "spring", stiffness: 300, damping: 30 }}
       className={cn(
         "bg-white border-l border-gray-200 flex ml-5 flex-col h-full",
