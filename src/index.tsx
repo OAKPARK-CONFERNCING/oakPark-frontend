@@ -5,6 +5,7 @@ import homeImage from './assets/images/home image.png'
 import videoRecording from './assets/icons/video-recording.png'
 
 import SessionModal from './components/SessionalModal'
+import { Link } from 'react-router'
 
 
 const App = () => {
@@ -17,13 +18,13 @@ const App = () => {
   return (
     <div className='h-screen max-w-[2000px] mx-auto'>
       <header className=" w-[80%] mx-auto mt-20 flex justify-between items-center">
-        <div className='flex items-center space-x-1'>
+        <Link to="/" className='cursor-pointer flex items-center space-x-1'>
         <img src={videoRecording} alt="video recorder icon" />
         <p className="font-inter-700 text-medium-green ">
           
           OakPark
         </p>
-        </div>
+        </Link>
 
         
           <button onClick={() => setIsModalOpen(true)}
@@ -56,7 +57,7 @@ const App = () => {
             <label htmlFor="password" className="sr-only ">Password</label>
             <input type="text" name="Email" id="password" className=" mt-2 bg-grey p-3 rounded-2xl w-full indent-3 font-inter-400" placeholder="Password"/>
           </div>}
-          <button className="font-inter-400 text-white p-3 bg-medium-green rounded-2xl w-full">Create a session</button>
+          <Link to ="/dashboard"><button className="cursor-pointer font-inter-400 text-white p-3 bg-medium-green rounded-2xl w-full">Create an account </button></Link>
           <p className="text-text-grey uppercase text-center font-inter-400">or</p>
           <button className='p-3 border border-border-color-grey w-full rounded-2xl flex justify-center items-center space-x-2'>
             <img src={GoogleLogo} className='size-8' alt="google logo" />

@@ -20,6 +20,7 @@ import micOn from "@/assets/icons/micOn.png"
 import micOff from "@/assets/icons/mic-off.png"
 import closeCall from "@/assets/icons/call-end.png"
 import shareScreen from "@/assets/icons/share-screen.png"
+import { Link } from "react-router"
 
 // Types for participants
 type Role = "host" | "co-host" | "member" | "participant" | "guest"
@@ -325,14 +326,14 @@ export default function VideoConference() {
       <div className="flex flex-col w-full mx-auto max-w-[1920px] overflow-hidden">
         {/* Header */}
         <header className="border border-light-green rounded-2xl my-1 bg-white px-2 sm:px-4 py-1 flex justify-between items-center flex-shrink-0">
-          <div className="flex items-center space-x-1">
+          <Link to="/" className="flex items-center cursor-pointer space-x-1">
             <img
               src={videoRecording || "/placeholder.svg"}
               alt="video recorder icon"
               className="w-5 h-5 sm:w-auto sm:h-auto"
             />
             <p className="font-inter-700 text-medium-green text-sm sm:text-base">OakPark</p>
-          </div>
+          </Link>
           <h1 className="hidden md:inline text-header-text-primary font-inter-700 truncate max-w-[500px]">
             <TooltipProvider>
               <Tooltip>

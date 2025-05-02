@@ -30,7 +30,7 @@ interface MeetingListProps {
   buttonText: string;
   buttonIcon: string;
   buttonAction: 'view' | 'join';
-    status: 'Complete' | 'In Progress' ;
+    status: 'Completed' | 'In Progress' ;
 }
 
 function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction,status }: MeetingListProps) {
@@ -81,10 +81,10 @@ function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction,
                     <p>{buttonText}</p>
                   </Link>
                 ) : (
-                  <button className='flex gap-2 px-10 border-2 border-medium-green font-inter-600 text-medium-green rounded-2xl p-2 cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out'>
+                  <Link to='/video' role='button' className='flex gap-2 px-10 border-2 border-medium-green font-inter-600 text-medium-green rounded-2xl p-2 cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out'>
                     <img src={buttonIcon} className='w-4' alt="button icon" />
                     <p>{buttonText}</p>
-                  </button>
+                  </Link>
                 )}
               </div>
             </div>

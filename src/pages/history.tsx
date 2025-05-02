@@ -28,7 +28,7 @@ interface Data {
 function History() {
   const meetingsData = data as Data;
 
-  const completedCount = meetingsData.meetings.filter(meeting => meeting.status === 'Complete').length;
+  const completedCount = meetingsData.meetings.filter(meeting => meeting.status === 'Completed').length;
   const ongoingCount = meetingsData.meetings.filter(meeting => meeting.status === "In Progress").length;
   
   return (
@@ -36,8 +36,8 @@ function History() {
     <Searcbar completedcount={completedCount}  ongoingcount={ ongoingCount} />
       <MeetingList 
         data={meetingsData}
-        statusFilter="Complete"     
-        status='Complete'
+        statusFilter="Completed"     
+        status='Completed'
         buttonText="View"
         buttonIcon={viewIcon}
         buttonAction="view"

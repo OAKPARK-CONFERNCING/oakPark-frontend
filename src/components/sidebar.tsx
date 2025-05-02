@@ -1,6 +1,6 @@
 import videoIcon from "../assets/icons/video-recording.png";
 import { ChevronRight } from "lucide-react";
-import { NavLink } from "react-router"; // Make sure to import NavLink
+import { Link, NavLink } from "react-router"; // Make sure to import NavLink
 import dashboard from "../assets/icons/dashboard.png";
 import contacts from "../assets/icons/contacts.png";
 import history from "../assets/icons/history.png";
@@ -47,7 +47,7 @@ function Sidebar() {
     return (
         <div className="fixed left-0 top-0 h-screen w-[250px]  bg-white  z-20">
             <aside className="h-screen border-r border-gray-200 bg-white flex flex-col  shadow-lg">
-                <div className=" logo flex flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
+                <Link to="/" className=" logo flex cursor-pointer flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
                     <div className=" items-center justify-center mr-2">
                         <img
                             src={videoIcon}
@@ -59,7 +59,7 @@ function Sidebar() {
                     <span className="text-lg font-bold uppercase text-medium-green items-center">
                         OakPark
                     </span>
-                </div>
+                </Link>
                 {/* <p className='h-2 bg-grey'></p> */}
                 <div className="bg-fade-bg flex items-center mx-2 justify-between p-2  border-gray-200 rounded-2xl mt-6">
                     <div className="flex items-center ">

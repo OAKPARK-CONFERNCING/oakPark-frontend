@@ -60,7 +60,7 @@
       "id": 1,
       "meetingTitle": "Quarterly Financial Review",
       "date": "2023-11-05T13:00:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "55 minutes",
       "participants": [
         {
@@ -93,7 +93,7 @@
       "id": 2,
       "meetingTitle": "Product Design Sprint",
       "date": "2023-11-07T10:30:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "35 minutes",
       "participants": [
         {
@@ -126,7 +126,7 @@
       "id": 3,
       "meetingTitle": "Marketing Strategy Q4",
       "date": "2023-10-20T14:00:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "60 minutes",
       "participants": [
         {
@@ -159,7 +159,7 @@
       "id": 4,
       "meetingTitle": "Technical Architecture Review",
       "date": "2023-11-15T16:45:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "25 minutes",
       "participants": [
         {
@@ -192,7 +192,7 @@
       "id": 5,
       "meetingTitle": "Customer Success Workshop",
       "date": "2023-12-01T11:15:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "90 minutes",
       "participants": [
         {
@@ -225,7 +225,7 @@
       "id": 6,
       "meetingTitle": "HR Policy Update",
       "date": "2024-01-10T09:00:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "45 minutes",
       "participants": [
         {
@@ -258,7 +258,7 @@
       "id": 7,
       "meetingTitle": "AI Integration Brainstorm",
       "date": "2023-11-20T15:30:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "120 minutes",
       "participants": [
         {
@@ -291,7 +291,7 @@
       "id": 8,
       "meetingTitle": "Sales Pipeline Review",
       "date": "2023-11-25T10:00:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "30 minutes",
       "participants": [
         {
@@ -324,7 +324,7 @@
       "id": 9,
       "meetingTitle": "Security Audit Debrief",
       "date": "2023-11-30T14:00:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "60 minutes",
       "participants": [
         {
@@ -357,7 +357,7 @@
       "id": 10,
       "meetingTitle": "Team Retrospective",
       "date": "2023-12-05T09:30:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "45 minutes",
       "participants": [
         {
@@ -390,7 +390,7 @@
       "id": 11,
       "meetingTitle": "Legal Compliance Sync",
       "date": "2023-12-10T13:00:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "75 minutes",
       "participants": [
         {
@@ -423,7 +423,7 @@
       "id": 12,
       "meetingTitle": "DevOps Standup",
       "date": "2023-12-14T08:45:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "20 minutes",
       "participants": [
         {
@@ -456,7 +456,7 @@
       "id": 13,
       "meetingTitle": "Investor Relations Call",
       "date": "2023-12-18T16:00:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "40 minutes",
       "participants": [
         {
@@ -489,7 +489,7 @@
       "id": 14,
       "meetingTitle": "UX Research Presentation",
       "date": "2024-01-05T14:30:00Z",
-      "status": "Complete",
+      "status": "Completed",
       "duration": "50 minutes",
       "participants": [
         {

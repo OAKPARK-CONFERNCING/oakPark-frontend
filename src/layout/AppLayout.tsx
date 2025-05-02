@@ -35,7 +35,7 @@ function AppLayout() {
                 <header className="fixed top-0 left-[250px] right-0 h-[70px] bg-white border-b border-gray-200  z-10">
                     <div className="flex flex-row items-center justify-between   mx-auto p-4 ">
                         <h1 className="font-inter-600 text-inActive-green">
-                            {dynamicHeaderText[location.pathname as keyof typeof dynamicHeaderText] || "Default Header"}
+                            {dynamicHeaderText[location.pathname as keyof typeof dynamicHeaderText] || "Session History"}
                         
                         </h1>
 
