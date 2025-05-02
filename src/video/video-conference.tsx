@@ -1,42 +1,36 @@
-import { useState, useEffect } from "react";
-import {
-  Video,
-  Mic,
-  MicOff,
-  VideoOff,
-  Share2,
-  Users,
-  
+"use client"
 
-} from "lucide-react";
-import { AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
-import ParticipantVideo from "@/components/participant-video";
-import SidebarPanel from "@/components/sidebar-panel";
-import { Button } from "@/components/ui/button";
-import { useMobile } from "@/hooks/use-mobile";
-import videoRecording from '@/assets/icons/video-recording.png'
-import videoRec from '@/assets/icons/videoRec.png'
-import shareScreenOn from '@/assets/icons/share-screen2.png'
-import clock from '@/assets/icons/clock.png'
-import videoOn from '@/assets/icons/video-On.png'
-import videoOff from '@/assets/icons/video-off.png'
-import micOn from '@/assets/icons/micOn.png'
-import micOff from '@/assets/icons/mic-off.png'
-import closeCall from '@/assets/icons/call-end.png'
-import shareScreen from '@/assets/icons/share-screen.png'
+import { useState, useEffect } from "react"
+import { Share2, Users } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
+import { AnimatePresence } from "framer-motion"
+import { cn } from "@/lib/utils"
+import ParticipantVideo from "@/components/participant-video"
+import SidebarPanel from "@/components/sidebar-panel"
+import { Button } from "@/components/ui/button"
+import { useMobile } from "@/hooks/use-mobile"
+import videoRecording from "@/assets/icons/video-recording.png"
+import videoRec from "@/assets/icons/videoRec.png"
+import shareScreenOn from "@/assets/icons/share-screen2.png"
+import clock from "@/assets/icons/clock.png"
+import videoOn from "@/assets/icons/video-On.png"
+import videoOff from "@/assets/icons/video-off.png"
+import micOn from "@/assets/icons/micOn.png"
+import micOff from "@/assets/icons/mic-off.png"
+import closeCall from "@/assets/icons/call-end.png"
+import shareScreen from "@/assets/icons/share-screen.png"
 
 // Types for participants
-type Role = "host" | "co-host" | "member" | "participant" | "guest";
+type Role = "host" | "co-host" | "member" | "participant" | "guest"
 
 interface Participant {
-  id: string;
-  name: string;
-  email: string;
-  role: Role;
-  videoOn: boolean;
-  audioOn: boolean;
+  id: string
+  name: string
+  email: string
+  role: Role
+  videoOn: boolean
+  audioOn: boolean
 }
 
 // Mock data for participants with various roles
@@ -201,77 +195,109 @@ const mockParticipants: Participant[] = [
     videoOn: false,
     audioOn: true,
   },
-];
+]
 
 export default function VideoConference() {
-  const [participants, setParticipants] =
-    useState<Participant[]>(mockParticipants);
+  const [participants, setParticipants] = useState<Participant[]>(mockParticipants)
   const [activeParticipant, setActiveParticipant] = useState<Participant>(
     // Default to host as the active participant
-    mockParticipants.find((p) => p.role === "host") || mockParticipants[0]
-  );
-  const [isMicOn, setIsMicOn] = useState(true);
-  const [isVideoOn, setIsVideoOn] = useState(true);
-  const [isShareScreen, setIsShareScreen] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [meetingTime, setMeetingTime] = useState(0);
-  const [visibleThumbnails, setVisibleThumbnails] = useState(6);
-  const isMobile = useMobile();
-  const isTablet = useWindowSize(1286);
+    mockParticipants.find((p) => p.role === "host") || mockParticipants[0],
+  )
+  const [isMicOn, setIsMicOn] = useState(true)
+  const [isVideoOn, setIsVideoOn] = useState(true)
+  const [isShareScreen, setIsShareScreen] = useState(true)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [meetingTime, setMeetingTime] = useState(0)
+  const [visibleThumbnails, setVisibleThumbnails] = useState(6)
+  const isMobile = useMobile()
+  const isTablet = useWindowSize(1280)
+  const isSmallScreen = useWindowSize(640) // Added for very small screens
+
+  // Add this at the top of the component
+  useEffect(() => {
+    // Fix for mobile browsers where 100vh includes the address bar
+    const setVh = () => {
+      const vh = window.innerHeight * 0.01
+      document.documentElement.style.setProperty("--vh", `${vh}px`)
+    }
+
+    setVh()
+    window.addEventListener("resize", setVh)
+
+    return () => {
+      window.removeEventListener("resize", setVh)
+    }
+  }, [])
 
   // Update meeting time every second
   useEffect(() => {
     const timer = setInterval(() => {
-      setMeetingTime((prev) => prev + 1);
-    }, 1000);
+      setMeetingTime((prev) => prev + 1)
+    }, 1000)
 
-    return () => clearInterval(timer);
-  }, []);
+    return () => clearInterval(timer)
+  }, [])
 
   // Update visible thumbnails based on screen size
   useEffect(() => {
-    if (isMobile) {
-      setVisibleThumbnails(3);
+    if (isSmallScreen) {
+      setVisibleThumbnails(2) // Show fewer thumbnails on very small screens
+    } else if (isMobile) {
+      setVisibleThumbnails(3)
     } else if (isTablet) {
-      setVisibleThumbnails(4);
+      setVisibleThumbnails(4)
     } else {
-      setVisibleThumbnails(6);
+      setVisibleThumbnails(6)
     }
-  }, [isMobile, isTablet]);
+  }, [isMobile, isTablet, isSmallScreen])
+
+  const titleShort = (title: string) => {
+    if (isMobile || isTablet) {
+      return title.substring(0, 50) + "..."
+    } else {
+      return title
+    }
+  }
 
   // Format meeting time as HH:MM:SS
   const formatTime = (seconds: number) => {
-    const hrs = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${hrs.toString().padStart(2, "0")}:${mins
-      .toString()
-      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  };
+    const hrs = Math.floor(seconds / 3600)
+    const mins = Math.floor((seconds % 3600) / 60)
+    const secs = seconds % 60
+    return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`
+  }
+
+  useEffect(() => {
+    if (isSmallScreen) {
+      setVisibleThumbnails(2) // Show fewer thumbnails on very small screens
+    } else if (isMobile) {
+      setVisibleThumbnails(3)
+    } else if (isTablet) {
+      setVisibleThumbnails(5)
+    } else {
+      setVisibleThumbnails(6)
+    }
+  }, [isMobile, isTablet, isSmallScreen])
 
   // Toggle participant video (in a real app, this would interact with WebRTC)
   const toggleParticipantVideo = (id: string) => {
-    setParticipants((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, videoOn: !p.videoOn } : p))
-    );
+    setParticipants((prev) => prev.map((p) => (p.id === id ? { ...p, videoOn: !p.videoOn } : p)))
 
     if (activeParticipant.id === id) {
-      setActiveParticipant((prev) => ({ ...prev, videoOn: !prev.videoOn }));
+      setActiveParticipant((prev) => ({ ...prev, videoOn: !prev.videoOn }))
     }
-  };
+  }
 
   // Set a participant as the main active view
   const setAsActive = (participant: Participant) => {
-    setActiveParticipant(participant);
-  };
+    setActiveParticipant(participant)
+  }
 
   // Get thumbnails to display
   // Priority: host, co-host, members, then others
   const getThumbnailParticipants = () => {
     // Skip the active participant if they would be in thumbnails
-    const filteredParticipants = participants.filter(
-      (p) => p.id !== activeParticipant.id
-    );
+    const filteredParticipants = participants.filter((p) => p.id !== activeParticipant.id)
 
     // Sort by role priority
     const sortedParticipants = [...filteredParticipants].sort((a, b) => {
@@ -281,206 +307,252 @@ export default function VideoConference() {
         member: 2,
         participant: 3,
         guest: 4,
-      };
-      return roleOrder[a.role] - roleOrder[b.role];
-    });
+      }
+      return roleOrder[a.role] - roleOrder[b.role]
+    })
 
-    return sortedParticipants.slice(0, visibleThumbnails);
-  };
+    return sortedParticipants.slice(0, visibleThumbnails)
+  }
 
-  const thumbnailParticipants = getThumbnailParticipants();
-  const remainingParticipantsCount =
-    participants.length - thumbnailParticipants.length - 1; // -1 for active participant
+  const thumbnailParticipants = getThumbnailParticipants()
+  const remainingParticipantsCount = participants.length - thumbnailParticipants.length - 1 // -1 for active participant
 
   return (
-    <div className="  bg-[#F7FFF8] flex flex-1 px-10">
-      <div className="flex flex-col min-h-screen w-[95%] mx-auto ">
+    <div
+      className={`bg-[#F7FFF8] flex  px-2 sm:px-5 mx-auto  ${isTablet ? "h-screen" : "h-[calc(100vh - 120px)]"}`}
+      // style={{ height: "calc(var(--vh, 1vh) * 100)" }}
+    >
+      <div className="flex flex-col w-full mx-auto max-w-[1920px] overflow-hidden">
         {/* Header */}
-        <header className="border border-light-green rounded-2xl my-5  bg-white px-4 py-2  flex justify-between items-center">
-        <div className='flex items-center space-x-1'>
-          <img src={videoRecording} alt="video recorder icon" />
-          <p className="font-inter-700 text-medium-green ">
-            
-            OakPark
-          </p>
+        <header className="border border-light-green rounded-2xl my-1 bg-white px-2 sm:px-4 py-1 flex justify-between items-center flex-shrink-0">
+          <div className="flex items-center space-x-1">
+            <img
+              src={videoRecording || "/placeholder.svg"}
+              alt="video recorder icon"
+              className="w-5 h-5 sm:w-auto sm:h-auto"
+            />
+            <p className="font-inter-700 text-medium-green text-sm sm:text-base">OakPark</p>
           </div>
-          <h1 className="hidden md:inline text-header-text-primary font-inter-700">
-              Workshop: An introduction to Artificial Intelligence and Machine
-              Learning
-            </h1>
-          <div className="flex items-center gap-4">
-            <div className="bg-red-500 justify-center items-center flex rounded-xl  cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12">
-              {/* <Video className="h-5 w-5" /> */}
-              <img src={videoRec} alt="video recorder icon"  className="w-7"/>
+          <h1 className="hidden md:inline text-header-text-primary font-inter-700 truncate max-w-[500px]">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  {titleShort("Workshop: An introduction to Artificial Intelligence and Machine Learning")}
+                </TooltipTrigger>
+                <TooltipContent>
+                  Workshop: An introduction to Artificial Intelligence and Machine Learning
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </h1>
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="bg-red-500 justify-center items-center flex rounded-xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-8 sm:size-12">
+              <img src={videoRec || "/placeholder.svg"} alt="video recorder icon" className="w-4 sm:w-7" />
             </div>
-            <div className="inline-flex items-center gap-2 bg-btn-primary  text-sm font-inter-700 text-gray-700 rounded-xl px-5 py-3">
-              <img src={clock} alt="clock icon" className="w-5 h-5" />
+            <div className="inline-flex items-center gap-1 sm:gap-2 bg-btn-primary text-xs sm:text-sm font-inter-700 text-gray-700 rounded-xl px-2 sm:px-5 py-1 sm:py-3">
+              <img src={clock || "/placeholder.svg"} alt="clock icon" className="w-4 h-4 sm:w-5 sm:h-5" />
               {formatTime(meetingTime)}
             </div>
           </div>
         </header>
-  
+
         {/* Main content */}
-        <div className="flex flex-1 ">
+        <div className="flex flex-1 min-h-0  overflow-hidden">
           {/* Video grid */}
-          <div className="flex-1 flex flex-col  ">
+          <div className="flex-1 flex flex-col min-h-0 max-h-full overflow-hidden">
             {/* Main active participant */}
-            <div className="flex-1 relative bg-black/10 rounded-2xl">
-              <div className="font-inter-500 absolute top-4 left-4 bg-black/50 text-white px-5 py-1 rounded-2xl text-sm z-10">
+            <div className="flex-1 relative bg-black/10 rounded-2xl min-h-0 max-h-[calc(100vh)] overflow-hidden">
+              <div className="font-inter-500 absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/50 text-white px-3 sm:px-5 py-1 rounded-2xl text-xs sm:text-sm z-10">
                 {activeParticipant.name}
               </div>
-              <ParticipantVideo participant={activeParticipant} isMain={true} />
+              <div className="h-full w-full max-h-full">
+                <ParticipantVideo participant={activeParticipant} isMain={true} />
+              </div>
             </div>
-  
+
             {/* Thumbnails at the bottom - NOT overlaid on main video */}
-            <div className=" p-2">
-              <div className="grid grid-cols-7 gap-2">
+            <div className="pt-1 overflow-x-auto flex-shrink-0" 
+            // style={{ maxHeight: "45vh" }}
+            >
+<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-3 w-full">
                 {thumbnailParticipants.map((participant) => (
                   <div
                     key={participant.id}
                     className={cn(
-                      "relative cursor-pointer transition-all",
-                      participant.id === activeParticipant.id
-                        ? "border-2 border-green-500"
-                        : ""
+                      "relative cursor-pointer transition-all rounded-2xl",
+                      participant.id === activeParticipant.id ? "border-2 border-green-500" : "",
                     )}
                     onClick={() => setAsActive(participant)}
+                    style={{ aspectRatio: "16/9" }}
                   >
-                    <ParticipantVideo
-                      participant={participant}
-                      isMain={false}
-                      width={100}
-                      height={130}
-                    />
-                    <div className="absolute top-5  left-5 px-3 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
+                    <ParticipantVideo participant={participant} isMain={false} width={100} height={100} />
+                    <div className="absolute top-2 left-2 px-2 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
                       {participant.name}
                     </div>
                   </div>
                 ))}
-  
+
                 {/* "+X participants" indicator */}
                 {remainingParticipantsCount > 0 && (
                   <div
-                    className="relative cursor-pointer bg-green-100 flex items-center justify-center text-green-800 font-medium"
-                    style={{ width: "100%", height: "100%" }}
+                    className="rounded-2xl relative cursor-pointer bg-green-100 flex items-center justify-center text-green-800 font-medium"
+                    style={{ aspectRatio: "16/9" }}
                     onClick={() => setIsSidebarOpen(true)}
                   >
                     <div className="text-center">
-                      <div className="text-lg font-bold">
-                        +{remainingParticipantsCount}
-                      </div>
+                      <div className="text-base sm:text-lg font-bold">+{remainingParticipantsCount}</div>
                       <div className="text-xs">participants</div>
                     </div>
                   </div>
                 )}
               </div>
             </div>
-  
+
+
             {/* Controls */}
-            <div className=" p-4 flex justify-center items-center gap-4">
-              <Button
-                variant="outline"
-                size="icon"
-                className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 ${isMicOn  ?'bg-medium-green ': 'bg-btn-primary'}`}
-                onClick={() => setIsMicOn(!isMicOn)}
-              >
-                {isMicOn ? (
-                  // <Mic className=" text-white " size={100} fontSize={100} />
-                  <img src={micOn} alt="mic on icon"  className="w-5"/>
-                ) : (
-                  // <MicOff className="h-5 w-5 text-medium-green" />
-                  <img src={micOff} alt="mic off icon" className="w-5" />
-                )}
-              </Button>
-  
-              <Button
-                variant="outline"
-                size="icon"
-                className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 ${isVideoOn  ?'bg-medium-green ': 'bg-btn-primary'}`}
-                onClick={() => setIsVideoOn(!isVideoOn)}
-              >
-                {isVideoOn ? (
-                  // <Video className="h-5 w-10 text-white" />
-                  <img src={videoOn} alt="video on icon" className="w-5"/>
-                ) : (
-                  // <VideoOff className="h-5 w-5 text-medium-green" />
-                  <img src={videoOff} alt="video off icon" className="w-5"/>
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 ${isShareScreen  ?'bg-medium-green ': 'bg-btn-primary'}`}
-                onClick={() => setIsShareScreen(!isShareScreen)}
-              >
-                {isShareScreen ? (
+            <div className="p-1 mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14 ${isMicOn ? "bg-medium-green " : "bg-btn-primary"}`}
+                      onClick={() => setIsMicOn(!isMicOn)}
+                    >
+                      {isMicOn ? (
+                        <img src={micOn || "/placeholder.svg"} alt="mic on icon" className="w-4 sm:w-5" />
+                      ) : (
+                        <img src={micOff || "/placeholder.svg"} alt="mic off icon" className="w-4 sm:w-5" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Microphone</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
-                  <img src={shareScreenOn} alt="video on icon" className="w-5"/>
-                ) : (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14 ${isVideoOn ? "bg-medium-green " : "bg-btn-primary"}`}
+                      onClick={() => setIsVideoOn(!isVideoOn)}
+                    >
+                      {isVideoOn ? (
+                        <img src={videoOn || "/placeholder.svg"} alt="video on icon" className="w-4 sm:w-5" />
+                      ) : (
+                        <img src={videoOff || "/placeholder.svg"} alt="video off icon" className="w-4 sm:w-5" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Video</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
-                  <img src={shareScreen} alt="video off icon" className="w-5"/>
-                )}
-              </Button>
-  
-              <Button variant="outline" size="icon" className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16 `}>
-                <Share2 className="h-5 w-5 hover:text-medium-green text-white" />
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14 ${isShareScreen ? "bg-medium-green " : "bg-btn-primary"}`}
+                      onClick={() => setIsShareScreen(!isShareScreen)}
+                    >
+                      {isShareScreen ? (
+                        <img src={shareScreenOn || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
+                      ) : (
+                        <img src={shareScreen || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Share Your Screen</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
-  
-              <Button
-                variant="outline"
-                size="icon"
-                className={cn(
-                  "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16",
-                  isSidebarOpen ? "bg-medium-green" : "bg-btn-primary"
-                )}
-                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              >
-                <Users className={`h-5 w-5 ${isSidebarOpen ? 'text-white' : 'text-medium-green'}`} />
-              </Button>
-  
-              <Button variant="destructive" size="icon" className="rounded-3xl  cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-16">
-                {/* <PhoneOff className="h-5 w-5" /> */}
-                <img src={closeCall} className="w-5" alt="call end icon" />
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14`}
+                    >
+                      <Share2 className="h-4 w-4 sm:h-5 sm:w-5 hover:text-medium-green text-white" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Share</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className={cn(
+                        "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14",
+                        isSidebarOpen ? "bg-medium-green" : "bg-btn-primary",
+                      )}
+                      onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                      <Users
+                        className={`h-4 w-4 sm:h-5 sm:w-5 ${isSidebarOpen ? "text-white" : "text-medium-green"}`}
+                      />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Open side bar</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="rounded-3xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14"
+                    >
+                      <img src={closeCall || "/placeholder.svg"} className="w-4 sm:w-5" alt="call end icon" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>End call</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           </div>
-  
-          
         </div>
       </div>
       {/* Sidebar with tabs */}
       <AnimatePresence>
-                      {isSidebarOpen && (
-                        <SidebarPanel
-                          participants={participants}
-                          onClose={() => setIsSidebarOpen(isSidebarOpen)}
-                          isMobile={isMobile}
-                        />
-                      )}
-          </AnimatePresence>
+        {isSidebarOpen && (
+          <SidebarPanel participants={participants} onClose={() => setIsSidebarOpen(false)} isMobile={isTablet} />
+        )}
+      </AnimatePresence>
     </div>
-  );
+  )
 }
 
 // Custom hook for additional screen size breakpoints
 function useWindowSize(breakpoint: number) {
-  const [isBelow, setIsBelow] = useState(false);
+  const [isBelow, setIsBelow] = useState(false)
 
   useEffect(() => {
     const checkSize = () => {
-      setIsBelow(window.innerWidth < breakpoint);
-    };
+      setIsBelow(window.innerWidth < breakpoint)
+    }
 
     // Check on mount
-    checkSize();
+    checkSize()
 
     // Add event listener
-    window.addEventListener("resize", checkSize);
+    window.addEventListener("resize", checkSize)
 
     // Clean up
-    return () => window.removeEventListener("resize", checkSize);
-  }, [breakpoint]);
+    return () => window.removeEventListener("resize", checkSize)
+  }, [breakpoint])
 
-  return isBelow;
+  return isBelow
 }

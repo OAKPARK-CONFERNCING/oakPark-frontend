@@ -63,14 +63,15 @@ function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction,
                     {item.participants.length}
                   </p>
                 </div>
-                {!item.status ==='Completed '&& <div>
+                
+                <div>
                   <h2 className='text-sm font-inter-500 text-inActive-green uppercase'>
                     Date
                   </h2>
                    <p className='text-base font-inter-500 text-text-primary'>
                     {FormatDates(item.date)}
                   </p>
-                </div>}
+                </div>
                 <p className='text-sm font-inter-500 text-inActive-green uppercase'>{status} </p>
               </div>
               <div className='flex gap-2'>
@@ -88,8 +89,8 @@ function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction,
               </div>
             </div>
           )
-        ))}
-      </div>
+
+        ))}      </div>
     </>
   )
 }

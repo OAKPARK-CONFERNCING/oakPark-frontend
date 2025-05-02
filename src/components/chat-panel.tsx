@@ -1,3 +1,4 @@
+"use client"
 
 import { useState } from "react"
 import { Send } from "lucide-react"
@@ -63,23 +64,23 @@ export default function ChatPanel() {
   }
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full w-full">
       {/* Chat messages */}
-      <div className="flex-1 p-4 space-y-4 overflow-y-auto">
+      <div className="flex-1 p-4 space-y-4 overflow-y-auto w-full">
         {messages.map((msg) => (
-          <div key={msg.id} className="flex flex-col">
+          <div key={msg.id} className="flex flex-col w-full">
             <div className="flex items-center gap-2">
               <span className="font-medium text-sm">{msg.sender}</span>
               <span className="text-xs text-gray-500">{msg.time}</span>
             </div>
-            <p className="text-sm mt-1">{msg.message}</p>
+            <p className="text-sm mt-1 break-words">{msg.message}</p>
           </div>
         ))}
       </div>
 
       {/* Chat input */}
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex gap-2">
+      <div className="p-4 border-t border-gray-200 w-full">
+        <div className="flex gap-2 w-full">
           <Input
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}

@@ -54,6 +54,10 @@ export default function SidebarPanel({ participants, onClose, isMobile }: Sideba
     setOpenTab(openTab === tabId ? null : tabId)
   }
 
+  
+  // Define fixed width based on mobile state
+  const sidebarWidth = isMobile ? "75%" : "300px"
+
   return (
     <motion.aside
     initial={{ width: 0, opacity: 0, }}
@@ -61,9 +65,14 @@ export default function SidebarPanel({ participants, onClose, isMobile }: Sideba
     exit={{ width: 0, opacity: 0, }}
     transition={{ duration: 0.3, ease: "easeInOut",type: "spring", stiffness: 300, damping: 30 }}
       className={cn(
-        "bg-white border-l border-gray-200 flex ml-5 flex-col h-full",
-        isMobile ? "fixed top-0 right-0 bottom-0 z-50 w-3/4" : "w-80",
+        "bg-[#F7FFF8] border-gray-200 overflow-y-auto flex mt-5 ml-5 flex-col h-full",
+        isMobile ? "fixed top-0 right-0 bottom-0 z-50 w-3/4 mt-0" : "",
       )}
+      style={{
+        width: sidebarWidth,
+        minWidth: sidebarWidth,
+        maxWidth: sidebarWidth,
+      }}
     >
       {/* Close button for mobile */}
       {isMobile && (
@@ -75,15 +84,15 @@ export default function SidebarPanel({ participants, onClose, isMobile }: Sideba
       )}
 
       {/* Tabs */}
-      <div className="flex-1 overflow-hidden flex flex-col">
+      <div className="flex-1  flex flex-col">
         {tabs.map((tab) => (
-          <div key={tab.id} className="border-b border-gray-200 last:border-b-0">
+          <div key={tab.id} className="space-y-5 border mb-5 border-light-green cursor-pointer rounded-2xl">
             {/* Tab header */}
             <button
-              className="w-full px-4 py-3 flex justify-between items-center text-left hover:bg-gray-50"
+              className="w-full px-4 py-[18px] flex justify-between items-center text-left hover:bg-gray-50"
               onClick={() => toggleTab(tab.id)}
             >
-              <div className="font-medium text-green-700">
+              <div className="font-inter-700 text-header-text-primary text-lg">
                 {tab.title} ({tab.count})
               </div>
               {openTab === tab.id ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
@@ -97,9 +106,9 @@ export default function SidebarPanel({ participants, onClose, isMobile }: Sideba
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ duration: 0.3, ease: "easeInOut" }}
-                  className="overflow-hidden"
+                  className="overflow-y-auto "
                 >
-                  <div className="max-h-[calc(100vh-200px)] overflow-y-auto">{tab.component}</div>
+                  <div className="  max-h-[calc(100vh-200px)] overflow-y-auto">{tab.component}</div>
                 </motion.div>
               )}
             </AnimatePresence>
