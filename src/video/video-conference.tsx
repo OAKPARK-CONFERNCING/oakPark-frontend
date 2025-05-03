@@ -270,7 +270,7 @@ export default function VideoConference() {
 
   useEffect(() => {
     if (isSmallScreen) {
-      setVisibleThumbnails(2) // Show fewer thumbnails on very small screens
+      setVisibleThumbnails(3) // Show fewer thumbnails on very small screens
     } else if (isMobile) {
       setVisibleThumbnails(3)
     } else if (isTablet) {
@@ -345,7 +345,7 @@ export default function VideoConference() {
     >
       <div className="flex flex-col w-full mx-auto max-w-[1920px] overflow-hidden">
         {/* Header */}
-        <header className="border border-light-green rounded-2xl my-4 bg-white  py-1 flex justify-between items-center flex-shrink-0">
+        <header className="border border-light-green rounded-2xl my-4 bg-white px-2  py-1 flex justify-between items-center flex-shrink-0">
           <Link to="/" className="flex items-center cursor-pointer space-x-1">
             <img
               src={videoRecording || "/placeholder.svg"}
@@ -380,9 +380,9 @@ export default function VideoConference() {
         {/* Main content */}
         <div className="flex flex-1 min-h-0  overflow-hidden">
           {/* Video grid */}
-          <div className="flex-1 flex flex-col min-h-0 max-h-full overflow-hidden">
+          <div className="flex-1 flex flex-col min-h-0  overflow-hidden">
             {/* Main active participant */}
-            <div className="flex-1 relative bg-black/10 rounded-2xl min-h-0 max-h-[calc(100vh)] overflow-hidden">
+            <div className="flex-1 relative bg-black/10 rounded-2xl min-h-0 h-full max-h-[300px] sm:max-h-[600px] xl:max-h-[90vh] overflow-hidden">
               <div className="font-inter-500 absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/50 text-white px-3 sm:px-5 py-1 rounded-2xl text-xs sm:text-sm z-10">
                 {activeParticipant.name}
               </div>
