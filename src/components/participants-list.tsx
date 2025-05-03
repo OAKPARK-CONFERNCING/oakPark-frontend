@@ -1,3 +1,5 @@
+"use client"
+
 import { Mic, MicOff, MoreVertical } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -10,9 +12,10 @@ interface ParticipantsListProps {
     videoOn: boolean
     audioOn: boolean
   }>
+  onParticipantSelect?: (participant: any) => void
 }
 
-export default function ParticipantsList({ participants }: ParticipantsListProps) {
+export default function ParticipantsList({ participants, onParticipantSelect }: ParticipantsListProps) {
   // Group participants by role
   const groupedParticipants = participants.reduce(
     (acc, participant) => {
@@ -42,54 +45,69 @@ export default function ParticipantsList({ participants }: ParticipantsListProps
   }
 
   return (
-    <div className="divide-y divide-gray-100 w-full">
-      {roleOrder.map((role) => {
-        const roleParticipants = groupedParticipants[role] || []
-        if (roleParticipants.length === 0) return null
+    <>
+      <div className="divide-y divide-gray-100 w-full">
+        {roleOrder.map((role) => {
+          const roleParticipants = groupedParticipants[role] || []
+          if (roleParticipants.length === 0) return null
+  
+          return (
+            <>
+              <div className="px-4 py-2 bg-gray-50 text-sm font-medium text-gray-600">
+                {getRoleDisplayName(role)} ({roleParticipants.length})
+              </div>
+              <div key={role} className="py-1 w-full">
+                
+                {roleParticipants.map((participant) => (
+                  <div
+                    key={participant.id}
+                    className="px-4 py-2 hover:bg-gray-50 w-full cursor-pointer"
+                    
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex items-center space-x-3 min-w-0">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-text-primary font-inter-600">
+                            {participant.name
+                              .split(" ")
+                              .map((n) => n[0])
+                              .join("")
+                              .toUpperCase()
+                              .substring(0, 2)}
+                          </div>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-gray-900 flex items-center truncate"
+                          onClick={() => onParticipantSelect && onParticipantSelect(participant)}
+                          >
+                            {participant.name}
+                            {participant.role === "host" && (
+                              <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">Host</span>
+                            )}
 
-        return (
-          <div key={role} className="py-1 w-full">
-            {roleParticipants.map((participant) => (
-              <div key={participant.id} className="px-4 py-2 hover:bg-gray-50 w-full">
-                <div className="flex items-center justify-between w-full">
-                  <div className="flex items-center space-x-3 min-w-0">
-                    <div className="flex-shrink-0">
-                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-800 font-medium">
-                        {participant.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .join("")
-                          .toUpperCase()
-                          .substring(0, 2)}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">{participant.email}</p>
+                        </div>
+                      </div>
+    
+                      <div className="flex items-center space-x-2 flex-shrink-0">
+                        {participant.audioOn ? (
+                          <Mic className="h-4 w-4 text-gray-400" />
+                        ) : (
+                          <MicOff className="h-4 w-4 text-red-500" />
+                        )}
+                        <Button variant="ghost" size="icon" className="h-8 w-8">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
                       </div>
                     </div>
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-gray-900 flex items-center truncate">
-                        {participant.name}
-                        {participant.role === "host" && (
-                          <span className="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">Host</span>
-                        )}
-                      </p>
-                      <p className="text-xs text-gray-500 truncate">{participant.email}</p>
-                    </div>
                   </div>
-
-                  <div className="flex items-center space-x-2 flex-shrink-0">
-                    {participant.audioOn ? (
-                      <Mic className="h-4 w-4 text-gray-400" />
-                    ) : (
-                      <MicOff className="h-4 w-4 text-red-500" />
-                    )}
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        )
-      })}
-    </div>
+            </>
+          )
+        })}
+      </div>
+    </>
   )
 }

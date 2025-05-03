@@ -246,7 +246,7 @@ export default function VideoConference() {
     } else if (isMobile) {
       setVisibleThumbnails(3)
     } else if (isTablet) {
-      setVisibleThumbnails(4)
+      setVisibleThumbnails(5)
     } else {
       setVisibleThumbnails(6)
     }
@@ -294,38 +294,58 @@ export default function VideoConference() {
     setActiveParticipant(participant)
   }
 
-  // Get thumbnails to display
-  // Priority: host, co-host, members, then others
+  // Get thumbnails to display - MODIFIED to include active participant and ensure host is first
   const getThumbnailParticipants = () => {
-    // Skip the active participant if they would be in thumbnails
-    const filteredParticipants = participants.filter((p) => p.id !== activeParticipant.id)
+    // Find the host participant
+    const hostParticipant = participants.find((p) => p.role === "host")
 
-    // Sort by role priority
-    const sortedParticipants = [...filteredParticipants].sort((a, b) => {
+    // Sort participants by role priority
+    const sortedParticipants = [...participants].sort((a, b) => {
+      // Skip the host as we'll add it first
+      if (a.role === "host") return -1
+      if (b.role === "host") return 1
+
       const roleOrder = {
-        host: 0,
         "co-host": 1,
         member: 2,
         participant: 3,
         guest: 4,
       }
-      return roleOrder[a.role] - roleOrder[b.role]
+      return roleOrder[a.role as keyof typeof roleOrder] - roleOrder[b.role as keyof typeof roleOrder]
     })
 
+    // Make sure active participant is included in the thumbnails
+    const activeParticipantIndex = sortedParticipants.findIndex((p) => p.id === activeParticipant.id)
+
+    // If active participant is not the host and not in the first visibleThumbnails-1 participants,
+    // we need to ensure it's included
+    if (activeParticipant.role !== "host" && activeParticipantIndex >= visibleThumbnails) {
+      // Replace the last visible thumbnail with the active participant
+      sortedParticipants.splice(activeParticipantIndex, 1) // Remove active participant from its current position
+      sortedParticipants.splice(visibleThumbnails - 1, 0, activeParticipant) // Insert it at the last visible position
+    }
+
+    // Return the visible thumbnails
     return sortedParticipants.slice(0, visibleThumbnails)
   }
 
   const thumbnailParticipants = getThumbnailParticipants()
-  const remainingParticipantsCount = participants.length - thumbnailParticipants.length - 1 // -1 for active participant
+  const remainingParticipantsCount = participants.length - thumbnailParticipants.length
+
+  // Handle participant selection from sidebar
+  const handleParticipantSelect = (participant: Participant) => {
+    setActiveParticipant(participant)
+    setIsSidebarOpen(false)
+  }
 
   return (
     <div
-      className={`bg-[#F7FFF8] flex  px-2 sm:px-5 mx-auto  ${isTablet ? "h-screen" : "h-[calc(100vh - 120px)]"}`}
+      className={`bg-[#F7FFF8] flex  px-2  sm:px-5 mx-auto  ${isTablet ? "h-screen" : ""}`}
       // style={{ height: "calc(var(--vh, 1vh) * 100)" }}
     >
       <div className="flex flex-col w-full mx-auto max-w-[1920px] overflow-hidden">
         {/* Header */}
-        <header className="border border-light-green rounded-2xl my-1 bg-white px-2 sm:px-4 py-1 flex justify-between items-center flex-shrink-0">
+        <header className="border border-light-green rounded-2xl my-4 bg-white  py-1 flex justify-between items-center flex-shrink-0">
           <Link to="/" className="flex items-center cursor-pointer space-x-1">
             <img
               src={videoRecording || "/placeholder.svg"}
@@ -334,7 +354,7 @@ export default function VideoConference() {
             />
             <p className="font-inter-700 text-medium-green text-sm sm:text-base">OakPark</p>
           </Link>
-          <h1 className="hidden md:inline text-header-text-primary font-inter-700 truncate max-w-[500px]">
+          <h1 className="hidden md:inline text-header-text-primary font-inter-700 truncate ">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
@@ -372,21 +392,22 @@ export default function VideoConference() {
             </div>
 
             {/* Thumbnails at the bottom - NOT overlaid on main video */}
-            <div className="pt-1 overflow-x-auto flex-shrink-0" 
-            // style={{ maxHeight: "45vh" }}
+            <div
+              className="pt-1 overflow-x-auto flex-shrink-0"
+              // style={{ maxHeight: "45vh" }}
             >
-<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-3 w-full">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-3 w-full">
                 {thumbnailParticipants.map((participant) => (
                   <div
                     key={participant.id}
                     className={cn(
-                      "relative cursor-pointer transition-all rounded-2xl",
+                      "relative cursor-pointer transition-all rounded-[20px]",
                       participant.id === activeParticipant.id ? "border-4 border-green-500" : "",
                     )}
                     onClick={() => setAsActive(participant)}
                     style={{ aspectRatio: "16/9" }}
                   >
-                    <ParticipantVideo participant={participant} isMain={false} width={100} height={100} />
+                    <ParticipantVideo participant={participant} isMain={false} width={100} isTablet={isTablet} height={100} />
                     <div className="absolute top-2 left-2 px-2 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
                       {participant.name}
                     </div>
@@ -408,7 +429,6 @@ export default function VideoConference() {
                 )}
               </div>
             </div>
-
 
             {/* Controls */}
             <div className="p-1 mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0">
@@ -529,7 +549,12 @@ export default function VideoConference() {
       {/* Sidebar with tabs */}
       <AnimatePresence>
         {isSidebarOpen && (
-          <SidebarPanel participants={participants} onClose={() => setIsSidebarOpen(false)} isMobile={isTablet} />
+          <SidebarPanel
+            participants={participants}
+            onClose={() => setIsSidebarOpen(false)}
+            isMobile={isTablet}
+            onParticipantSelect={handleParticipantSelect}
+          />
         )}
       </AnimatePresence>
     </div>

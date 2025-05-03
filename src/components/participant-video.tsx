@@ -14,9 +14,10 @@ interface ParticipantVideoProps {
   isMain?: boolean
   width?: number
   height?: number
+  isTablet?: boolean
 }
 
-export default function ParticipantVideo({ participant, isMain = false, width, height }: ParticipantVideoProps) {
+export default function ParticipantVideo({ participant, isMain = false, width, height,isTablet }: ParticipantVideoProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isLoading, setIsLoading] = useState(true)
 
@@ -49,8 +50,8 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
 
   // Preserve percentage-based sizing from original code
   const containerStyles = {
-    width: width ? `${width}%` : isMain ? "100%" : "100%",
-    height: height ? `${height}%` : isMain ? "90vh" : "100%",
+    width: width ? `${width}%` : isMain  ? "100%" : "100%",
+    height: height ? `${height}%` : isTablet  ? "50vh" : "100%",
     aspectRatio: isMain ? undefined : undefined, // Remove aspect ratio constraint for main video
     maxHeight: isMain ? "90vh" : undefined, // Allow main video to take up to 90% of viewport height
   }
@@ -83,7 +84,7 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
           </video>
         </>
       ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gray-700">
+        <div className="w-full xl:h-[90vh] h-full flex items-center justify-center bg-gray-700">
           <div
             className={cn(
               "flex items-center object-cover justify-center rounded-full bg-green-600 text-white",

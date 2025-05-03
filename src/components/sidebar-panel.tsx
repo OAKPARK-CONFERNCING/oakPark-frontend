@@ -14,6 +14,7 @@ interface SidebarPanelProps {
   participants: any[]
   onClose: () => void
   isMobile: boolean
+  onParticipantSelect?: (participant: any) => void
 }
 
 type TabId = "participants" | "chat" | "conversations"
@@ -25,7 +26,7 @@ interface TabData {
   component: React.ReactNode
 }
 
-export default function SidebarPanel({ participants, onClose, isMobile }: SidebarPanelProps) {
+export default function SidebarPanel({ participants, onClose, isMobile,onParticipantSelect, }: SidebarPanelProps) {
   const [openTab, setOpenTab] = useState<TabId | null>("participants")
 
   // Define the tabs with their content
@@ -34,12 +35,12 @@ export default function SidebarPanel({ participants, onClose, isMobile }: Sideba
       id: "participants",
       title: "Participants",
       count: participants.length,
-      component: <ParticipantsList participants={participants} />,
+      component: <ParticipantsList participants={participants} onParticipantSelect={onParticipantSelect} />,
     },
     {
       id: "chat",
       title: "Chat",
-      count: 225, // Mock count
+      count: 5, // Mock count
       component: <ChatPanel />,
     },
     {
