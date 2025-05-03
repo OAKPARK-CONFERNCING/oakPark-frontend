@@ -50,7 +50,7 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
   // Preserve percentage-based sizing from original code
   const containerStyles = {
     width: width ? `${width}%` : isMain ? "100%" : "100%",
-    height: height ? `${height}%` : isMain ? "100%" : "100%",
+    height: height ? `${height}%` : isMain ? "90vh" : "100%",
     aspectRatio: isMain ? undefined : undefined, // Remove aspect ratio constraint for main video
     maxHeight: isMain ? "90vh" : undefined, // Allow main video to take up to 90% of viewport height
   }

@@ -381,7 +381,7 @@ export default function VideoConference() {
                     key={participant.id}
                     className={cn(
                       "relative cursor-pointer transition-all rounded-2xl",
-                      participant.id === activeParticipant.id ? "border-2 border-green-500" : "",
+                      participant.id === activeParticipant.id ? "border-4 border-green-500" : "",
                     )}
                     onClick={() => setAsActive(participant)}
                     style={{ aspectRatio: "16/9" }}
