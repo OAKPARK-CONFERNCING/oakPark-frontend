@@ -29,7 +29,8 @@ const SessionCard = ({
     const colors = [
       'bg-medium-green',    // First card - green
       'bg-[#FFC107]',       // Second card - yellow
-      'bg-[#FF5722]'        // Third card - orange
+      'bg-[#FF5722]',        // Third card - orange
+      'bg-[#04A69C',
     ];
     
     // Use modulo to handle cases where there are more cards than colors

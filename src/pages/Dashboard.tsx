@@ -152,9 +152,9 @@ const Dashboard = () => {
         
         {/* completed sessions - limited to 3 */}
         <div className="flex justify-between items-center mt-12 mb-6">
-          <h2 className="font-inter-600 text-lg text-inActive-green]">Completed Sessions</h2>
+          <h2 className="font-inter-600 text-lg text-inActive-green">Completed Sessions</h2>
           {completedMeetings.length > 0 && (
-            <a href="/history" className="text-sm text-blue-600 hover:underline">
+            <a href="/history" className="text-sm text-header-text-primary hover:underline">
               View All
             </a>
           )}
