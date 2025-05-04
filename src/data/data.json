@@ -38,19 +38,6 @@
       "email": "adelakunmanuel@gmail.com",
       "avatar": "/avatar.png"
     }
-  },
-  {
-    "id": 4,
-    "title": "INTRODUCTION TO Artificial Intelligence and Machine Learning",
-    "topimg": "/card2.png",
-    "category": "BIO-MEDICINE",
-    "timeRemaining": "30mins to go",
-    "progress": 66, 
-    "instructor": {
-      "name": "Emmanuel A.",
-      "email": "adelakunmanuel@gmail.com",
-      "avatar": "/avatar.png"
-    }
   }
 ],
 
