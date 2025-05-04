@@ -9,8 +9,8 @@ import dashboardColored from "../assets/icons/dashboardColored.png";
 import contactsColored from "../assets/icons/contactsColored.png";
 import completedSessions from '../assets/icons/competed.png';
 import CompletedSessionsColored from '../assets/icons/competedColored.png'
-import logout from '../assets/icons/logOutIcon.png'
-import { AnimatePresence, motion } from "framer-motion"
+import logout from '../assets/icons/LogOutIcon.png'
+// import { AnimatePresence, motion } from "framer-motion"
 
 function Sidebar({isSidebarOpen}:{isSidebarOpen:boolean}) {
 
