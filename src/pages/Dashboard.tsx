@@ -104,7 +104,7 @@ const Dashboard = () => {
         
         {/* Horizontal scroll for mobile to md, grid for lg and up */}
         <div className="flex lg:hidden overflow-x-auto pb-4 space-x-4 -mx-4 px-4">
-          {cards.slice(0,1).map((card,index) => (
+          {cards.slice(0,3).map((card,index) => (
             <div key={card.id} className="min-w-[280px] max-w-[320px] flex-shrink-0">
               <SessionCard
                 title={card.title}
