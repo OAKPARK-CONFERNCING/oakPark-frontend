@@ -114,6 +114,7 @@ function Sidebar() {
                         ))}
                     </ul>
                     <div className="inline-flex mb-10 hover:scale-105 transition-all duration-300 ease-in-out  cursor-pointer hover:text-gray-700">
+                        
                         <img src={logout} alt="logout" className="w-5 " />
                         <p className="font-inter-500 text-text-grey hover:text-gray-700 hover:scale-105 text-base  ml-2">Log Out</p>
                     </div>
