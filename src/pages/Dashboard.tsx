@@ -64,7 +64,7 @@ const Dashboard = () => {
   
   // Filter to get only completed meetings and limit to 3
   const completedMeetings = allMeetingsData
-    .filter(meeting => meeting.status === "Complete")
+    .filter(meeting => meeting.status === "Completed")
     .slice(0, 3); // Limit to 3 meetings
 
   return (
@@ -80,7 +80,7 @@ const Dashboard = () => {
       </div>
       
       {/* banner */}
-      <div className="h-auto md:h-[287px] w-full bg-gradient-to-r from-blue-600 to-green-500 rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row my-6">
+      <div className="h-auto md:h-[287px] w-full md:bg-gradient-to-r bg-gradient-to-b from-[#5856D6] to-medium-green rounded-lg overflow-hidden shadow-lg flex flex-col md:flex-row my-6">
         <div className="w-full md:w-3/4 p-6 md:p-0">
           <h1 className="text-2xl md:text-[40px] text-white font-bold mb-3 md:pl-[60px] md:mt-[25px]">
             Fast, reliable and secure conferencing
@@ -163,8 +163,8 @@ const Dashboard = () => {
         <div>
           <MeetingList 
             data={{ meetings: completedMeetings }}
-            statusFilter="Complete"     
-            status="Complete"
+            statusFilter="Completed"     
+            status="Completed"
             buttonText="View"
             buttonIcon={viewIcon}
             buttonAction="view"
