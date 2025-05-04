@@ -6,7 +6,7 @@ function searchbar({completedcount,ongoingcount}: { completedcount?: number , on
   // const [completedcount, setCompletedCount] = useState<number>(0)
 
   return (
-    <div className='flex items-center gap-4 mb-5'>
+    <div className='flex flex-col md:flex-row md:items-center gap-4 mb-5'>
       <div className=' flex w-full items-center gap-2 bg-fade-bg border-2  border-[#f4f4f4] rounded-2xl p-2'>
         <Search className='text-inActive-green ml-3'/>
         <input type="text" placeholder='Enter a session title' className=' focus:outline-none font-inter-400  p-2 placeholder:text-inActive-green w-full'/>

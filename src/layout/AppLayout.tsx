@@ -4,9 +4,11 @@ import Sidebar from '../components/sidebar';
 import Loader from '../loader/loader';
 import { ChevronDown } from "lucide-react";
 import Video from "../assets/icons/video.png";
+import { HamIcon } from 'lucide-react';
 
 function AppLayout() {
     const location = useLocation();
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
@@ -30,10 +32,11 @@ function AppLayout() {
     
     return (
         <div className="flex flex-row flex-1 ">
-            <Sidebar />
+           { <Sidebar isSidebarOpen={isSidebarOpen} />}
             <div className=" w-full">
-                <header className="fixed top-0 left-[250px] right-0 h-[70px] bg-white border-b border-gray-200  z-10">
+                <header className="fixed top-0 left-0 sm:left-[100px] lg:left-[250px] right-0 h-[70px] bg-white border-b border-gray-200  z-10">
                     <div className="flex flex-row items-center justify-between   mx-auto p-4 ">
+                        <HamIcon className='z-10 sm:hidden block ' onClick={() => setIsSidebarOpen(!isSidebarOpen)}/>
                         <h1 className="font-inter-600 text-inActive-green">
                             {dynamicHeaderText[location.pathname as keyof typeof dynamicHeaderText] || "Session History"}
                         
@@ -48,7 +51,7 @@ function AppLayout() {
                         </button>
                     </div>
                 </header>
-                <main className="ml-[250px] mt-[70px] h-[calc(100vh-70px)] overflow-y-auto ">
+                <main className= "ml-0 sm:ml-[100px] lg:ml-[250px] mt-[70px] h-[calc(100vh-70px)] overflow-y-auto ">
                     {loading && (
                         <div className="absolute inset-0 z-10 flex items-center justify-center bg-white">
                             <Loader />

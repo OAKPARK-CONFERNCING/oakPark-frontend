@@ -32,7 +32,7 @@ function History() {
   const ongoingCount = meetingsData.meetings.filter(meeting => meeting.status === "In Progress").length;
   
   return (
-    <section className='p-7'>
+    <section className='p-3 sm:p-5 md:p-7'>
     <Searcbar completedcount={completedCount}  ongoingcount={ ongoingCount} />
       <MeetingList 
         data={meetingsData}
