@@ -37,7 +37,7 @@ const SessionCardFade = ({
   
   return (
     <div className="p-4 card relative bg-white rounded-2xl overflow-hidden   shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.16)] transition-shadow duration-300 cursor-pointer">
-      <div className='bg-white/60 absolute top-0 left-0 w-full h-full z-10  rounded-2xl'></div>
+      <div className='bg-white/70 absolute top-0 left-0 w-full h-full z-10  rounded-2xl'></div>
       <button className='absolute inset-0 font-inter-500 z-20' ><Link to="/ongoing">+see more</Link></button>
     <div className="relative">
       <img 
