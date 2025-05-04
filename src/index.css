@@ -160,6 +160,32 @@
   .tabs{
     @apply cursor-pointer hover:scale-105 transition-all duration-200 ease-linear font-inter-600  data-[state=active]:bg-tab-button-bg data-[state=active]:border-0 py-2 px-4 rounded-3xl text-inActive-green hover:text-gray-700 data-[state=active]:outline-0 data-[state=active]:!shadow-none  flex-0 flex data-[state=active]:text-medium-green
   }
+
+  .ham-menu {
+    @apply h-[32px] w-[32px]  relative z-[4] hover:cursor-pointer lg:hidden;
+  }
+  .ham-menu span {
+    @apply h-[3px] w-[100%]  bg-black rounded-3xl absolute top-1/2  -translate-y-1/2 transition-all duration-300 ease-in-out;
+  }
+  .ham-menu span:nth-child(1) {
+    @apply top-1/4;
+  }
+  .ham-menu span:nth-child(3) {
+    @apply top-[75%];
+  }
+  .ham-menu.active2 span {
+    @apply bg-black;
+  }
+  .ham-menu.active2 span:nth-child(1) {
+    @apply top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-45;
+  }
+  .ham-menu.active2 span:nth-child(2) {
+    @apply opacity-0;
+  }
+  .ham-menu.active2 span:nth-child(3) {
+    @apply -rotate-45 top-1/2  -translate-x-1/2 -translate-y-1/2 ;
+  }
+
 }
 
 /* HTML: <div class="loader"></div> */

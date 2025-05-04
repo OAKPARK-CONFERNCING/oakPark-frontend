@@ -12,7 +12,7 @@ import CompletedSessionsColored from '../assets/icons/competedColored.png'
 import logout from '../assets/icons/LogOutIcon.png'
 // import { AnimatePresence, motion } from "framer-motion"
 
-function Sidebar({isSidebarOpen}:{isSidebarOpen:boolean}) {
+function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>void}) {
 
     const navigationItems = [
         {
@@ -49,19 +49,23 @@ function Sidebar({isSidebarOpen}:{isSidebarOpen:boolean}) {
         <>
             <div className="fixed left-0 hidden sm:block top-0 h-screen lg:w-[250px] w-auto bg-white  z-20">
                 <aside className="h-screen border-r border-gray-200 bg-white flex flex-col  shadow-lg">
-                    <Link to="/" className=" logo flex cursor-pointer flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
-                        <div className=" items-center justify-center mr-2">
-                            <img
-                                src={videoIcon}
-                                alt="Video recording icon"
-                                width={20}
-                                height={20}
-                            />
-                        </div>
-                        <span className="text-lg font-bold uppercase hidden lg:block text-medium-green items-center">
-                            OakPark
-                        </span>
-                    </Link>
+                    
+                        <Link to="/" className=" logo flex cursor-pointer flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
+                            <div className=" items-center justify-center mr-2">
+                                <img
+                                    src={videoIcon}
+                                    alt="Video recording icon"
+                                    width={20}
+                                    height={20}
+                                />
+                            </div>
+                            <span className="text-lg font-bold uppercase hidden lg:block text-medium-green items-center">
+                                OakPark
+                            </span>
+                        </Link>
+
+  
+                    
                     {/* <p className='h-2 bg-grey'></p> */}
                     <div className="hidden sm:flex bg-fade-bg  items-center mx-2 justify-between p-2  border-gray-200 rounded-2xl mt-6">
                         <div className="flex items-center ">
@@ -129,19 +133,34 @@ function Sidebar({isSidebarOpen}:{isSidebarOpen:boolean}) {
                 {/* mobile nav bar */}
             <div  className={`absolute z-20  top-0 h-screen w-[250px]  bg-white   ${isSidebarOpen ? "left-0" : "left-[-100%]"} transition-all duration-300 ease-in-out`}>
             <aside className="h-screen border-r border-gray-200 bg-white flex flex-col  shadow-lg">
-                <Link to="/" className=" logo flex cursor-pointer flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
-                    <div className=" items-center justify-center mr-2">
-                        <img
-                            src={videoIcon}
-                            alt="Video recording icon"
-                            width={20}
-                            height={20}
-                        />
+            <div className="flex items-center w-full justify-between  border-b border-gray-200 bg-white">
+                        <Link to="/" className=" logo flex cursor-pointer flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
+                            <div className=" items-center justify-center mr-2">
+                                <img
+                                    src={videoIcon}
+                                    alt="Video recording icon"
+                                    width={20}
+                                    height={20}
+                                />
+                            </div>
+                            <span className="text-lg font-bold uppercase  text-medium-green items-center">
+                                OakPark
+                            </span>
+                        </Link>
+
+                        <div
+                            className={`ml-2  ham-menu z-[50] ${isSidebarOpen ? "active2" : ""}`}
+                            onClick={() => onClose()}
+                            role="button"
+                            aria-label="Menu button"
+                        >
+
+                            <span className="span-1 "></span>
+                            <span className="span-2"></span>
+                            <span className="span-3"></span>
+
+                        </div>
                     </div>
-                    <span className="text-lg font-bold uppercase  text-medium-green items-center">
-                        OakPark
-                    </span>
-                </Link>
                 {/* <p className='h-2 bg-grey'></p> */}
                 <div className="hidden sm:flex bg-fade-bg  items-center mx-2 justify-between p-2  border-gray-200 rounded-2xl mt-6">
                     <div className="flex items-center ">

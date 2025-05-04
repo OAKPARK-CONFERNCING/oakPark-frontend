@@ -17,7 +17,7 @@ const App = () => {
 
   return (
     <div className='h-screen max-w-[2000px] mx-auto'>
-      <header className=" w-[80%] mx-auto mt-20 flex justify-between items-center">
+      <header className=" w-[80%] mx-auto lg:mt-20 mt-10 flex justify-between items-center">
         <Link to="/" className='cursor-pointer flex items-center space-x-1'>
         <img src={videoRecording} alt="video recorder icon" />
         <p className="font-inter-700 text-medium-green ">

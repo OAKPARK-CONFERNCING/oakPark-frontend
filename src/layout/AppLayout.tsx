@@ -4,7 +4,8 @@ import Sidebar from '../components/sidebar';
 import Loader from '../loader/loader';
 import { ChevronDown } from "lucide-react";
 import Video from "../assets/icons/video.png";
-import { HamIcon } from 'lucide-react';
+
+
 
 function AppLayout() {
     const location = useLocation();
@@ -12,6 +13,7 @@ function AppLayout() {
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         setLoading(true);
+        setIsSidebarOpen(false); // Close the sidebar when the route changes
         // Simulate a small delay for the loader - adjust the delay (e.g., 300ms) as needed.
         const timer = setTimeout(() => {
             setLoading(false);
@@ -32,19 +34,32 @@ function AppLayout() {
     
     return (
         <div className="flex flex-row flex-1 ">
-           { <Sidebar isSidebarOpen={isSidebarOpen} />}
+           { <Sidebar onClose={() => setIsSidebarOpen(false)} isSidebarOpen={isSidebarOpen} />}
             <div className=" w-full">
-                <header className="fixed top-0 left-0 sm:left-[100px] lg:left-[250px] right-0 h-[70px] bg-white border-b border-gray-200  z-10">
-                    <div className="flex flex-row items-center justify-between   mx-auto p-4 ">
-                        <HamIcon className='z-10 sm:hidden block ' onClick={() => setIsSidebarOpen(!isSidebarOpen)}/>
-                        <h1 className="font-inter-600 text-inActive-green">
+                <header className=" fixed top-0 left-0 sm:left-[100px] lg:left-[250px] right-0 h-[70px] bg-white border-b border-gray-200   z-10 flex items-center justify-between ">
+                <div
+                    className={`ml-2 sm:hidden ham-menu z-[50] ${isSidebarOpen ? "active2" : ""}`}
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    role="button"
+                    aria-label="Menu button"
+                >
+
+                        <span className="span-1 "></span>
+                        <span className="span-2"></span>
+                        <span className="span-3"></span>
+
+                </div>
+                    <div className="flex flex-row border-l border-grey  ml-2 items-center justify-between p-4 w-full  ">
+                    
+
+                        <h1 className=" sm:w-auto text-xs md:text-base font-inter-600 text-inActive-green">
                             {dynamicHeaderText[location.pathname as keyof typeof dynamicHeaderText] || "Session History"}
                         
                         </h1>
 
-                        <button className="z-10 w-auto bg-medium-green hover:bg-medium-green/20 rounded-2xl flex items-center px-4 h-10">
+                        <button className="z-10 w-auto bg-medium-green hover:bg-medium-green/20 rounded-2xl flex items-center px-2 md:px-4 h-10">
                             <img src={Video} alt="video icon" className="mr-2 w-4" />
-                            <p className="font-inter-700 text-[12px] mr-3 text-white border-r h-full flex justify-center items-center pr-3">
+                            <p className="font-inter-700 text-[12px] mr-3 text-white border-r h-full flex justify-center items-center md:pr-3 pr-1">
                                 New session
                             </p>
                             <ChevronDown size={20} className="text-white " />
