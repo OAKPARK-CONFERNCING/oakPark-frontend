@@ -4,6 +4,7 @@ import Sidebar from '../components/sidebar';
 import Loader from '../loader/loader';
 import { ChevronDown } from "lucide-react";
 import Video from "../assets/icons/video.png";
+import { AnimatePresence } from 'framer-motion';
 
 
 
@@ -34,7 +35,7 @@ function AppLayout() {
     
     return (
         <div className="flex flex-row flex-1 ">
-           { <Sidebar onClose={() => setIsSidebarOpen(false)} isSidebarOpen={isSidebarOpen} />}
+<AnimatePresence>            {isSidebarOpen && <Sidebar onClose={() => setIsSidebarOpen(false)} isSidebarOpen={isSidebarOpen} />}</AnimatePresence>
             <div className=" w-full">
                 <header className=" fixed top-0 left-0 sm:left-[100px] lg:left-[250px] right-0 h-[70px] bg-white border-b border-gray-200   z-10 flex items-center justify-between ">
                 <div

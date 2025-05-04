@@ -10,7 +10,7 @@ import contactsColored from "../assets/icons/contactsColored.png";
 import completedSessions from '../assets/icons/competed.png';
 import CompletedSessionsColored from '../assets/icons/competedColored.png'
 import logout from '../assets/icons/LogOutIcon.png'
-// import { AnimatePresence, motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 
 function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>void}) {
 
@@ -126,12 +126,17 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
                         </div>
                     </nav>
                 </aside>
-    
+
     
             </div>
                 
                 {/* mobile nav bar */}
-            <div  className={`absolute z-20  top-0 h-screen w-[250px]  bg-white   ${isSidebarOpen ? "left-0" : "left-[-100%]"} transition-all duration-300 ease-in-out`}>
+            <motion.div  className={`absolute z-20  top-0 h-screen w-[250px]  bg-white    transition-all duration-300 ease-in-out`}
+                initial={{  opacity: 0, x: -100 }}
+                animate={{ width: "auto", opacity: 1, x:0}}
+                exit={{  opacity: 0,x:-100 }}
+                transition={{ duration: 0.1, ease: "easeInOut",type: "spring",bounce:0.9, stiffness: 900, damping: 30 }}
+            >
             <aside className="h-screen border-r border-gray-200 bg-white flex flex-col  shadow-lg">
             <div className="flex items-center w-full justify-between  border-b border-gray-200 bg-white">
                         <Link to="/" className=" logo flex cursor-pointer flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
@@ -223,7 +228,7 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
             </aside>
 
 
-        </div>
+        </motion.div>
 
         </>    );
 }
