@@ -1,0 +1,87 @@
+import { useState } from 'react';
+import { Link } from 'react-router';
+
+interface InstructorType {
+  name: string;
+  email: string;
+  avatar: string;
+}
+
+interface SessionCardFadeProps {
+  title?: string;
+  imageUrl?: string;
+  category?: string;
+  instructor?: InstructorType;
+  progress?: number; // Made optional with ?
+  timeRemaining?: string; // Made optional with ?
+}
+
+const SessionCardFade = ({
+  title = "Introduction to Artificial Intelligence and Machine Learning",
+  imageUrl = "/card3.png",
+  category = "ARTIFICIAL INTELLIGENCE",
+  progress = 20,
+  timeRemaining = "60mins to go",
+  instructor = {
+    name: "Emmanuel A.",
+    email: "emmanuel.a@example.com",
+    avatar: "/avatar.png"
+  }
+}: SessionCardFadeProps) => {
+  const [expanded, setExpanded] = useState(false);
+  
+  const handleSeeMore = () => {
+    setExpanded(!expanded);
+    // Here you would typically navigate to a page showing more courses
+  };
+  
+  return (
+    <div className="p-4 card relative bg-white rounded-2xl overflow-hidden   shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.16)] transition-shadow duration-300 cursor-pointer">
+      <div className='bg-white/70 absolute top-0 left-0 w-full h-full z-10  rounded-2xl'></div>
+      <button className='absolute inset-0 font-inter-500 z-20' ><Link to="/ongoing">+see more</Link></button>
+    <div className="relative">
+      <img 
+        src={imageUrl} 
+        alt={`${title} session thumbnail`} 
+        className="w-full h-48 object-cover rounded-2xl"
+      />
+      <p className="text-sm text-[#30434A] px-2 rounded-xl font-inter-500 absolute bottom-5 right-5 py-1  bg-border-color-grey">{timeRemaining}</p>
+    </div>
+    
+    <div className="card-content py-5">
+    <div className="w-auto inline-flex border mb-3  border-inActive-green bg-light-green font-inter-500 text-text-primary  px-2 py-1 rounded-xl text-xs">
+        {category}
+      </div>
+      <h3 className="font-inter-500 text-text-primary text-[15px] mb-2">{title}</h3>
+      
+      {progress > 0 && (
+        <div className="mt-2">
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div 
+              className="bg-blue-500 h-2 rounded-full" 
+              style={{ width: `${progress}%` }}
+              aria-label={`${progress}% complete`}
+            ></div>
+          </div>
+          
+        </div>
+      )}
+    </div>
+    
+    {/* instructor footer */}
+    <div className="pt-5 flex items-center gap-3 border-t border-gray-100">
+      <img 
+        src={instructor.avatar} 
+        alt={`${instructor.name}'s profile`}
+        className="w-10 h-10 rounded-full object-cover shadow-sm" 
+      />
+      <div>
+        <h4 className="font-inter-700 text-text-primary text-sm ">{instructor.name}</h4>
+        <p className=" text-xs  truncate text-inActive-green font-inter-500">{instructor.email}</p>
+      </div>
+    </div>
+  </div>
+  );
+};
+
+export default SessionCardFade;

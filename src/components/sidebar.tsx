@@ -9,7 +9,7 @@ import dashboardColored from "../assets/icons/dashboardColored.png";
 import contactsColored from "../assets/icons/contactsColored.png";
 import completedSessions from '../assets/icons/competed.png';
 import CompletedSessionsColored from '../assets/icons/competedColored.png'
-
+import logout from '../assets/icons/logOutIcon.png'
 
 function Sidebar() {
 
@@ -80,7 +80,7 @@ function Sidebar() {
                     <ChevronRight size={16} className="text-gray-900" />
                 </div>
 
-                <nav className="mt-4 mx-2 flex-1">
+                <nav className="mt-4 mx-2 flex-1 flex flex-col justify-between">
                     <ul>
                         {navigationItems.map((item) => (
                             <li
@@ -113,6 +113,10 @@ function Sidebar() {
                             </li>
                         ))}
                     </ul>
+                    <div className="inline-flex mb-10 hover:scale-105 transition-all duration-300 ease-in-out  cursor-pointer hover:text-gray-700">
+                        <img src={logout} alt="logout" className="w-5 " />
+                        <p className="font-inter-500 text-text-grey hover:text-gray-700 hover:scale-105 text-base  ml-2">Log Out</p>
+                    </div>
                 </nav>
             </aside>
 

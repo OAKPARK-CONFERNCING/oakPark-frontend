@@ -13,7 +13,7 @@ interface Participant {
   role: string;
 }
 
-interface Meeting {
+export interface Meeting {
   id: number;
   meetingTitle: string;
   date: string;
