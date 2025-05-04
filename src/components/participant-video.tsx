@@ -51,18 +51,18 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
   // Preserve percentage-based sizing from original code
   const containerStyles = {
     width: width ? `${width}%` : isMain  ? "100%" : "100%",
-    height: height ? `${height}%` : isTablet  ? "100%" : "100%",
+    height: height ? `${height}%` : isMain  ? "90vh" : "100%",
     aspectRatio: isMain ? undefined : undefined, // Remove aspect ratio constraint for main video
-    // maxHeight: isMain ? "90vh" : undefined, // Allow main video to take up to 90% of viewport height
+    maxHeight: isMain ? "90vh" : undefined, // Allow main video to take up to 90% of viewport height
   }
 
   return (
     <div
       className={cn(
-        "relative overflow-hidden   bg-gray-800 rounded-2xl",
-        isMain ? "w-full h-full max-h-[300px] sm:max-h-[600px] xl:max-h-[90vh]" : "w-full h-full",
+        "relative overflow-hidden bg-gray-800 rounded-2xl",
+        isMain ? "w-full h-full max-h-full" : "w-full h-full",
       )}
-      // style={containerStyles}
+      style={containerStyles}
     >
       {participant.videoOn ? (
         <>
@@ -84,7 +84,7 @@ export default function ParticipantVideo({ participant, isMain = false, width, h
           </video>
         </>
       ) : (
-        <div className="w-full xl:h-[90vh] max-h-[300px] sm:max-h-[600px]  xl:max-h-[90vh]  h-full flex items-center justify-center bg-gray-700">
+        <div className="w-full xl:h-[90vh]  h-full flex items-center justify-center bg-gray-700">
           <div
             className={cn(
               "flex items-center object-cover justify-center rounded-full bg-green-600 text-white",
