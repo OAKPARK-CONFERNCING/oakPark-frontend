@@ -120,12 +120,12 @@ export default function SidebarPanel({ participants, onClose, isMobile,onPartici
       </motion.aside>
       <motion.div 
       onClick={onClose
-        
+
       }
         initial={{  opacity: 0, }}
         animate={{  opacity: 1 }}
         exit={{  opacity: 0, }}
-      className="bg-black/50 h-screen w-full fixed top-0 left-0 z-10"></motion.div>
+      className="lg:hidden bg-black/50 h-screen w-full fixed top-0 left-0 z-10"></motion.div>
 </div>
   )
 }

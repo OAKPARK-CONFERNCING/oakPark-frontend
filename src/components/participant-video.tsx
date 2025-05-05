@@ -80,7 +80,7 @@ export default function ParticipantVideo({
         "relative overflow-hidden bg-gray-800 rounded-2xl",
         isMain ? "w-full h-full max-h-full" : "w-full h-full",
       )}
-      style={containerStyles}
+      // style={containerStyles}
       onClick={handleVideoClick}
     >
       {participant.videoOn ? (
