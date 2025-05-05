@@ -133,9 +133,9 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
                 {/* mobile nav bar */}
             <div className="block sm:hidden">
                 <motion.div  className={`absolute z-20  top-0 h-screen w-[250px]  bg-white    `}
-                    initial={{ width: 0, opacity: 0,x:-100 }}
+                    initial={{  opacity: 0,x:-100 }}
                     animate={{ width: "auto", opacity: 1,x:0 }}
-                    exit={{ width: 0, opacity: 0,x:0 }}
+                    exit={{ opacity: 0,x:0 }}
                     transition={{ duration: 0.3, ease: "easeInOut",type: "spring", stiffness: 300, damping: 30 }}
                 >
                 <aside className="h-screen border-r border-gray-200 bg-white flex flex-col  shadow-lg">

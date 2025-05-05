@@ -368,7 +368,7 @@ export default function VideoConference() {
 
   return (
     <div className={`bg-[#F7FFF8] lg:h-auto h-screen flex px-2 sm:px-5 mx-auto ${isTablet ? "" : ""}`}>
-      <div className="flex flex-col w-full mx-auto max-w-[1920px] overflow-hidden">
+      <div className="flex flex-col w-full mx-auto max-w-[1920px] ">
         {/* Header */}
         <header className="border border-light-green rounded-2xl my-4 bg-white px-2 sm:px-4 py-1 flex justify-between items-center flex-shrink-0">
           <Link to="/" className="hidden md:flex items-center cursor-pointer space-x-1">
@@ -423,7 +423,7 @@ export default function VideoConference() {
                   {/* Close button */}
                   <button
                     onClick={closeMainView}
-                    className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-black/70"
+                    className="absolute top-2 sm:top-4 cursor-pointer right-2 sm:right-4 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-black/70"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
