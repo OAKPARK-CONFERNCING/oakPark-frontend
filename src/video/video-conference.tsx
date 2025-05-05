@@ -239,9 +239,9 @@ export default function VideoConference() {
   // Update thumbnail count based on screen size
   useEffect(() => {
     if (isSmallScreen) {
-      setThumbnailCount(4) // Show fewer thumbnails on very small screens
+      setThumbnailCount(7) // Show fewer thumbnails on very small screens
     } else if (isMobile) {
-      setThumbnailCount(6)
+      setThumbnailCount(7)
     } else if (isTablet) {
       setThumbnailCount(7)
     } else {
@@ -316,24 +316,7 @@ export default function VideoConference() {
 
   // Get participants to display in the grid
   const getGridParticipants = () => {
-    // If no active participant, show all participants
-    if (!activeParticipant) {
-      return [...participants].sort((a, b) => {
-        // Host first
-        if (a.role === "host") return -1
-        if (b.role === "host") return 1
-
-        const roleOrder = {
-          "co-host": 1,
-          member: 2,
-          participant: 3,
-          guest: 4,
-        }
-        return roleOrder[a.role as keyof typeof roleOrder] - roleOrder[b.role as keyof typeof roleOrder]
-      })
-    }
-
-    // If there is an active participant, show a limited number of thumbnails
+    // Always limit the number of participants shown in thumbnails
     // Sort participants by role priority
     const sortedParticipants = [...participants].sort((a, b) => {
       // Host first
@@ -349,16 +332,18 @@ export default function VideoConference() {
       return roleOrder[a.role as keyof typeof roleOrder] - roleOrder[b.role as keyof typeof roleOrder]
     })
 
-    // Make sure active participant is included in the thumbnails
-    const activeParticipantIndex = sortedParticipants.findIndex((p) => p.id === activeParticipant.id)
+    // If there's an active participant, make sure it's included in the thumbnails
+    if (activeParticipant) {
+      const activeParticipantIndex = sortedParticipants.findIndex((p) => p.id === activeParticipant.id)
 
-    // If active participant is not in the first thumbnailCount-1 participants,
-    // we need to ensure it's included
-    if (activeParticipantIndex >= thumbnailCount) {
-      // Remove active participant from its current position
-      const activeParticipantObj = sortedParticipants.splice(activeParticipantIndex, 1)[0]
-      // Insert it at the last visible position
-      sortedParticipants.splice(thumbnailCount - 1, 0, activeParticipantObj)
+      // If active participant is not in the first thumbnailCount-1 participants,
+      // we need to ensure it's included
+      if (activeParticipantIndex >= thumbnailCount) {
+        // Remove active participant from its current position
+        const activeParticipantObj = sortedParticipants.splice(activeParticipantIndex, 1)[0]
+        // Insert it at the last visible position
+        sortedParticipants.splice(thumbnailCount - 1, 0, activeParticipantObj)
+      }
     }
 
     return sortedParticipants.slice(0, thumbnailCount)
@@ -373,25 +358,16 @@ export default function VideoConference() {
     setIsSidebarOpen(false)
   }
 
-  // Determine grid columns based on active state and screen size
+  // Determine grid columns based on screen size
   const getGridColumns = () => {
-    if (!activeParticipant) {
-      // More columns in grid-only view
-      if (isSmallScreen) return "grid-cols-2"
-      if (isMobile) return "grid-cols-3"
-      if (isTablet) return "grid-cols-4"
-      return "grid-cols-5"
-    } else {
-      // Fewer columns when main video is active
-      if (isSmallScreen) return "grid-cols-2"
-      if (isMobile) return "grid-cols-3"
-      if (isTablet) return "grid-cols-4"
-      return "grid-cols-4"
-    }
+    if (isSmallScreen) return "grid-cols-2"
+    if (isMobile) return "grid-cols-3"
+    if (isTablet) return "grid-cols-2"
+    return "grid-cols-3"
   }
 
   return (
-    <div className={`bg-[#F7FFF8] flex px-2 sm:px-5 mx-auto ${isTablet ? "" : ""}`}>
+    <div className={`bg-[#F7FFF8] lg:h-auto h-screen flex px-2 sm:px-5 mx-auto ${isTablet ? "" : ""}`}>
       <div className="flex flex-col w-full mx-auto max-w-[1920px] overflow-hidden">
         {/* Header */}
         <header className="border border-light-green rounded-2xl my-4 bg-white px-2 sm:px-4 py-1 flex justify-between items-center flex-shrink-0">
@@ -404,10 +380,10 @@ export default function VideoConference() {
             <p className="font-inter-700 text-medium-green text-sm sm:text-base">OakPark</p>
           </Link>
 
-          <TooltipProvider>
+          <TooltipProvider >
             <Tooltip>
-              <TooltipTrigger>
-                <h1 className="w-44 lg:w-full text-header-text-primary font-inter-700 truncate">
+              <TooltipTrigger className="flex justify-center items-center">
+                <h1 className="text-center w-48 sm:w-[60%] xl:w-[80%] :w-full text-header-text-primary font-inter-700 truncate">
                   Workshop: An introduction to Artificial Intelligence and Machine Learning
                 </h1>
               </TooltipTrigger>
@@ -465,7 +441,7 @@ export default function VideoConference() {
                     </svg>
                   </button>
 
-                  <div className="h-[80vh] w-full">
+                  <div className="h-full lg:h-[80vh] w-full">
                     <ParticipantVideo
                       onToggleVideo={toggleParticipantVideo}
                       participant={activeParticipant}
@@ -478,8 +454,8 @@ export default function VideoConference() {
             </AnimatePresence>
 
             {/* Grid of participants */}
-            <div className={`flex-1 overflow-y-auto ${activeParticipant ? "max-h-[30vh]" : ""}`}>
-              <div className={`grid ${getGridColumns()} gap-3 sm:gap-4 w-full ${activeParticipant ? "" : "h-full"}`}>
+            <div className={`flex-1  overflow-y-auto ${activeParticipant ? "max-h-[20vh] md:max-h-[30vh]" : ""}`}>
+              <div className={`mb-20 lg:mb-0 grid ${getGridColumns()} gap-3 sm:gap-4 w-full ${activeParticipant ? "" : "h-full"}`}>
                 {gridParticipants.map((participant) => (
                   <div
                     key={participant.id}
@@ -488,7 +464,7 @@ export default function VideoConference() {
                       participant.id === activeParticipant?.id ? "border-4 border-green-500" : "",
                     )}
                     onClick={() => setAsActive(participant)}
-                    style={{ aspectRatio: "16/9" }}
+                    // style={{ aspectRatio: "16/9" }}
                   >
                     <ParticipantVideo
                       participant={participant}
@@ -504,11 +480,12 @@ export default function VideoConference() {
                   </div>
                 ))}
 
-                {/* "+X participants" indicator */}
+                {/* "+X participants" indicator - always show when there are more participants */}
                 {remainingParticipantsCount > 0 && (
                   <div
                     className="rounded-2xl relative cursor-pointer bg-green-100 flex items-center justify-center text-green-800 font-medium"
-                    style={{ aspectRatio: "16/9" }}
+
+                    // style={{ aspectRatio: "16/9" }}
                     onClick={() => setIsSidebarOpen(true)}
                   >
                     <div className="text-center">
@@ -521,7 +498,7 @@ export default function VideoConference() {
             </div>
 
             {/* Controls */}
-            <div className="p-1 mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0">
+            <div className="p-1 fixed bg-white w-full 1lg:bottom-auto left-0 right-0 1lg:left-auto 1lg:right-auto  bottom-0 1lg:relative mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0">
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
@@ -689,6 +666,7 @@ function useWindowSize(breakpoint: number) {
   }, [breakpoint])
 
   return isBelow
+
 }
 
 // "use client"
