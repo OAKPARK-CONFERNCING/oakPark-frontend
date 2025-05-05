@@ -199,6 +199,8 @@ const mockParticipants: Participant[] = [
 ]
 
 export default function VideoConference() {
+
+  
   const [participants, setParticipants] = useState<Participant[]>(mockParticipants)
   const [activeParticipant, setActiveParticipant] = useState<Participant>(
     // Default to host as the active participant
@@ -229,6 +231,8 @@ export default function VideoConference() {
       window.removeEventListener("resize", setVh)
     }
   }, [])
+
+  
 
   // Update meeting time every second
   useEffect(() => {
@@ -269,6 +273,10 @@ export default function VideoConference() {
   }
 
   useEffect(() => {
+    setIsVideoOn(activeParticipant.videoOn);
+  }, [activeParticipant]);
+
+  useEffect(() => {
     if (isSmallScreen) {
       setVisibleThumbnails(2) // Show fewer thumbnails on very small screens
     } else if (isMobile) {
@@ -289,9 +297,28 @@ export default function VideoConference() {
     }
   }
 
+  // Add a function to toggle participant audio
+const toggleParticipantAudio = (id: string) => {
+  setParticipants((prev) => 
+    prev.map((p) => (p.id === id ? { ...p, audioOn: !p.audioOn } : p))
+  );
+
+  if (activeParticipant.id === id) {
+    setActiveParticipant((prev) => ({ ...prev, audioOn: !prev.audioOn }));
+    setIsMicOn(!activeParticipant.audioOn); // Update the mic button state
+    
+  }
+}
+
+useEffect(() => {
+  setIsMicOn(activeParticipant.audioOn);
+}, [activeParticipant]);
+
   // Set a participant as the main active view
   const setAsActive = (participant: Participant) => {
     setActiveParticipant(participant)
+    setIsVideoOn(participant.videoOn);
+    setIsMicOn(participant.audioOn);
   }
 
   // Get thumbnails to display - MODIFIED to include active participant and ensure host is first
@@ -387,7 +414,9 @@ export default function VideoConference() {
                 {activeParticipant.name}
               </div>
               <div className="h-full w-full max-h-full">
-                <ParticipantVideo participant={activeParticipant} isMain={true} />
+                <ParticipantVideo 
+                onToggleVideo={toggleParticipantVideo}
+                participant={activeParticipant} isVideoOn={()=>setIsVideoOn(!isVideoOn)} isMain={true} />
               </div>
             </div>
 
@@ -407,7 +436,7 @@ export default function VideoConference() {
                     onClick={() => setAsActive(participant)}
                     style={{ aspectRatio: "16/9" }}
                   >
-                    <ParticipantVideo participant={participant} isMain={false} width={100} isTablet={isTablet} height={100} />
+                    <ParticipantVideo participant={participant} isVideoOn={()=>setIsVideoOn(!isVideoOn)} isMain={false} width={100} isTablet={isTablet} height={100} />
                     <div className="absolute top-2 left-2 px-2 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
                       {participant.name}
                     </div>
@@ -439,7 +468,13 @@ export default function VideoConference() {
                       variant="outline"
                       size="icon"
                       className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isMicOn ? "bg-medium-green " : "bg-btn-primary"}`}
-                      onClick={() => setIsMicOn(!isMicOn)}
+                      onClick={() => {
+                        // Toggle the button state
+                        setIsMicOn(!isMicOn);
+                        
+                        // Toggle the active participant's audio
+                        toggleParticipantAudio(activeParticipant.id);
+                      }}
                     >
                       {isMicOn ? (
                         <img src={micOn || "/placeholder.svg"} alt="mic on icon" className="w-4 sm:w-5" />
@@ -459,7 +494,13 @@ export default function VideoConference() {
                       variant="outline"
                       size="icon"
                       className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isVideoOn ? "bg-medium-green " : "bg-btn-primary"}`}
-                      onClick={() => setIsVideoOn(!isVideoOn)}
+                      onClick={() => {
+                        // Toggle the button state
+                        setIsVideoOn(!isVideoOn);
+                        
+                        // Toggle the active participant's video
+                        toggleParticipantVideo(activeParticipant.id);
+                      }}
                     >
                       {isVideoOn ? (
                         <img src={videoOn || "/placeholder.svg"} alt="video on icon" className="w-4 sm:w-5" />

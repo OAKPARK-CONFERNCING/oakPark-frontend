@@ -49,7 +49,7 @@ function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction,
                   {/* <div className="w-full sm:w-32 1lg:w-44">
                     <img src="https://picsum.photos/300/200" className="w-full rounded-2xl" alt="meeting thumbnail" />
                   </div> */}
-                  <div className="rounded-2xl h-52 sm:h-22 w-full sm:w-32 1lg:w-44 bg-gray-300">
+                  <div className="rounded-2xl h-52 sm:h-22 w-full sm:w-32 1lg:w-44 bg-gray-300 ">
 
                   </div>
 
