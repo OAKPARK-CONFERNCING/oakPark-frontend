@@ -345,7 +345,7 @@ export default function VideoConference() {
     >
       <div className="flex flex-col w-full mx-auto max-w-[1920px] overflow-hidden">
         {/* Header */}
-        <header className="border border-light-green rounded-2xl my-4 bg-white  py-1 flex justify-between items-center flex-shrink-0">
+        <header className="border border-light-green rounded-2xl my-4 bg-white px-2 sm:px-4  py-1 flex justify-between items-center flex-shrink-0">
           <Link to="/" className="flex items-center cursor-pointer space-x-1">
             <img
               src={videoRecording || "/placeholder.svg"}
@@ -438,7 +438,7 @@ export default function VideoConference() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14 ${isMicOn ? "bg-medium-green " : "bg-btn-primary"}`}
+                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isMicOn ? "bg-medium-green " : "bg-btn-primary"}`}
                       onClick={() => setIsMicOn(!isMicOn)}
                     >
                       {isMicOn ? (
@@ -458,7 +458,7 @@ export default function VideoConference() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14 ${isVideoOn ? "bg-medium-green " : "bg-btn-primary"}`}
+                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isVideoOn ? "bg-medium-green " : "bg-btn-primary"}`}
                       onClick={() => setIsVideoOn(!isVideoOn)}
                     >
                       {isVideoOn ? (
@@ -478,7 +478,7 @@ export default function VideoConference() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14 ${isShareScreen ? "bg-medium-green " : "bg-btn-primary"}`}
+                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isShareScreen ? "bg-medium-green " : "bg-btn-primary"}`}
                       onClick={() => setIsShareScreen(!isShareScreen)}
                     >
                       {isShareScreen ? (
@@ -498,7 +498,7 @@ export default function VideoConference() {
                     <Button
                       variant="outline"
                       size="icon"
-                      className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14`}
+                      className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14`}
                     >
                       <Share2 className="h-4 w-4 sm:h-5 sm:w-5 hover:text-medium-green text-white" />
                     </Button>
@@ -514,7 +514,7 @@ export default function VideoConference() {
                       variant="outline"
                       size="icon"
                       className={cn(
-                        "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14",
+                        "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14",
                         isSidebarOpen ? "bg-medium-green" : "bg-btn-primary",
                       )}
                       onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -534,7 +534,7 @@ export default function VideoConference() {
                     <Button
                       variant="destructive"
                       size="icon"
-                      className="rounded-3xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-10 sm:size-14"
+                      className="rounded-3xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14"
                     >
                       <img src={closeCall || "/placeholder.svg"} className="w-4 sm:w-5" alt="call end icon" />
                     </Button>
