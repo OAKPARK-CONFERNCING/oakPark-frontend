@@ -46,7 +46,8 @@
   --font-inter-900: inter-black;
   --font-inter-500: inter-medium;
   --font-inter-600: inter-semiBold;
-  --breakpoint-1xl: 1300px
+  --breakpoint-1xl: 1300px;
+  --breakpoint-1lg: 1170px
 }
 
 @theme  {
@@ -165,7 +166,7 @@
     @apply h-[32px] w-[32px]  relative z-[4] hover:cursor-pointer lg:hidden;
   }
   .ham-menu span {
-    @apply h-[3px] w-[100%]  bg-black rounded-3xl absolute top-1/2  -translate-y-1/2 transition-all duration-300 ease-in-out;
+    @apply h-[3px] w-[100%]  bg-header-text-primary rounded-3xl absolute top-1/2  -translate-y-1/2 transition-all duration-300 ease-in-out;
   }
   .ham-menu span:nth-child(1) {
     @apply top-1/4;
@@ -174,7 +175,7 @@
     @apply top-[75%];
   }
   .ham-menu.active2 span {
-    @apply bg-black;
+    @apply bg-header-text-primary;
   }
   .ham-menu.active2 span:nth-child(1) {
     @apply top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-45;

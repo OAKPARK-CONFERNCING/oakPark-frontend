@@ -119,6 +119,9 @@ export default function SidebarPanel({ participants, onClose, isMobile,onPartici
         </div>
       </motion.aside>
       <motion.div 
+      onClick={onClose
+        
+      }
         initial={{  opacity: 0, }}
         animate={{  opacity: 1 }}
         exit={{  opacity: 0, }}

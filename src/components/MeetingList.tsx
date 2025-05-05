@@ -35,46 +35,51 @@ interface MeetingListProps {
 function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction, status }: MeetingListProps) {
   return (
     <>
-      <div className="space-y-5">
+      {/* <div className="1lg:space-y-5 "> */}
+      <div className="1lg:space-y-5 grid grid-cols-1 md:grid-cols-2 gap-5 1lg:flex 1lg:flex-col">
         {data.meetings.map(
           (item: Meeting, index: number) =>
             item.status === statusFilter && (
               <div
                 key={index}
-                className="flex gap-6 lg:gap-0 flex-col lg:flex-row items-center justify-between bg-white rounded-2xl p-4 md:p-5 border border-[#f4f4f4]"
+                className=" flex gap-6 md:gap-10  1lg:gap-0 flex-col 1lg:flex-row items-center justify-between bg-white rounded-2xl p-4 md:p-5 border border-[#f4f4f4]"
               >
                 {/* Meeting thumbnail and title - stacked on mobile, side by side on tablet/desktop */}
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 items-start sm:items-center justify-between w-full lg:w-auto mb-4 md:mb-0">
-                  <div className="w-full sm:w-44">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 items-start sm:items-center justify-between w-full 1lg:w-auto mb-4 md:mb-0">
+                  {/* <div className="w-full sm:w-32 1lg:w-44">
                     <img src="https://picsum.photos/300/200" className="w-full rounded-2xl" alt="meeting thumbnail" />
+                  </div> */}
+                  <div className="rounded-2xl h-52 sm:h-22 w-full sm:w-32 1lg:w-44 bg-gray-300">
+
                   </div>
 
-                  <div className="flex flex-col justify-center mt-2 sm:mt-0">
-                    <h2 className="text-sm font-inter-500 text-inActive-green uppercase">Title</h2>
-                    <p className="text-base font-inter-500 sm:w-44 w-auto text-text-primary">{item.meetingTitle}</p>
+                  <div className="1lg:w-full w-auto sm:w-48 md:w-32 flex flex-col justify-center mt-2 sm:mt-0">
+                    <h2 className="text-xs 1lg:text-sm font-inter-500 text-inActive-green uppercase">Title</h2>
+                    <p className="text-sm truncate 1lg:overflow-visible 1lg:text-ellipsis 1lg:whitespace-normal
+                    1lg:text-base font-inter-500 1lg:w-44 w-auto text-text-primary">{item.meetingTitle}</p>
                   </div>
                 </div>
 
                 {/* Meeting details - grid on mobile, flex on tablet/desktop */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:flex gap-4 md:gap-10 2xl:gap-32 items-start md:items-center justify-between w-full lg:w-auto mb-4 md:mb-0">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:flex gap-4 md:gap-10 2xl:gap-32 items-start md:items-center justify-between w-full 1lg:w-auto mb-4 md:mb-0">
                   <div>
-                    <h2 className="text-sm font-inter-500 text-inActive-green uppercase">participants</h2>
-                    <p className="text-base font-inter-500 text-text-primary">{item.participants.length}</p>
+                    <h2 className="text-xs 1lg:text-sm font-inter-500 text-inActive-green uppercase">participants</h2>
+                    <p className="1lg:text-base text-sm font-inter-500 text-text-primary">{item.participants.length}</p>
                   </div>
 
                   <div>
-                    <h2 className="text-sm font-inter-500 text-inActive-green uppercase">Date</h2>
-                    <p className="text-base font-inter-500 text-text-primary">{FormatDates(item.date)}</p>
+                    <h2 className="1lg:text-sm text-xs font-inter-500 text-inActive-green uppercase">Date</h2>
+                    <p className="1lg:text-base text-sm font-inter-500 text-text-primary">{FormatDates(item.date)}</p>
                   </div>
 
                   <div className="col-span-2 sm:col-span-1">
-                    <h2 className="text-sm font-inter-500 text-inActive-green uppercase">Status</h2>
-                    <p className="text-base font-inter-500 text-text-primary">{status}</p>
+                    <h2 className="text-xs 1lg:text-sm font-inter-500 text-inActive-green uppercase">Status</h2>
+                    <p className="text-sm 1lg:text-base font-inter-500 text-text-primary">{status}</p>
                   </div>
                 </div>
 
                 {/* Action button - full width on mobile, auto width on tablet/desktop */}
-                <div className="w-full sm:w-auto">
+                <div className="w-full 1lg:w-auto">
                   {buttonAction === "view" ? (
                     <Link
                       to={`/history/${item.id}`}

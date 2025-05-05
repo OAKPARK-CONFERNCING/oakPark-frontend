@@ -47,10 +47,10 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
 
     return (
         <>
-            <div className="fixed left-0 hidden sm:block top-0 h-screen lg:w-[250px] w-auto bg-white  z-20">
+            <div className="fixed left-0 hidden sm:block top-0 h-screen  sm:w-[100px] lg:w-[250px] w-auto bg-white  z-20">
                 <aside className="h-screen border-r border-gray-200 bg-white flex flex-col  shadow-lg">
                     
-                        <Link to="/" className=" logo flex cursor-pointer flex-row h-[70px]  border-b border-gray-200 pl-3 bg-white items-center justify-start ">
+                        <Link to="/" className=" logo flex cursor-pointer flex-col lg:flex-row  h-[70px]  border-b border-gray-200 lg:pl-3 pl-0  bg-white items-center justify-center lg:justify-start ">
                             <div className=" items-center justify-center mr-2">
                                 <img
                                     src={videoIcon}
@@ -59,7 +59,7 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
                                     height={20}
                                 />
                             </div>
-                            <span className="text-lg font-bold uppercase hidden lg:block text-medium-green items-center">
+                            <span className= "text-base lg:text-lg  font-bold uppercase text-medium-green items-center">
                                 OakPark
                             </span>
                         </Link>
@@ -131,7 +131,7 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
             </div>
                 
                 {/* mobile nav bar */}
-            <div>
+            <div className="block sm:hidden">
                 <motion.div  className={`absolute z-20  top-0 h-screen w-[250px]  bg-white    `}
                     initial={{ width: 0, opacity: 0,x:-100 }}
                     animate={{ width: "auto", opacity: 1,x:0 }}
@@ -231,6 +231,7 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
     
             </motion.div>
             <motion.div 
+            onClick={onClose}
              initial={{  opacity: 0, }}
              animate={{  opacity: 1 }}
              exit={{  opacity: 0, }}
