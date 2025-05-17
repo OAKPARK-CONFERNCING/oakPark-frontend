@@ -54,7 +54,8 @@ const Dashboard = () => {
   })));
   
   // Process all meetings data
-  const allMeetingsData: Meeting[] = typedData.meetings.map(meeting => ({
+
+  const allMeetingsData = typedData.meetings.map(meeting => ({
     ...meeting,
     participants: meeting.participants.map(participant => ({
       ...participant,
@@ -162,7 +163,7 @@ const Dashboard = () => {
 
         <div>
           <MeetingList 
-            data={{ meetings: completedMeetings }}
+            data={{ meetings: completedMeetings as any }}
             statusFilter="Completed"     
             status="Completed"
             buttonText="View"
@@ -174,7 +175,6 @@ const Dashboard = () => {
     </div>
   );
 };
-
 export default Dashboard;
 
 

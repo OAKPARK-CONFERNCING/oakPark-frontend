@@ -2,6 +2,8 @@ import data from '../data/data.json';
 import Searcbar from '../components/searchbar';
 import MeetingList from '../components/MeetingList';
 import viewIcon from '../assets/icons/viewIcon.png'
+import { useState } from 'react';
+import  useDebounce  from '../hooks/useDebounce';
 
 interface Participant {
   id: number;
@@ -28,14 +30,25 @@ interface Data {
 function History() {
   const meetingsData = data as Data;
 
+  const [searchTerm, setSearchTerm] = useState<string >('');
+  const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([]);
+
+  // Filter meetings by status and search term
+  useDebounce(() => {
+    setFilteredMeetings(
+      meetingsData.meetings.filter(m => m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+    
+  }, [meetingsData,searchTerm],500);
+
   const completedCount = meetingsData.meetings.filter(meeting => meeting.status === 'Completed').length;
   const ongoingCount = meetingsData.meetings.filter(meeting => meeting.status === "In Progress").length;
   
   return (
     <section className='p-3 sm:p-5 md:p-7'>
-    <Searcbar completedcount={completedCount}  ongoingcount={ ongoingCount} />
+    <Searcbar completedcount={completedCount}  ongoingcount={ ongoingCount} setOnSearch={setSearchTerm}/>
       <MeetingList 
-        data={meetingsData}
+        data={{meetings: filteredMeetings}}
         statusFilter="Completed"     
         status='Completed'
         buttonText="View"

@@ -1,3 +1,4 @@
+// import data from "../data/data.json"
 import FormatDates from "../constants/constants"
 import { Link } from "react-router-dom"
 
@@ -33,6 +34,7 @@ interface MeetingListProps {
 }
 
 function MeetingList({ data, statusFilter, buttonText, buttonIcon, buttonAction, status }: MeetingListProps) {
+  
   return (
     <>
       {/* <div className="1lg:space-y-5 "> */}
