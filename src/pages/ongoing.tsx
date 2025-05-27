@@ -42,14 +42,19 @@ function Ongoing() {
   const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([]);
 
   // Filter meetings by status and search term
-  useDebounce(() => {
-    setFilteredMeetings(
-      meetingsData.meetings.filter(m => m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+  useDebounce({
+    effect: () => {
+      setFilteredMeetings(
+        meetingsData.meetings.filter(m =>
+          m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    },
+    dependencies: [meetingsData, searchTerm],
+    delay: 500,
+  });
+  
 
-  }, [meetingsData,searchTerm],500);
-  // const filteredMeetings = meetingsData.meetings
-  // .filter(m => m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase()));
 
   return (
     <section className="p-3 sm:p-5 md:p-7">

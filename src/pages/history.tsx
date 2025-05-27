@@ -34,12 +34,17 @@ function History() {
   const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([]);
 
   // Filter meetings by status and search term
-  useDebounce(() => {
-    setFilteredMeetings(
-      meetingsData.meetings.filter(m => m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
-    
-  }, [meetingsData,searchTerm],500);
+  useDebounce({
+    effect: () => {
+      setFilteredMeetings(
+        meetingsData.meetings.filter(m =>
+          m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    },
+    dependencies: [meetingsData, searchTerm],
+    delay: 500,
+  });
 
   const completedCount = meetingsData.meetings.filter(meeting => meeting.status === 'Completed').length;
   const ongoingCount = meetingsData.meetings.filter(meeting => meeting.status === "In Progress").length;

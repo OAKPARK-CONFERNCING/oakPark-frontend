@@ -10,7 +10,7 @@ import contactsColored from "../assets/icons/contactsColored.png";
 import completedSessions from '../assets/icons/competed.png';
 import CompletedSessionsColored from '../assets/icons/competedColored.png'
 import logout from '../assets/icons/LogOutIcon.png'
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
 
 function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>void}) {
 
@@ -39,7 +39,7 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
         {
             id: "Groups",
             url: "/contacts",
-            label: "Contacts",
+            label: "Groups",
             icon: contacts,
             iconColored: contactsColored,
         },

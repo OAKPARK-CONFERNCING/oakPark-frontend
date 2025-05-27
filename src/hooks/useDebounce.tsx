@@ -1,6 +1,12 @@
 import { useEffect, useCallback } from 'react';
 
-export default function useDebounce(effect, dependencies, delay) {
+interface useDebounceProps {
+  effect: () => void;
+  dependencies: any[];
+  delay: number;
+}
+
+export default function useDebounce({effect, dependencies, delay}:useDebounceProps) {
   const callback = useCallback(effect, dependencies);
 
   useEffect(() => {
