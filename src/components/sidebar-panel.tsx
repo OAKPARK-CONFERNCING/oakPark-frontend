@@ -62,7 +62,7 @@ export default function SidebarPanel({ participants, onClose, isMobile,onPartici
   return (
 <div>
       <motion.aside
-      initial={{ width: 0, opacity: 0,x:100 }}
+      initial={{ width: 0, opacity: 1,x:100 }}
       animate={{ width: "auto", opacity: 1,x:0 }}
       exit={{ width: 0, opacity: 0,x:100 }}
       transition={{ duration: 0.3, ease: "easeInOut",type: "spring", stiffness: 300, damping: 30 }}

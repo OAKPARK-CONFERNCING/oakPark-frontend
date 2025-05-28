@@ -1,12 +1,12 @@
-// components/SignIn.tsx
+// components/Crea.tsx
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { motion } from 'framer-motion';
 import closeBtn from '../assets/icons/closeBtn.png';
 import GoogleLogo from "../assets/icons/googleLogo.png";
+import { motion } from 'framer-motion';
 
-interface SignInProps {
+interface CreateAccountProps {
     isOpen: boolean;
     onClose: () => void;
 }
@@ -14,9 +14,11 @@ interface SignInProps {
 interface FormInputs {
     email: string;
     password: string;
+    firstName: string;
+    lastName: string;
 }
 
-const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
+const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<FormInputs>();
 
     const onSubmit = (data: FormInputs) => {
@@ -41,33 +43,53 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="fixed inset-0 bg-bg-secondary/36" 
+                className="fixed inset-0  bg-bg-secondary/36"
                 onClick={onClose}
             />
 
+
             {/* Modal content with opaque white/dark background */}
             <motion.div
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0 }}
-                transition={{
-                    duration: 0.4,
-                    delay: 0.2,
-                    scale: { type: "spring", visualDuration: 0.4, bounce: 0.25 },
-                }}
-                className="relative z-10 w-xl max-w-3xl rounded-xl bg-[#fbfbfb] shadow md:p-16 p-6 text-text-primary overflow-hidden dark:border-gray-700"
-            >
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{
+                duration: 0.4,
+                delay: 0.2,
+                scale: { type: "spring", visualDuration: 0.4, bounce: 0.25 },
+            }}
+            className="relative z-10 w-xl max-w-3xl rounded-xl bg-[#fbfbfb] shadow md:p-16 p-6 text-text-primary overflow-hidden dark:border-gray-700">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
                     <div className='flex justify-between items-center'>
                         <div>
-                            <h3 className='text-2xl font-inter-700 text-text-primary'>Login</h3>
-                            <p className='text-xs text-inActive-green font-inter-400'>Authenticate your membership, Gain your quick access</p>
+                            <h3 className='text-2xl font-inter-700 text-text-primary'>Create Account</h3>
+                            <p className='text-xs text-inActive-green font-inter-400'>Join our community and get started</p>
                         </div>
                         <button type="button" onClick={onClose} className='cursor-pointer'>
                             <img src={closeBtn} alt="close" className='size-6' />
                         </button>
                     </div>
                     <div>
+                        <label htmlFor="firstName" className="sr-only">First Name</label>
+                        <input
+                            {...register("firstName", { required: "First name is required" })}
+                            type="text"
+                            id="firstName"
+                            className="bg-white border-2 border-[#cccccc] focus:outline-[#cccccc] focus:ring-0 focus:border-[#cccccc] p-3 rounded-2xl w-full indent-3 font-inter-400"
+                            placeholder="FirstName"
+                        />
+                        {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
+
+                        <label htmlFor="lastName" className="sr-only">Last Name</label>
+                        <input
+                            {...register("lastName", { required: "Last name is required" })}
+                            type="text"
+                            id="lastName"
+                            className="mt-2 bg-white border-2 border-[#cccccc] focus:outline-[#cccccc] focus:ring-0 focus:border-[#cccccc] p-3 rounded-2xl w-full indent-3 font-inter-400"
+                            placeholder="Lastname"
+                        />
+                        {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
+
                         <label htmlFor="email" className="sr-only">Email</label>
                         <input
                             {...register("email", { 
@@ -79,7 +101,7 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
                             })}
                             type="email"
                             id="email"
-                            className="bg-white border-2 border-[#cccccc] focus:outline-[#cccccc] focus:ring-0 focus:border-[#cccccc] p-3 rounded-2xl w-full indent-3 font-inter-400"
+                            className="mt-2 bg-white border-2 border-[#cccccc] focus:outline-[#cccccc] focus:ring-0 focus:border-[#cccccc] p-3 rounded-2xl w-full indent-3 font-inter-400"
                             placeholder="Enter your email address"
                         />
                         {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
@@ -101,19 +123,19 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
                         {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
                     </div>
                     <button type="submit" className="cursor-pointer font-inter-400 text-white p-3 mb-3 bg-medium-green rounded-2xl w-full">
-                        Login
+                        Create Account
                     </button>
                     <p className="text-text-grey uppercase text-center font-inter-400">or</p>
                     <button type="button" className='p-3 border bg-white border-border-color-grey w-full rounded-2xl flex justify-center items-center space-x-2'>
                         <img src={GoogleLogo} className='size-8' alt="google logo" />
                         <span className="font-inter-400">Continue with Google</span>
                     </button>
-                    <p className='cursor-pointer text-text-grey underline font-inter-400 text-right'>Forget password?</p>
+                    <p className='cursor-pointer text-text-grey underline font-inter-400 text-right'>Already have an account? Sign in</p>
                 </form>
             </motion.div>
         </div>
     );
 };
 
-export default SignIn;
+export default CreateAccount;
 

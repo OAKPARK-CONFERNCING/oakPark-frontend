@@ -2,7 +2,7 @@ import data from '../data/data.json';
 import Searchbar from '../components/searchbar';
 import MeetingList from '../components/MeetingList';
 import viewIcon from '../assets/icons/viewIcon.png';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import  useDebounce  from '../hooks/useDebounce';
 
 
@@ -42,18 +42,27 @@ function Ongoing() {
   const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([]);
 
   // Filter meetings by status and search term
+  useEffect(() => {
+    setFilteredMeetings(meetingsData.meetings);
+  }, [meetingsData]);
+
+  // Only use debounce for search
   useDebounce({
     effect: () => {
-      setFilteredMeetings(
-        meetingsData.meetings.filter(m =>
-          m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
+      if (searchTerm) {
+        setFilteredMeetings(
+          meetingsData.meetings.filter(m =>
+            m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        );
+      } else {
+        setFilteredMeetings(meetingsData.meetings);
+      }
     },
-    dependencies: [meetingsData, searchTerm],
+    dependencies: [searchTerm, meetingsData],
     delay: 500,
   });
-  
+
 
 
   return (

@@ -2,8 +2,8 @@ import data from '../data/data.json';
 import Searcbar from '../components/searchbar';
 import MeetingList from '../components/MeetingList';
 import viewIcon from '../assets/icons/viewIcon.png'
-import { useState } from 'react';
-import  useDebounce  from '../hooks/useDebounce';
+import { useState, useEffect } from 'react';
+import useDebounce from '../hooks/useDebounce';
 
 interface Participant {
   id: number;
@@ -29,20 +29,28 @@ interface Data {
 
 function History() {
   const meetingsData = data as Data;
-
-  const [searchTerm, setSearchTerm] = useState<string >('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([]);
 
-  // Filter meetings by status and search term
+  // Initialize meetings immediately
+  useEffect(() => {
+    setFilteredMeetings(meetingsData.meetings);
+  }, [meetingsData]);
+
+  // Only use debounce for search
   useDebounce({
     effect: () => {
-      setFilteredMeetings(
-        meetingsData.meetings.filter(m =>
-          m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      );
+      if (searchTerm) {
+        setFilteredMeetings(
+          meetingsData.meetings.filter(m =>
+            m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        );
+      } else {
+        setFilteredMeetings(meetingsData.meetings);
+      }
     },
-    dependencies: [meetingsData, searchTerm],
+    dependencies: [searchTerm, meetingsData],
     delay: 500,
   });
 
@@ -51,7 +59,7 @@ function History() {
   
   return (
     <section className='p-3 sm:p-5 md:p-7'>
-    <Searcbar completedcount={completedCount}  ongoingcount={ ongoingCount} setOnSearch={setSearchTerm}/>
+      <Searcbar completedcount={completedCount} ongoingcount={ongoingCount} setOnSearch={setSearchTerm}/>
       <MeetingList 
         data={{meetings: filteredMeetings}}
         statusFilter="Completed"     
