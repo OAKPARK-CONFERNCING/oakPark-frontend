@@ -11,16 +11,6 @@
     "skipLibCheck": true,          // optional: skip type‐check of node_modules
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "noImplicitAny": false,
-    "strict": false,
-    "strictNullChecks": false,
-    "strictFunctionTypes": false,
-    "strictBindCallApply": false,
-    "strictPropertyInitialization": false,
-    "noImplicitThis": false,
-    "alwaysStrict": false,
-    "allowUnusedLabels": true,
-    "allowUnreachableCode": true
+    }
   }
 }
