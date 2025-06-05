@@ -4,11 +4,16 @@ import Sidebar from '../components/sidebar';
 import Loader from '../loader/loader';
 import Video from "../assets/icons/video.png";
 import { AnimatePresence, motion } from 'framer-motion';
+import UserProfileCard from '../components/UserProfileCard';
+import { useSelector, useDispatch } from 'react-redux';
+import { hideProfileCard } from '../redux/userSlice';
 
 function AppLayout() {
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
+    const { currentUser, isProfileCardVisible } = useSelector((state: any) => state.user);
 
     useEffect(() => {
         setLoading(true);
@@ -117,6 +122,11 @@ function AppLayout() {
                             </motion.div>
                         </AnimatePresence>
                     )}
+                    <UserProfileCard
+                        isVisible={isProfileCardVisible}
+                        onClose={() => dispatch(hideProfileCard())}
+                        user={currentUser}
+                    />
                 </main>
             </div>
         </div>

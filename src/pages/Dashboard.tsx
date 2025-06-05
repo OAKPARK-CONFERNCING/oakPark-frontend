@@ -6,6 +6,7 @@ import data from "../data/data.json";
 import { useState, useRef, useEffect } from "react";
 import SessionCardFade from "@/components/SessionCardFade";
 import viewIcon from "../assets/icons/viewIcon.png";
+import { useAppSelector } from '../redux/store';
 import {
   motion,
   useScroll,
@@ -14,6 +15,8 @@ import {
   animate,
 } from "framer-motion";
 import UserProfileCard from "@/components/UserProfileCard";
+import { useDispatch } from 'react-redux';
+import { hideProfileCard } from '../redux/userSlice';
 
 // Define types
 interface Participant {
@@ -56,39 +59,45 @@ const Dashboard = () => {
   const maskImage = useScrollOverflowMask(scrollXProgress);
   const [showLeftButton, setShowLeftButton] = useState(false);
   const [showRightButton, setShowRightButton] = useState(false);
-const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
+
+
+    const { currentUser, isProfileCardVisible } = useAppSelector((state) => state.user);
   const typedData = data as unknown as AppData;
 
-  const currentUser = {
-    name: "Emmanuel A.",
-    email: "emmanuel@example.com",
-    avatar: "/path/to/avatar.jpg", // Replace with actual path to avatar
-    role: "Admin",
-    joinDate: "June 2023",
-    additionalInfo: {
-      "Total Sessions": "24",
-      "Time Spent": "20 hours"
-    }
-  };
 
-  const toggleProfileCard = () => {
-    setIsProfileCardVisible(!isProfileCardVisible);
-  };
+// const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
+//   const typedData = data as unknown as AppData;
 
-  // Close profile card if clicked outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (isProfileCardVisible && 
-          event.target instanceof Element && 
-          !event.target.closest('.profile-card') && 
-          !event.target.closest('.profile-image-container')) {
-        setIsProfileCardVisible(false);
-      }
-    };
+//   const currentUser = {
+//     name: "Emmanuel A.",
+//     email: "emmanuel@example.com",
+//     avatar: "/path/to/avatar.jpg", // Replace with actual path to avatar
+//     role: "Admin",
+//     joinDate: "June 2023",
+//     additionalInfo: {
+//       "Total Sessions": "24",
+//       "Time Spent": "20 hours"
+//     }
+//   };
+
+//   const toggleProfileCard = () => {
+//     setIsProfileCardVisible(!isProfileCardVisible);
+//   };
+
+//   // Close profile card if clicked outside
+//   useEffect(() => {
+//     const handleClickOutside = (event: MouseEvent) => {
+//       if (isProfileCardVisible && 
+//           event.target instanceof Element && 
+//           !event.target.closest('.profile-card') && 
+//           !event.target.closest('.profile-image-container')) {
+//         setIsProfileCardVisible(false);
+//       }
+//     };
     
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isProfileCardVisible]);
+//     document.addEventListener('mousedown', handleClickOutside);
+//     return () => document.removeEventListener('mousedown', handleClickOutside);
+//   }, [isProfileCardVisible]);
 
   const [cards] = useState<CardData[]>(
     typedData.cardData.map((card) => ({
@@ -153,6 +162,7 @@ const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
     }
   };
 
+  const dispatch = useDispatch();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -163,8 +173,8 @@ const [isProfileCardVisible, setIsProfileCardVisible] = useState(false);
     >
         {/* Add UserProfileCard component */}
       <UserProfileCard 
-        isVisible={isProfileCardVisible} 
-        onClose={() => setIsProfileCardVisible(false)} 
+         isVisible={isProfileCardVisible} 
+        onClose={() => dispatch(hideProfileCard())} 
         user={currentUser} 
       />
       

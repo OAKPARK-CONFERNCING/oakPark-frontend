@@ -19,7 +19,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ isVisible, onClose, u
   if (!isVisible) return null;
 
   return (
-    <div className="absolute right-0 top-16 w-80 bg-white rounded-lg shadow-lg z-50 overflow-hidden">
+    <div className="fixed right-0 top-16 w-80 bg-white rounded-lg shadow-lg z-50 overflow-hidden">
       <div className="relative p-5 border-b">
         <div className="absolute right-4 top-4 cursor-pointer" onClick={onClose}>
           <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
