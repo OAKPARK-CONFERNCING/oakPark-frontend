@@ -1,4 +1,4 @@
-import { Outlet, useLocation } from 'react-router';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
 import Sidebar from '../components/sidebar';
 import Loader from '../loader/loader';
@@ -6,10 +6,13 @@ import Video from "../assets/icons/video.png";
 import { AnimatePresence, motion } from 'framer-motion';
 import UserProfileCard from '../components/UserProfileCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { hideProfileCard } from '../redux/userSlice';
+import { toggleProfileCard } from '../redux/userSlice';
+import Toasts from '../components/Toasts';
+import { addToast } from '../redux/toastSlice';
 
 function AppLayout() {
     const location = useLocation();
+    const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -69,12 +72,16 @@ function AppLayout() {
         return pageVariants.dashboard; // default
     };
 
+    const handleNewSessionClick = () => {
+        navigate('/new-session');
+    };
+
     return (
         <div className="flex flex-row flex-1">
             <div className="hidden sm:block">
                 <Sidebar onClose={() => {}} isSidebarOpen={false} />
             </div>
-            
+            <Toasts />
             <AnimatePresence>
                 {isSidebarOpen && (
                     <div className="block sm:hidden">
@@ -99,7 +106,7 @@ function AppLayout() {
                         <h1 className="sm:w-auto text-xs md:text-base font-inter-600 text-inActive-green">
                             {dynamicHeaderText[location.pathname as keyof typeof dynamicHeaderText] || "Session History"}
                         </h1>
-                        <button className="z-10 w-auto bg-medium-green hover:bg-medium-green/20 rounded-2xl flex items-center px-2 md:px-4 h-10">
+                        <button className="z-10 w-auto bg-medium-green hover:bg-medium-green/20 rounded-2xl flex items-center px-2 md:px-4 h-10" onClick={handleNewSessionClick}>
                             <img src={Video} alt="video icon" className="mr-2 w-4" />
                             <p className="font-inter-700 text-[12px] text-white">
                                 New session
@@ -124,7 +131,7 @@ function AppLayout() {
                     )}
                     <UserProfileCard
                         isVisible={isProfileCardVisible}
-                        onClose={() => dispatch(hideProfileCard())}
+                        onClose={() => dispatch(toggleProfileCard())}
                         user={currentUser}
                     />
                 </main>

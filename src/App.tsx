@@ -8,6 +8,7 @@ import AppLayout from './layout/AppLayout.tsx'
 import Ongoing from './pages/ongoing.tsx'
 import SessionDetails from './id/sessionDetails.tsx'
 import VideoConference from './video/video-conference.tsx'
+import NewSession from './pages/NewSession.tsx'
 
 
  const App = () => {
@@ -21,6 +22,7 @@ import VideoConference from './video/video-conference.tsx'
         <Route path="/contacts" element={<Contact />} />
         <Route path='/ongoing' element={<Ongoing/>}/>
         <Route path='/history/:id' element={<SessionDetails/>}/>
+        <Route path='/new-session' element={<NewSession/>}/>
       </Route>
       <Route path='/video' element={<VideoConference/>}/>
     </Routes>
