@@ -30,7 +30,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ isVisible, onClose, u
         {/* Avatar */}
         <div className="absolute left-1/2 -bottom-12 transform -translate-x-1/2">
           <div className="h-24 w-24 rounded-full border-4 border-white bg-gray-300 flex items-center justify-center overflow-hidden">
-            <img src="public/Ellipse .png" alt="avatar" className='w-full h-full object-cover' />
+            <img src="/Ellipse .png" alt="avatar" className='w-full h-full object-cover' />
           </div>
         </div>
       </div>
