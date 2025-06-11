@@ -9,12 +9,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toggleProfileCard } from '../redux/userSlice';
 import Toasts from '../components/Toasts';
 import { addToast } from '../redux/toastSlice';
+import NewSession from '@/pages/NewSession';
 
 function AppLayout() {
     const location = useLocation();
     const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [newSessionModal, setNewSessionalModal]=useState(false);
     const dispatch = useDispatch();
     const { currentUser, isProfileCardVisible } = useSelector((state: any) => state.user);
 
@@ -106,7 +108,7 @@ function AppLayout() {
                         <h1 className="sm:w-auto text-xs md:text-base font-inter-600 text-inActive-green">
                             {dynamicHeaderText[location.pathname as keyof typeof dynamicHeaderText] || "Session History"}
                         </h1>
-                        <button className="z-10 w-auto bg-medium-green hover:bg-medium-green/20 rounded-2xl flex items-center px-2 md:px-4 h-10" onClick={handleNewSessionClick}>
+                        <button className="z-10 w-auto bg-medium-green hover:bg-medium-green/20 rounded-2xl flex items-center px-2 md:px-4 h-10" onClick={()=> setNewSessionalModal(true)}>
                             <img src={Video} alt="video icon" className="mr-2 w-4" />
                             <p className="font-inter-700 text-[12px] text-white">
                                 New session
@@ -136,6 +138,12 @@ function AppLayout() {
                     />
                 </main>
             </div>
+            {newSessionModal && (
+                <NewSession
+                    onClose={() => setNewSessionalModal(false)}
+                />
+            )
+            }
         </div>
     );
 }

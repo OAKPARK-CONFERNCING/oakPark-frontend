@@ -1,11 +1,19 @@
 import  { useState } from 'react';
 
-const NewSession = () => {
+const NewSession = ({onClose}:{onClose:()=>void}) => {
   const [privacy, setPrivacy] = useState('Private');
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F9FAF9]">
-      <div className="bg-white rounded-2xl shadow-md p-8 w-[600px] max-w-full border border-gray-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                  <div
+                // initial={{ opacity: 0 }}
+                // animate={{ opacity: 1 }}
+                // exit={{ opacity: 0 }}
+                // transition={{ duration: 0.3 }}
+                className="fixed inset-0 bg-bg-secondary/36" 
+                onClick={onClose}
+            />
+      <div className="relative z-10 bg-white rounded-2xl shadow-md p-8 w-[600px] max-w-full border border-gray-100">
         <h1 className="text-center text-2xl font-semibold mb-8">Create a new Session</h1>
         <form className="flex flex-col gap-6">
           {/* Title */}
