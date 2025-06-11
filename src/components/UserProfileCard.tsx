@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 interface UserProfileCardProps {
   isVisible: boolean;
@@ -89,7 +90,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ isVisible, onClose, u
           <div className="text-[#5B6D5B] text-sm">{user.email || 'staff@oauife.edu.ng'}</div>
         </div>
         {/* Edit Profile Button */}
-        <button className="mt-6 w-full py-3 bg-[#4CAF50] text-white rounded-2xl text-lg font-semibold hover:bg-[#43a047] transition">Edit your Profile</button>
+        <button className="mt-6 w-full py-3 bg-[#4CAF50] text-white rounded-2xl text-lg font-semibold hover:bg-[#43a047] transition cursor-pointer"><Link to="/edit"> Edit your Profile</Link></button>
         {/* Footer */}
         <div className="flex justify-center items-center gap-4 mt-6 w-full text-xs text-[#7A8B7A] border-t border-gray-200 pt-4">
           <a href="#" className="hover:underline">Privacy Policy</a>
