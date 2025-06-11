@@ -73,7 +73,7 @@ function AppLayout() {
     };
 
     const handleNewSessionClick = () => {
-        navigate('/video');
+        navigate('/new-session');
     };
 
     return (
