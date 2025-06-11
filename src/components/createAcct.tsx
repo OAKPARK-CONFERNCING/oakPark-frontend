@@ -5,6 +5,8 @@ import { useForm } from 'react-hook-form';
 import closeBtn from '../assets/icons/closeBtn.png';
 import GoogleLogo from "../assets/icons/googleLogo.png";
 import { motion } from 'framer-motion';
+import { useDispatch } from 'react-redux';
+import { addToast } from '../redux/toastSlice';
 
 interface CreateAccountProps {
     isOpen: boolean;
@@ -20,10 +22,17 @@ interface FormInputs {
 
 const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<FormInputs>();
+    const dispatch = useDispatch();
 
     const onSubmit = (data: FormInputs) => {
         console.log(data);
         // Handle form submission here
+        dispatch(addToast({
+            id: Date.now().toString(),
+            message: 'Account created successfully!',
+            type: 'success',
+            open: true,
+        }));
     };
 
     // Reset form when modal is closed

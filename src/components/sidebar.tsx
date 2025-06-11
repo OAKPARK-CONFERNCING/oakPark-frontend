@@ -11,8 +11,13 @@ import completedSessions from '../assets/icons/competed.png';
 import CompletedSessionsColored from '../assets/icons/competedColored.png'
 import logout from '../assets/icons/LogOutIcon.png'
 import { motion } from "framer-motion"
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleProfileCard } from '../redux/userSlice';
+import UserProfileCard from './UserProfileCard';
 
 function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>void}) {
+    const dispatch = useDispatch();
+    const { currentUser, isProfileCardVisible } = useSelector((state: any) => state.user);
 
     const navigationItems = [
         {
@@ -67,19 +72,23 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
   
                     
                     {/* <p className='h-2 bg-grey'></p> */}
-                    <div className="hidden sm:flex bg-fade-bg  items-center mx-2 justify-between p-2  border-gray-200 rounded-2xl mt-6">
-                        <div className="flex items-center ">
+                    {/* profile button */}
+                    <div className="hidden sm:flex bg-fade-bg  items-center mx-2 justify-between p-2  border-gray-200 rounded-2xl mt-6 relative">
+                        <div className="flex items-center cursor-pointer profile-image-container" onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(toggleProfileCard());
+                        }}>
                             <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-2">
                                 <img
-                                    src="https://picsum.photos/300/200"
+                                    src={currentUser.avatar}
                                     alt="User avatar"
                                     className="w-full h-full object-cover"
                                 />
                             </div>
                             <div className="hidden lg:block">
-                                <div className="text-gray-800 font-medium">Emmanuel A.</div>
+                                <div className="text-gray-800 font-medium">{currentUser.name}</div>
                                 <div className="text-xs text-gray-500">
-                                    adelakunmanuel@gmail.com
+                                    {currentUser.email}
                                 </div>
                             </div>
                         </div>

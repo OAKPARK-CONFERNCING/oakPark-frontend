@@ -8,9 +8,10 @@ import AppLayout from './layout/AppLayout.tsx'
 import Ongoing from './pages/ongoing.tsx'
 import SessionDetails from './id/sessionDetails.tsx'
 import VideoConference from './video/video-conference.tsx'
+import Edit from './pages/Edit.tsx'
+import NewSession from './pages/NewSession.tsx'
 
-
- const App = () => {
+const App = () => {
    return (
     <BrowserRouter>
     <Routes> 
@@ -23,6 +24,8 @@ import VideoConference from './video/video-conference.tsx'
         <Route path='/history/:id' element={<SessionDetails/>}/>
       </Route>
       <Route path='/video' element={<VideoConference/>}/>
+      <Route path='/edit-profile' element={<Edit/>}/>
+      <Route path='/new-session' element={<NewSession/>}/>
     </Routes>
   </BrowserRouter>
    )
