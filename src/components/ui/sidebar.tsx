@@ -26,7 +26,7 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 type SidebarContext = {
   state: "expanded" | "collapsed"
-  open: boolean
+ open: boolean
   setOpen: (open: boolean) => void
   openMobile: boolean
   setOpenMobile: (open: boolean) => void

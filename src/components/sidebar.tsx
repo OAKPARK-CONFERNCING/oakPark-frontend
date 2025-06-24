@@ -72,8 +72,12 @@ function Sidebar({isSidebarOpen,onClose}:{isSidebarOpen:boolean, onClose:()=>voi
   
                     
                     {/* <p className='h-2 bg-grey'></p> */}
+                    {/* profile button */}
                     <div className="hidden sm:flex bg-fade-bg  items-center mx-2 justify-between p-2  border-gray-200 rounded-2xl mt-6 relative">
-                        <div className="flex items-center cursor-pointer" onClick={() => dispatch(toggleProfileCard())}>
+                        <div className="flex items-center cursor-pointer profile-image-container" onClick={(e) => {
+                            e.stopPropagation();
+                            dispatch(toggleProfileCard());
+                        }}>
                             <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-2">
                                 <img
                                     src={currentUser.avatar}
