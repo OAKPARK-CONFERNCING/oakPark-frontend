@@ -47,7 +47,8 @@
   --font-inter-500: inter-medium;
   --font-inter-600: inter-semiBold;
   --breakpoint-1xl: 1300px;
-  --breakpoint-1lg: 1170px
+  --breakpoint-1lg: 1170px;
+  --breakpoint-2xl:1500px
 }
 
 @theme  {

@@ -25,7 +25,7 @@ const App = () => {
       </Route>
       <Route path='/video' element={<VideoConference/>}/>
       <Route path='/edit-profile' element={<Edit/>}/>
-      <Route path='/new-session' element={<NewSession/>}/>
+      {/* <Route path='/new-session' element={<NewSession/>}/> */}
     </Routes>
   </BrowserRouter>
    )
