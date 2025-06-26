@@ -27,7 +27,7 @@ interface TabData {
 }
 
 export default function SidebarPanel({ participants, onClose, isMobile,onParticipantSelect, }: SidebarPanelProps) {
-  const [openTab, setOpenTab] = useState<TabId | null>("participants")
+  const [openTab, setOpenTab] = useState<TabId | null>()
 
   // Define the tabs with their content
   const tabs: TabData[] = [
@@ -62,10 +62,10 @@ export default function SidebarPanel({ participants, onClose, isMobile,onPartici
   return (
 <div>
       <motion.aside
-      initial={{ width: 0, opacity: 1,x:100 }}
-      animate={{ width: "auto", opacity: 1,x:0 }}
-      exit={{ width: 0, opacity: 0,x:100 }}
-      transition={{ duration: 0.3, ease: "easeInOut",type: "spring", stiffness: 300, damping: 30 }}
+      initial={{ x: isMobile ? 500:0 }}
+      animate={{ x:0 }}
+      exit={{ x:isMobile? 700:0 }}
+      transition={{ duration: 0.3, ease: "easeInOut",type: "spring", stiffness: 300, damping: 25 }}
         className={cn(
           "bg-[#F7FFF8] border-gray-200 overflow-y-auto flex mt-5 ml-5 flex-col h-full",
           isMobile ? "fixed top-0 right-0 bottom-0 z-50 w-3/4 mt-0" : "",

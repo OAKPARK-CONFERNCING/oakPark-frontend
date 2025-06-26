@@ -1,15 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Share2, Users } from "lucide-react"
+import { Share2, Users, PenTool } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 import { AnimatePresence, motion } from "framer-motion"
 import { cn } from "@/lib/utils"
+import WhiteboardPanel from "@/components/whiteboard-panel"
 import ParticipantVideo from "@/components/participant-video"
-import SidebarPanel from "@/components/sidebar-panel"
-import { Button } from "@/components/ui/button"
-import { useMobile } from "@/hooks/use-mobile"
 import videoRecording from "@/assets/icons/video-recording.png"
 import videoRec from "@/assets/icons/videoRec.png"
 import shareScreenOn from "@/assets/icons/share-screen2.png"
@@ -20,7 +18,12 @@ import micOn from "@/assets/icons/micOn.png"
 import micOff from "@/assets/icons/mic-off.png"
 import closeCall from "@/assets/icons/call-end.png"
 import shareScreen from "@/assets/icons/share-screen.png"
-import { Link } from "react-router"
+import SidebarPanel from "@/components/sidebar-panel"
+import { Button } from "@/components/ui/button"
+import { useMobile } from "@/hooks/use-mobile"
+import Link from "next/link"
+
+
 
 // Types for participants
 type Role = "host" | "co-host" | "member" | "participant" | "guest"
@@ -200,16 +203,21 @@ const mockParticipants: Participant[] = [
 
 export default function VideoConference() {
   const [participants, setParticipants] = useState<Participant[]>(mockParticipants)
-  const [activeParticipant, setActiveParticipant] = useState<Participant | null>(null) // Initially no active participant
+  const [activeParticipant, setActiveParticipant] = useState<Participant | null>(null)
   const [isMicOn, setIsMicOn] = useState(true)
   const [isVideoOn, setIsVideoOn] = useState(true)
   const [isShareScreen, setIsShareScreen] = useState(true)
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
   const [meetingTime, setMeetingTime] = useState(0)
-  const [thumbnailCount, setThumbnailCount] = useState(8) // Number of thumbnails when main video is active
+  const [currentUser] = useState<Participant>(mockParticipants[0])
+  const [thumbnailCount, setThumbnailCount] = useState(8)
   const isMobile = useMobile()
   const isTablet = useWindowSize(1280)
-  const isSmallScreen = useWindowSize(640) // Added for very small screens
+  const isSmallScreen = useWindowSize(640)
+  const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false)
+
+  // Check if current user is host or co-host
+  const isHost = currentUser.role === "host" || currentUser.role === "co-host"
 
   // Add this at the top of the component
   useEffect(() => {
@@ -239,7 +247,7 @@ export default function VideoConference() {
   // Update thumbnail count based on screen size
   useEffect(() => {
     if (isSmallScreen) {
-      setThumbnailCount(7) // Show fewer thumbnails on very small screens
+      setThumbnailCount(7)
     } else if (isMobile) {
       setThumbnailCount(7)
     } else if (isTablet) {
@@ -248,14 +256,6 @@ export default function VideoConference() {
       setThumbnailCount(8)
     }
   }, [isMobile, isTablet, isSmallScreen])
-
-  const titleShort = (title: string) => {
-    if (isMobile || isTablet) {
-      return title.substring(0, 50) + "..."
-    } else {
-      return title
-    }
-  }
 
   // Format meeting time as HH:MM:SS
   const formatTime = (seconds: number) => {
@@ -287,7 +287,7 @@ export default function VideoConference() {
 
     if (activeParticipant && activeParticipant.id === id) {
       setActiveParticipant((prev) => (prev ? { ...prev, audioOn: !prev.audioOn } : null))
-      setIsMicOn(!activeParticipant.audioOn) // Update the mic button state
+      setIsMicOn(!activeParticipant.audioOn)
     }
   }
 
@@ -299,7 +299,6 @@ export default function VideoConference() {
 
   // Set a participant as the main active view
   const setAsActive = (participant: Participant) => {
-    // If clicking the same participant that's already active, close the main view
     if (activeParticipant && activeParticipant.id === participant.id) {
       setActiveParticipant(null)
     } else {
@@ -316,10 +315,7 @@ export default function VideoConference() {
 
   // Get participants to display in the grid
   const getGridParticipants = () => {
-    // Always limit the number of participants shown in thumbnails
-    // Sort participants by role priority
     const sortedParticipants = [...participants].sort((a, b) => {
-      // Host first
       if (a.role === "host") return -1
       if (b.role === "host") return 1
 
@@ -332,16 +328,11 @@ export default function VideoConference() {
       return roleOrder[a.role as keyof typeof roleOrder] - roleOrder[b.role as keyof typeof roleOrder]
     })
 
-    // If there's an active participant, make sure it's included in the thumbnails
     if (activeParticipant) {
       const activeParticipantIndex = sortedParticipants.findIndex((p) => p.id === activeParticipant.id)
 
-      // If active participant is not in the first thumbnailCount-1 participants,
-      // we need to ensure it's included
       if (activeParticipantIndex >= thumbnailCount) {
-        // Remove active participant from its current position
         const activeParticipantObj = sortedParticipants.splice(activeParticipantIndex, 1)[0]
-        // Insert it at the last visible position
         sortedParticipants.splice(thumbnailCount - 1, 0, activeParticipantObj)
       }
     }
@@ -366,232 +357,279 @@ export default function VideoConference() {
     return "grid-cols-3"
   }
 
+  // Toggle whiteboard
+  const toggleWhiteboard = () => {
+    if (isHost) {
+      setIsWhiteboardOpen(!isWhiteboardOpen)
+    }
+  }
+
+  // If whiteboard is open, render the whiteboard layout
+  // if (isWhiteboardOpen) {
+  //   return (
+  //     <WhiteboardPanel
+  //       isOpen={isWhiteboardOpen}
+  //       onClose={() => setIsWhiteboardOpen(false)}
+  //       participants={participants}
+  //       onParticipantSelect={setAsActive}
+  //       activeParticipant={activeParticipant}
+  //       remainingParticipantsCount={remainingParticipantsCount}
+  //       onOpenSidebar={() => setIsSidebarOpen(true)}
+  //     />
+  //   )
+  // }
+
   return (
     <div className={`bg-[#F7FFF8] lg:h-auto h-screen flex px-2 sm:px-5 mx-auto ${isTablet ? "" : ""}`}>
-      <div className="flex flex-col w-full mx-auto max-w-[1920px] ">
-        {/* Header */}
-        <header className="border border-light-green rounded-2xl my-4 bg-white px-2 sm:px-4 py-1 flex justify-between items-center flex-shrink-0">
-          <Link to="/" className="hidden md:flex items-center cursor-pointer space-x-1">
-            <img
-              src={videoRecording || "/placeholder.svg"}
-              alt="video recorder icon"
-              className="w-5 h-5 sm:w-auto sm:h-auto"
-            />
-            <p className="font-inter-700 text-medium-green text-sm sm:text-base">OakPark</p>
-          </Link>
+      <div className="flex w-full h-full flex-row-reverse">
+        {/* Sidebar with tabs */}
+        <AnimatePresence>
+          {isSidebarOpen && (
+            <motion.div
+              key="sidebar"
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width:isTablet ? 0:320, opacity: 1, zIndex:100 }}
+              exit={{ width: 0, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="overflow-hidden z-50"
+              style={{ minWidth: 0 }}
+            >
+              <SidebarPanel
+                participants={participants}
+                onClose={() => setIsSidebarOpen(false)}
+                isMobile={isTablet}
+                onParticipantSelect={handleParticipantSelect}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-          <TooltipProvider >
-            <Tooltip>
-              <TooltipTrigger className="flex justify-center items-center">
-                <h1 className="text-center w-48 sm:w-[60%] xl:w-[80%] :w-full text-header-text-primary font-inter-700 truncate">
-                  Workshop: An introduction to Artificial Intelligence and Machine Learning
-                </h1>
-              </TooltipTrigger>
-              <TooltipContent>Workshop: An introduction to Artificial Intelligence and Machine Learning</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        {/* Main Content */}
+        <motion.div
+          key="main-content"
+          className="flex-1 flex flex-col w-full mx-auto max-w-[1920px]"
+          animate={{
+            width: isTablet ? "100vw" : (isSidebarOpen ? "calc(100% - 320px)" : "100%"),
+            transition: { type: "spring", stiffness: 300, damping: 30 },
+          }}
+          style={{ minWidth: 0 }}
+        >
+          {/* Header */}
+          <header className="border border-light-green rounded-2xl my-4 bg-white px-2 sm:px-4 py-1 flex justify-between items-center flex-shrink-0">
+            <Link href="/" className="hidden md:flex items-center cursor-pointer space-x-1">
+              <img
+                src={videoRecording || "/placeholder.svg"}
+                alt="video recorder icon"
+                className="w-5 h-5 sm:w-auto sm:h-auto"
+              />
+              <p className="font-inter-700 text-medium-green text-sm sm:text-base">OakPark</p>
+            </Link>
 
-          <div className="flex items-center gap-2 sm:gap-4">
-            <div className="bg-red-500 justify-center items-center flex rounded-xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-8 sm:size-12">
-              <img src={videoRec || "/placeholder.svg"} alt="video recorder icon" className="w-4 sm:w-7" />
-            </div>
-            <div className="inline-flex items-center gap-1 sm:gap-2 bg-btn-primary text-xs sm:text-sm font-inter-700 text-gray-700 rounded-xl px-2 sm:px-5 py-1 sm:py-3">
-              <img src={clock || "/placeholder.svg"} alt="clock icon" className="w-4 h-4 sm:w-5 sm:h-5" />
-              {formatTime(meetingTime)}
-            </div>
-          </div>
-        </header>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="flex justify-center items-center">
+                  <h1 className="text-center w-48 sm:w-[60%] xl:w-[80%] text-header-text-primary font-inter-700 truncate">
+                    Workshop: An introduction to Artificial Intelligence and Machine Learning
+                  </h1>
+                </TooltipTrigger>
+                <TooltipContent>Workshop: An introduction to Artificial Intelligence and Machine Learning</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
 
-        {/* Main content */}
-        <div className="flex flex-1 min-h-0 overflow-hidden">
-          {/* Video grid */}
-          <div className="flex-1 flex flex-col min-h-0 max-h-full overflow-hidden">
-            {/* Main active participant (only shown when a participant is selected) */}
-            <AnimatePresence>
-              {activeParticipant && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex-1 relative bg-black/10 rounded-2xl min-h-0 overflow-hidden mb-4"
-                >
-                  <div className="font-inter-500 absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/50 text-white px-3 sm:px-5 py-1 rounded-2xl text-xs sm:text-sm z-10">
-                    {activeParticipant.name}
-                  </div>
-
-                  {/* Close button */}
-                  <button
-                    onClick={closeMainView}
-                    className="absolute top-2 sm:top-4 cursor-pointer right-2 sm:right-4 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-black/70"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
-
-                  <div className="h-full lg:h-[80vh] w-full">
-                    <ParticipantVideo
-                      onToggleVideo={toggleParticipantVideo}
-                      participant={activeParticipant}
-                      isVideoOn={() => setIsVideoOn(!isVideoOn)}
-                      isMain={true}
-                    />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* Grid of participants */}
-            <div className={`flex-1  overflow-y-auto ${activeParticipant ? "max-h-[20vh] md:max-h-[30vh]" : ""}`}>
-              <div className={`mb-20 lg:mb-0 grid ${getGridColumns()} gap-3 sm:gap-4 w-full ${activeParticipant ? "" : "h-full"}`}>
-                {gridParticipants.map((participant) => (
-                  <div
-                    key={participant.id}
-                    className={cn(
-                      "relative cursor-pointer transition-all rounded-[20px]",
-                      participant.id === activeParticipant?.id ? "border-4 border-green-500" : "",
-                    )}
-                    onClick={() => setAsActive(participant)}
-                    // style={{ aspectRatio: "16/9" }}
-                  >
-                    <ParticipantVideo
-                      participant={participant}
-                      isVideoOn={() => setIsVideoOn(!isVideoOn)}
-                      isMain={false}
-                      width={100}
-                      isTablet={isTablet}
-                      height={100}
-                    />
-                    <div className="absolute top-2 left-2 px-2 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
-                      {participant.name}
-                    </div>
-                  </div>
-                ))}
-
-                {/* "+X participants" indicator - always show when there are more participants */}
-                {remainingParticipantsCount > 0 && (
-                  <div
-                    className="rounded-2xl relative cursor-pointer bg-green-100 flex items-center justify-center text-green-800 font-medium"
-
-                    // style={{ aspectRatio: "16/9" }}
-                    onClick={() => setIsSidebarOpen(true)}
-                  >
-                    <div className="text-center">
-                      <div className="text-base sm:text-lg font-bold">+{remainingParticipantsCount}</div>
-                      <div className="text-xs">participants</div>
-                    </div>
-                  </div>
-                )}
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className="bg-red-500 justify-center items-center flex rounded-xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-8 sm:size-12">
+                <img src={videoRec || "/placeholder.svg"} alt="video recorder icon" className="w-4 sm:w-7" />
+              </div>
+              <div className="inline-flex items-center gap-1 sm:gap-2 bg-btn-primary text-xs sm:text-sm font-inter-700 text-gray-700 rounded-xl px-2 sm:px-5 py-1 sm:py-3">
+                <img src={clock || "/placeholder.svg"} alt="clock icon" className="w-4 h-4 sm:w-5 sm:h-5" />
+                {formatTime(meetingTime)}
               </div>
             </div>
+          </header>
 
-            {/* Controls */}
-            <div className="p-1 fixed bg-white w-full 1lg:bottom-auto left-0 right-0 1lg:left-auto 1lg:right-auto  bottom-0 1lg:relative mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isMicOn ? "bg-medium-green " : "bg-btn-primary"}`}
-                      onClick={() => {
-                        // Toggle the button state
-                        setIsMicOn(!isMicOn)
-
-                        // Toggle the active participant's audio if one is selected
-                        if (activeParticipant) {
-                          toggleParticipantAudio(activeParticipant.id)
-                        }
-                      }}
-                      disabled={!activeParticipant}
+          {/* Main content */}
+          <div className="flex flex-1 min-h-[80vh] overflow-hidden">
+            {/* Video grid or Whiteboard */}
+            {isWhiteboardOpen ? (
+              <WhiteboardPanel
+                isOpen={isWhiteboardOpen}
+                onClose={() => setIsWhiteboardOpen(false)}
+                participants={participants}
+                onParticipantSelect={setAsActive}
+                activeParticipant={activeParticipant}
+                remainingParticipantsCount={remainingParticipantsCount}
+                onOpenSidebar={() => setIsSidebarOpen(true)}
+              />
+            ) : (
+              <div className="flex-1 flex flex-col min-h-0 max-h-full overflow-hidden">
+                {/* Main active participant (only shown when a participant is selected) */}
+                <AnimatePresence>
+                  {activeParticipant && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex-1 relative bg-black/10 rounded-2xl min-h-0 overflow-hidden mb-4"
                     >
-                      {isMicOn ? (
-                        <img src={micOn || "/placeholder.svg"} alt="mic on icon" className="w-4 sm:w-5" />
-                      ) : (
-                        <img src={micOff || "/placeholder.svg"} alt="mic off icon" className="w-4 sm:w-5" />
-                      )}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Microphone</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                      <div className="font-inter-500 absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/50 text-white px-3 sm:px-5 py-1 rounded-2xl text-xs sm:text-sm z-10">
+                        {activeParticipant.name}
+                      </div>
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isVideoOn ? "bg-medium-green " : "bg-btn-primary"}`}
-                      onClick={() => {
-                        // Toggle the button state
-                        setIsVideoOn(!isVideoOn)
+                      {/* Close button */}
+                      <button
+                        onClick={closeMainView}
+                        className="absolute top-2 sm:top-4 cursor-pointer right-2 sm:right-4 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-black/70"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      </button>
 
-                        // Toggle the active participant's video if one is selected
-                        if (activeParticipant) {
-                          toggleParticipantVideo(activeParticipant.id)
-                        }
-                      }}
-                      disabled={!activeParticipant}
-                    >
-                      {isVideoOn ? (
-                        <img src={videoOn || "/placeholder.svg"} alt="video on icon" className="w-4 sm:w-5" />
-                      ) : (
-                        <img src={videoOff || "/placeholder.svg"} alt="video off icon" className="w-4 sm:w-5" />
-                      )}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Video</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                      <div className="h-full lg:h-[80vh] w-full">
+                        <ParticipantVideo
+                          onToggleVideo={toggleParticipantVideo}
+                          participant={activeParticipant}
+                          isVideoOn={() => setIsVideoOn(!isVideoOn)}
+                          isMain={true}
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isShareScreen ? "bg-medium-green " : "bg-btn-primary"}`}
-                      onClick={() => setIsShareScreen(!isShareScreen)}
-                    >
-                      {isShareScreen ? (
-                        <img src={shareScreenOn || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
-                      ) : (
-                        <img src={shareScreen || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
-                      )}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Share Your Screen</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                {/* Grid of participants */}
+                <div className={`flex-1 overflow-y-auto ${activeParticipant ? "max-h-[20vh] md:max-h-[30vh]" : ""}`}>
+                  <div
+                    className={`mb-20 lg:mb-0 grid ${getGridColumns()} gap-3 sm:gap-4 w-full ${activeParticipant ? "" : "h-full"}`}
+                  >
+                    {gridParticipants.map((participant) => (
+                      <div
+                        key={participant.id}
+                        className={cn(
+                          "relative cursor-pointer transition-all rounded-[20px]",
+                          participant.id === activeParticipant?.id ? "border-4 border-green-500" : "",
+                        )}
+                        onClick={() => setAsActive(participant)}
+                      >
+                        <ParticipantVideo
+                          participant={participant}
+                          isVideoOn={() => setIsVideoOn(!isVideoOn)}
+                          isMain={false}
+                          width={100}
+                          isTablet={isTablet}
+                          height={100}
+                        />
+                        <div className="absolute top-2 left-2 px-2 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
+                          {participant.name}
+                        </div>
+                      </div>
+                    ))}
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14`}
-                    >
-                      <Share2 className="h-4 w-4 sm:h-5 sm:w-5 hover:text-medium-green text-white" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Share</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+                    {/* "+X participants" indicator - always show when there are more participants */}
+                    {remainingParticipantsCount > 0 && (
+                      <div
+                        className="rounded-2xl relative cursor-pointer bg-green-100 flex items-center justify-center text-green-800 font-medium"
+                        onClick={() => setIsSidebarOpen(true)}
+                      >
+                        <div className="text-center">
+                          <div className="text-base sm:text-lg font-bold">+{remainingParticipantsCount}</div>
+                          <div className="text-xs">participants</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
 
+          {/* Controls */}
+          <div className="p-1 fixed bg-white w-full lg:bottom-auto left-0 right-0 lg:left-auto lg:right-auto bottom-0 lg:relative mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0">
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isMicOn ? "bg-medium-green " : "bg-btn-primary"}`}
+                    onClick={() => {
+                      setIsMicOn(!isMicOn)
+                      if (activeParticipant) {
+                        toggleParticipantAudio(activeParticipant.id)
+                      }
+                    }}
+                    disabled={!activeParticipant}
+                  >
+                    {isMicOn ? (
+                      <img src={micOn } alt="mic on icon" className="w-4 sm:w-5" />
+                    ) : (
+                      <img src={micOff} alt="mic off icon" className="w-4 sm:w-5" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Microphone</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isVideoOn ? "bg-medium-green " : "bg-btn-primary"}`}
+                    onClick={() => {
+                      setIsVideoOn(!isVideoOn)
+                      if (activeParticipant) {
+                        toggleParticipantVideo(activeParticipant.id)
+                      }
+                    }}
+                    disabled={!activeParticipant}
+                  >
+                    {isVideoOn ? (
+                      <img src={videoOn || "/placeholder.svg"} alt="video on icon" className="w-4 sm:w-5" />
+                    ) : (
+                      <img src={videoOff || "/placeholder.svg"} alt="video off icon" className="w-4 sm:w-5" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Video</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isShareScreen ? "bg-medium-green " : "bg-btn-primary"}`}
+                    onClick={() => setIsShareScreen(!isShareScreen)}
+                  >
+                    {isShareScreen ? (
+                      <img src={shareScreenOn || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
+                    ) : (
+                      <img src={shareScreen || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Share Your Screen</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            {isHost && (
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
@@ -600,48 +638,71 @@ export default function VideoConference() {
                       size="icon"
                       className={cn(
                         "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14",
-                        isSidebarOpen ? "bg-medium-green" : "bg-btn-primary",
+                        isWhiteboardOpen ? "bg-medium-green" : "bg-btn-primary",
                       )}
-                      onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                      onClick={toggleWhiteboard}
                     >
-                      <Users
-                        className={`h-4 w-4 sm:h-5 sm:w-5 ${isSidebarOpen ? "text-white" : "text-medium-green"}`}
+                      <PenTool
+                        className={`h-4 w-4 sm:h-5 sm:w-5 ${isWhiteboardOpen ? "text-white" : "text-medium-green"}`}
                       />
                     </Button>
                   </TooltipTrigger>
-                  <TooltipContent>Open side bar</TooltipContent>
+                  <TooltipContent>Teaching Whiteboard</TooltipContent>
                 </Tooltip>
               </TooltipProvider>
+            )}
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      className="rounded-3xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14"
-                    >
-                      <img src={closeCall || "/placeholder.svg"} className="w-4 sm:w-5" alt="call end icon" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>End call</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14`}
+                  >
+                    <Share2 className="h-4 w-4 sm:h-5 sm:w-5 hover:text-medium-green text-white" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Share</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className={cn(
+                      "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14",
+                      isSidebarOpen ? "bg-medium-green" : "bg-btn-primary",
+                    )}
+                    onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                  >
+                    <Users className={`h-4 w-4 sm:h-5 sm:w-5 ${isSidebarOpen ? "text-white" : "text-medium-green"}`} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Open side bar</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Button
+                    variant="destructive"
+                    size="icon"
+                    className="rounded-3xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14"
+                  >
+                    <img src={closeCall || "/placeholder.svg"} className="w-4 sm:w-5" alt="call end icon" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>End call</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
-        </div>
+        </motion.div>
       </div>
-      {/* Sidebar with tabs */}
-      <AnimatePresence>
-        {isSidebarOpen && (
-          <SidebarPanel
-            participants={participants}
-            onClose={() => setIsSidebarOpen(false)}
-            isMobile={isTablet}
-            onParticipantSelect={handleParticipantSelect}
-          />
-        )}
-      </AnimatePresence>
     </div>
   )
 }
@@ -655,32 +716,32 @@ function useWindowSize(breakpoint: number) {
       setIsBelow(window.innerWidth < breakpoint)
     }
 
-    // Check on mount
     checkSize()
-
-    // Add event listener
     window.addEventListener("resize", checkSize)
 
-    // Clean up
     return () => window.removeEventListener("resize", checkSize)
   }, [breakpoint])
 
   return isBelow
-
 }
 
-// "use client"
+
+
+
+
+
+
+{/** */}
+
 
 // import { useState, useEffect } from "react"
-// import { Share2, Users } from "lucide-react"
+// import { Share2, Users, PenTool } from "lucide-react"
 // import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-// import { AnimatePresence } from "framer-motion"
+// import { AnimatePresence, motion } from "framer-motion"
 // import { cn } from "@/lib/utils"
+// import WhiteboardPanel from "@/components/whiteboard-panel"
 // import ParticipantVideo from "@/components/participant-video"
-// import SidebarPanel from "@/components/sidebar-panel"
-// import { Button } from "@/components/ui/button"
-// import { useMobile } from "@/hooks/use-mobile"
 // import videoRecording from "@/assets/icons/video-recording.png"
 // import videoRec from "@/assets/icons/videoRec.png"
 // import shareScreenOn from "@/assets/icons/share-screen2.png"
@@ -691,7 +752,12 @@ function useWindowSize(breakpoint: number) {
 // import micOff from "@/assets/icons/mic-off.png"
 // import closeCall from "@/assets/icons/call-end.png"
 // import shareScreen from "@/assets/icons/share-screen.png"
-// import { Link } from "react-router"
+// import SidebarPanel from "@/components/sidebar-panel"
+// import { Button } from "@/components/ui/button"
+// import { useMobile } from "@/hooks/use-mobile"
+// import Link from "next/link"
+
+
 
 // // Types for participants
 // type Role = "host" | "co-host" | "member" | "participant" | "guest"
@@ -870,22 +936,22 @@ function useWindowSize(breakpoint: number) {
 // ]
 
 // export default function VideoConference() {
-
-  
 //   const [participants, setParticipants] = useState<Participant[]>(mockParticipants)
-//   const [activeParticipant, setActiveParticipant] = useState<Participant>(
-//     // Default to host as the active participant
-//     mockParticipants.find((p) => p.role === "host") || mockParticipants[0],
-//   )
+//   const [activeParticipant, setActiveParticipant] = useState<Participant | null>(null)
 //   const [isMicOn, setIsMicOn] = useState(true)
 //   const [isVideoOn, setIsVideoOn] = useState(true)
 //   const [isShareScreen, setIsShareScreen] = useState(true)
 //   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 //   const [meetingTime, setMeetingTime] = useState(0)
-//   const [visibleThumbnails, setVisibleThumbnails] = useState(6)
+//   const [currentUser] = useState<Participant>(mockParticipants[0])
+//   const [thumbnailCount, setThumbnailCount] = useState(8)
 //   const isMobile = useMobile()
 //   const isTablet = useWindowSize(1280)
-//   const isSmallScreen = useWindowSize(640) // Added for very small screens
+//   const isSmallScreen = useWindowSize(640)
+//   const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false)
+
+//   // Check if current user is host or co-host
+//   const isHost = currentUser.role === "host" || currentUser.role === "co-host"
 
 //   // Add this at the top of the component
 //   useEffect(() => {
@@ -903,8 +969,6 @@ function useWindowSize(breakpoint: number) {
 //     }
 //   }, [])
 
-  
-
 //   // Update meeting time every second
 //   useEffect(() => {
 //     const timer = setInterval(() => {
@@ -914,26 +978,18 @@ function useWindowSize(breakpoint: number) {
 //     return () => clearInterval(timer)
 //   }, [])
 
-//   // Update visible thumbnails based on screen size
+//   // Update thumbnail count based on screen size
 //   useEffect(() => {
 //     if (isSmallScreen) {
-//       setVisibleThumbnails(3) // Show fewer thumbnails on very small screens
+//       setThumbnailCount(7)
 //     } else if (isMobile) {
-//       setVisibleThumbnails(3)
+//       setThumbnailCount(7)
 //     } else if (isTablet) {
-//       setVisibleThumbnails(5)
+//       setThumbnailCount(7)
 //     } else {
-//       setVisibleThumbnails(6)
+//       setThumbnailCount(8)
 //     }
 //   }, [isMobile, isTablet, isSmallScreen])
-
-//   const titleShort = (title: string) => {
-//     if (isMobile || isTablet) {
-//       return title.substring(0, 50) + "..."
-//     } else {
-//       return title
-//     }
-//   }
 
 //   // Format meeting time as HH:MM:SS
 //   const formatTime = (seconds: number) => {
@@ -944,62 +1000,56 @@ function useWindowSize(breakpoint: number) {
 //   }
 
 //   useEffect(() => {
-//     setIsVideoOn(activeParticipant.videoOn);
-//   }, [activeParticipant]);
-
-//   useEffect(() => {
-//     if (isSmallScreen) {
-//       setVisibleThumbnails(2) // Show fewer thumbnails on very small screens
-//     } else if (isMobile) {
-//       setVisibleThumbnails(3)
-//     } else if (isTablet) {
-//       setVisibleThumbnails(5)
-//     } else {
-//       setVisibleThumbnails(6)
+//     if (activeParticipant) {
+//       setIsVideoOn(activeParticipant.videoOn)
 //     }
-//   }, [isMobile, isTablet, isSmallScreen])
+//   }, [activeParticipant])
 
 //   // Toggle participant video (in a real app, this would interact with WebRTC)
 //   const toggleParticipantVideo = (id: string) => {
 //     setParticipants((prev) => prev.map((p) => (p.id === id ? { ...p, videoOn: !p.videoOn } : p)))
 
-//     if (activeParticipant.id === id) {
-//       setActiveParticipant((prev) => ({ ...prev, videoOn: !prev.videoOn }))
+//     if (activeParticipant && activeParticipant.id === id) {
+//       setActiveParticipant((prev) => (prev ? { ...prev, videoOn: !prev.videoOn } : null))
+//       setIsVideoOn(!activeParticipant.videoOn)
 //     }
 //   }
 
 //   // Add a function to toggle participant audio
-// const toggleParticipantAudio = (id: string) => {
-//   setParticipants((prev) => 
-//     prev.map((p) => (p.id === id ? { ...p, audioOn: !p.audioOn } : p))
-//   );
+//   const toggleParticipantAudio = (id: string) => {
+//     setParticipants((prev) => prev.map((p) => (p.id === id ? { ...p, audioOn: !p.audioOn } : p)))
 
-//   if (activeParticipant.id === id) {
-//     setActiveParticipant((prev) => ({ ...prev, audioOn: !prev.audioOn }));
-//     setIsMicOn(!activeParticipant.audioOn); // Update the mic button state
-    
+//     if (activeParticipant && activeParticipant.id === id) {
+//       setActiveParticipant((prev) => (prev ? { ...prev, audioOn: !prev.audioOn } : null))
+//       setIsMicOn(!activeParticipant.audioOn)
+//     }
 //   }
-// }
 
-// useEffect(() => {
-//   setIsMicOn(activeParticipant.audioOn);
-// }, [activeParticipant]);
+//   useEffect(() => {
+//     if (activeParticipant) {
+//       setIsMicOn(activeParticipant.audioOn)
+//     }
+//   }, [activeParticipant])
 
 //   // Set a participant as the main active view
 //   const setAsActive = (participant: Participant) => {
-//     setActiveParticipant(participant)
-//     setIsVideoOn(participant.videoOn);
-//     setIsMicOn(participant.audioOn);
+//     if (activeParticipant && activeParticipant.id === participant.id) {
+//       setActiveParticipant(null)
+//     } else {
+//       setActiveParticipant(participant)
+//       setIsVideoOn(participant.videoOn)
+//       setIsMicOn(participant.audioOn)
+//     }
 //   }
 
-//   // Get thumbnails to display - MODIFIED to include active participant and ensure host is first
-//   const getThumbnailParticipants = () => {
-//     // Find the host participant
-//     const hostParticipant = participants.find((p) => p.role === "host")
+//   // Close the main view and return to grid
+//   const closeMainView = () => {
+//     setActiveParticipant(null)
+//   }
 
-//     // Sort participants by role priority
+//   // Get participants to display in the grid
+//   const getGridParticipants = () => {
 //     const sortedParticipants = [...participants].sort((a, b) => {
-//       // Skip the host as we'll add it first
 //       if (a.role === "host") return -1
 //       if (b.role === "host") return 1
 
@@ -1012,23 +1062,20 @@ function useWindowSize(breakpoint: number) {
 //       return roleOrder[a.role as keyof typeof roleOrder] - roleOrder[b.role as keyof typeof roleOrder]
 //     })
 
-//     // Make sure active participant is included in the thumbnails
-//     const activeParticipantIndex = sortedParticipants.findIndex((p) => p.id === activeParticipant.id)
+//     if (activeParticipant) {
+//       const activeParticipantIndex = sortedParticipants.findIndex((p) => p.id === activeParticipant.id)
 
-//     // If active participant is not the host and not in the first visibleThumbnails-1 participants,
-//     // we need to ensure it's included
-//     if (activeParticipant.role !== "host" && activeParticipantIndex >= visibleThumbnails) {
-//       // Replace the last visible thumbnail with the active participant
-//       sortedParticipants.splice(activeParticipantIndex, 1) // Remove active participant from its current position
-//       sortedParticipants.splice(visibleThumbnails - 1, 0, activeParticipant) // Insert it at the last visible position
+//       if (activeParticipantIndex >= thumbnailCount) {
+//         const activeParticipantObj = sortedParticipants.splice(activeParticipantIndex, 1)[0]
+//         sortedParticipants.splice(thumbnailCount - 1, 0, activeParticipantObj)
+//       }
 //     }
 
-//     // Return the visible thumbnails
-//     return sortedParticipants.slice(0, visibleThumbnails)
+//     return sortedParticipants.slice(0, thumbnailCount)
 //   }
 
-//   const thumbnailParticipants = getThumbnailParticipants()
-//   const remainingParticipantsCount = participants.length - thumbnailParticipants.length
+//   const gridParticipants = getGridParticipants()
+//   const remainingParticipantsCount = participants.length - gridParticipants.length
 
 //   // Handle participant selection from sidebar
 //   const handleParticipantSelect = (participant: Participant) => {
@@ -1036,15 +1083,42 @@ function useWindowSize(breakpoint: number) {
 //     setIsSidebarOpen(false)
 //   }
 
+//   // Determine grid columns based on screen size
+//   const getGridColumns = () => {
+//     if (isSmallScreen) return "grid-cols-2"
+//     if (isMobile) return "grid-cols-3"
+//     if (isTablet) return "grid-cols-2"
+//     return "grid-cols-3"
+//   }
+
+//   // Toggle whiteboard
+//   const toggleWhiteboard = () => {
+//     if (isHost) {
+//       setIsWhiteboardOpen(!isWhiteboardOpen)
+//     }
+//   }
+
+//   // If whiteboard is open, render the whiteboard layout
+//   // if (isWhiteboardOpen) {
+//   //   return (
+//   //     <WhiteboardPanel
+//   //       isOpen={isWhiteboardOpen}
+//   //       onClose={() => setIsWhiteboardOpen(false)}
+//   //       participants={participants}
+//   //       onParticipantSelect={setAsActive}
+//   //       activeParticipant={activeParticipant}
+//   //       remainingParticipantsCount={remainingParticipantsCount}
+//   //       onOpenSidebar={() => setIsSidebarOpen(true)}
+//   //     />
+//   //   )
+//   // }
+
 //   return (
-//     <div
-//       className={`bg-[#F7FFF8] flex  px-2  sm:px-5 mx-auto  ${isTablet ? "" : ""}`}
-//       // style={{ height: "calc(var(--vh, 1vh) * 100)" }}
-//     >
-//       <div className="flex flex-col w-full mx-auto max-w-[1920px] overflow-hidden">
+//     <div className={`bg-[#F7FFF8] lg:h-auto h-screen flex px-2 sm:px-5 mx-auto ${isTablet ? "" : ""}`}>
+//       <div className="flex flex-col w-full mx-auto max-w-[1920px]">
 //         {/* Header */}
-//         <header className="border border-light-green rounded-2xl my-4 bg-white px-2 sm:px-4  py-1 flex justify-between items-center flex-shrink-0">
-//           <Link to="/" className= "hidden md:flex items-center cursor-pointer space-x-1">
+//         <header className="border border-light-green rounded-2xl my-4 bg-white px-2 sm:px-4 py-1 flex justify-between items-center flex-shrink-0">
+//           <Link href="/" className="hidden md:flex items-center cursor-pointer space-x-1">
 //             <img
 //               src={videoRecording || "/placeholder.svg"}
 //               alt="video recorder icon"
@@ -1052,30 +1126,18 @@ function useWindowSize(breakpoint: number) {
 //             />
 //             <p className="font-inter-700 text-medium-green text-sm sm:text-base">OakPark</p>
 //           </Link>
-//           {/* <h1 className="text-header-text-primary font-inter-700  truncate ">
-//             <TooltipProvider>
-//               <Tooltip>
-//                 <TooltipTrigger>
-//                   {titleShort("Workshop: An introduction to Artificial Intelligence and Machine Learning")}
-//                 </TooltipTrigger>
-//                 <TooltipContent>
+
+//           <TooltipProvider>
+//             <Tooltip>
+//               <TooltipTrigger className="flex justify-center items-center">
+//                 <h1 className="text-center w-48 sm:w-[60%] xl:w-[80%] text-header-text-primary font-inter-700 truncate">
 //                   Workshop: An introduction to Artificial Intelligence and Machine Learning
-//                 </TooltipContent>
-//               </Tooltip>
-//             </TooltipProvider>
-//           </h1> */}
-                    
-//             <TooltipProvider>
-//               <Tooltip>
-//                 <TooltipTrigger>
-//                 <h1 className="w-44 lg:w-full text-header-text-primary font-inter-700  truncate ">Workshop: An introduction to Artificial Intelligence and Machine Learning</h1>
-//                 </TooltipTrigger>
-//                 <TooltipContent>
-//                   Workshop: An introduction to Artificial Intelligence and Machine Learning
-//                 </TooltipContent>
-//               </Tooltip>
-//             </TooltipProvider>
-          
+//                 </h1>
+//               </TooltipTrigger>
+//               <TooltipContent>Workshop: An introduction to Artificial Intelligence and Machine Learning</TooltipContent>
+//             </Tooltip>
+//           </TooltipProvider>
+
 //           <div className="flex items-center gap-2 sm:gap-4">
 //             <div className="bg-red-500 justify-center items-center flex rounded-xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-8 sm:size-12">
 //               <img src={videoRec || "/placeholder.svg"} alt="video recorder icon" className="w-4 sm:w-7" />
@@ -1088,188 +1150,261 @@ function useWindowSize(breakpoint: number) {
 //         </header>
 
 //         {/* Main content */}
-//         <div className="flex flex-1 min-h-0  overflow-hidden">
-//           {/* Video grid */}
-//           <div className="flex-1 flex flex-col min-h-0 max-h-full overflow-hidden">
-//             {/* Main active participant */}
-//             <div className="flex-1 relative bg-black/10 rounded-2xl min-h-0 max-h-[calc(100vh)] overflow-hidden">
-//               <div className="font-inter-500 absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/50 text-white px-3 sm:px-5 py-1 rounded-2xl text-xs sm:text-sm z-10">
-//                 {activeParticipant.name}
-//               </div>
-//               <div className="h-full w-full max-h-full">
-//                 <ParticipantVideo 
-//                 onToggleVideo={toggleParticipantVideo}
-//                 participant={activeParticipant} isVideoOn={()=>setIsVideoOn(!isVideoOn)} isMain={true} />
-//               </div>
-//             </div>
-
-//             {/* Thumbnails at the bottom - NOT overlaid on main video */}
-//             <div
-//               className="pt-1 overflow-x-auto flex-shrink-0"
-//               // style={{ maxHeight: "45vh" }}
-//             >
-//               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-2 sm:gap-3 w-full">
-//                 {thumbnailParticipants.map((participant) => (
-//                   <div
-//                     key={participant.id}
-//                     className={cn(
-//                       "relative cursor-pointer transition-all rounded-[20px]",
-//                       participant.id === activeParticipant.id ? "border-4 border-green-500" : "",
-//                     )}
-//                     onClick={() => setAsActive(participant)}
-//                     style={{ aspectRatio: "16/9" }}
+//         <div className="flex flex-1 min-h-[80vh] overflow-hidden">
+//           {/* Video grid or Whiteboard */}
+//           {isWhiteboardOpen ? (
+//             <WhiteboardPanel
+//               isOpen={isWhiteboardOpen}
+//               onClose={() => setIsWhiteboardOpen(false)}
+//               participants={participants}
+//               onParticipantSelect={setAsActive}
+//               activeParticipant={activeParticipant}
+//               remainingParticipantsCount={remainingParticipantsCount}
+//               onOpenSidebar={() => setIsSidebarOpen(true)}
+//             />
+//           ) : (
+//             <div className="flex-1 flex flex-col min-h-0 max-h-full overflow-hidden">
+//               {/* Main active participant (only shown when a participant is selected) */}
+//               <AnimatePresence>
+//                 {activeParticipant && (
+//                   <motion.div
+//                     initial={{ opacity: 0, height: 0 }}
+//                     animate={{ opacity: 1, height: "auto" }}
+//                     exit={{ opacity: 0, height: 0 }}
+//                     transition={{ duration: 0.3 }}
+//                     className="flex-1 relative bg-black/10 rounded-2xl min-h-0 overflow-hidden mb-4"
 //                   >
-//                     <ParticipantVideo participant={participant} isVideoOn={()=>setIsVideoOn(!isVideoOn)} isMain={false} width={100} isTablet={isTablet} height={100} />
-//                     <div className="absolute top-2 left-2 px-2 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
-//                       {participant.name}
+//                     <div className="font-inter-500 absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/50 text-white px-3 sm:px-5 py-1 rounded-2xl text-xs sm:text-sm z-10">
+//                       {activeParticipant.name}
 //                     </div>
-//                   </div>
-//                 ))}
 
-//                 {/* "+X participants" indicator */}
-//                 {remainingParticipantsCount > 0 && (
-//                   <div
-//                     className="rounded-2xl relative cursor-pointer bg-green-100 flex items-center justify-center text-green-800 font-medium"
-//                     style={{ aspectRatio: "16/9" }}
-//                     onClick={() => setIsSidebarOpen(true)}
-//                   >
-//                     <div className="text-center">
-//                       <div className="text-base sm:text-lg font-bold">+{remainingParticipantsCount}</div>
-//                       <div className="text-xs">participants</div>
-//                     </div>
-//                   </div>
-//                 )}
-//               </div>
-//             </div>
-
-//             {/* Controls */}
-//             <div className="p-1 mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0">
-//               <TooltipProvider>
-//                 <Tooltip>
-//                   <TooltipTrigger>
-//                     <Button
-//                       variant="outline"
-//                       size="icon"
-//                       className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isMicOn ? "bg-medium-green " : "bg-btn-primary"}`}
-//                       onClick={() => {
-//                         // Toggle the button state
-//                         setIsMicOn(!isMicOn);
-                        
-//                         // Toggle the active participant's audio
-//                         toggleParticipantAudio(activeParticipant.id);
-//                       }}
+//                     {/* Close button */}
+//                     <button
+//                       onClick={closeMainView}
+//                       className="absolute top-2 sm:top-4 cursor-pointer right-2 sm:right-4 bg-black/50 text-white p-1 rounded-full z-10 hover:bg-black/70"
 //                     >
-//                       {isMicOn ? (
-//                         <img src={micOn || "/placeholder.svg"} alt="mic on icon" className="w-4 sm:w-5" />
-//                       ) : (
-//                         <img src={micOff || "/placeholder.svg"} alt="mic off icon" className="w-4 sm:w-5" />
-//                       )}
-//                     </Button>
-//                   </TooltipTrigger>
-//                   <TooltipContent>Microphone</TooltipContent>
-//                 </Tooltip>
-//               </TooltipProvider>
+//                       <svg
+//                         xmlns="http://www.w3.org/2000/svg"
+//                         width="24"
+//                         height="24"
+//                         viewBox="0 0 24 24"
+//                         fill="none"
+//                         stroke="currentColor"
+//                         strokeWidth="2"
+//                         strokeLinecap="round"
+//                         strokeLinejoin="round"
+//                       >
+//                         <line x1="18" y1="6" x2="6" y2="18"></line>
+//                         <line x1="6" y1="6" x2="18" y2="18"></line>
+//                       </svg>
+//                     </button>
 
-//               <TooltipProvider>
-//                 <Tooltip>
-//                   <TooltipTrigger>
-//                     <Button
-//                       variant="outline"
-//                       size="icon"
-//                       className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isVideoOn ? "bg-medium-green " : "bg-btn-primary"}`}
-//                       onClick={() => {
-//                         // Toggle the button state
-//                         setIsVideoOn(!isVideoOn);
-                        
-//                         // Toggle the active participant's video
-//                         toggleParticipantVideo(activeParticipant.id);
-//                       }}
-//                     >
-//                       {isVideoOn ? (
-//                         <img src={videoOn || "/placeholder.svg"} alt="video on icon" className="w-4 sm:w-5" />
-//                       ) : (
-//                         <img src={videoOff || "/placeholder.svg"} alt="video off icon" className="w-4 sm:w-5" />
-//                       )}
-//                     </Button>
-//                   </TooltipTrigger>
-//                   <TooltipContent>Video</TooltipContent>
-//                 </Tooltip>
-//               </TooltipProvider>
-
-//               <TooltipProvider>
-//                 <Tooltip>
-//                   <TooltipTrigger>
-//                     <Button
-//                       variant="outline"
-//                       size="icon"
-//                       className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isShareScreen ? "bg-medium-green " : "bg-btn-primary"}`}
-//                       onClick={() => setIsShareScreen(!isShareScreen)}
-//                     >
-//                       {isShareScreen ? (
-//                         <img src={shareScreenOn || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
-//                       ) : (
-//                         <img src={shareScreen || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
-//                       )}
-//                     </Button>
-//                   </TooltipTrigger>
-//                   <TooltipContent>Share Your Screen</TooltipContent>
-//                 </Tooltip>
-//               </TooltipProvider>
-
-//               <TooltipProvider>
-//                 <Tooltip>
-//                   <TooltipTrigger>
-//                     <Button
-//                       variant="outline"
-//                       size="icon"
-//                       className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14`}
-//                     >
-//                       <Share2 className="h-4 w-4 sm:h-5 sm:w-5 hover:text-medium-green text-white" />
-//                     </Button>
-//                   </TooltipTrigger>
-//                   <TooltipContent>Share</TooltipContent>
-//                 </Tooltip>
-//               </TooltipProvider>
-
-//               <TooltipProvider>
-//                 <Tooltip>
-//                   <TooltipTrigger>
-//                     <Button
-//                       variant="outline"
-//                       size="icon"
-//                       className={cn(
-//                         "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14",
-//                         isSidebarOpen ? "bg-medium-green" : "bg-btn-primary",
-//                       )}
-//                       onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-//                     >
-//                       <Users
-//                         className={`h-4 w-4 sm:h-5 sm:w-5 ${isSidebarOpen ? "text-white" : "text-medium-green"}`}
+//                     <div className="h-full lg:h-[80vh] w-full">
+//                       <ParticipantVideo
+//                         onToggleVideo={toggleParticipantVideo}
+//                         participant={activeParticipant}
+//                         isVideoOn={() => setIsVideoOn(!isVideoOn)}
+//                         isMain={true}
 //                       />
-//                     </Button>
-//                   </TooltipTrigger>
-//                   <TooltipContent>Open side bar</TooltipContent>
-//                 </Tooltip>
-//               </TooltipProvider>
+//                     </div>
+//                   </motion.div>
+//                 )}
+//               </AnimatePresence>
 
-//               <TooltipProvider>
-//                 <Tooltip>
-//                   <TooltipTrigger>
-//                     <Button
-//                       variant="destructive"
-//                       size="icon"
-//                       className="rounded-3xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14"
+//               {/* Grid of participants */}
+//               <div className={`flex-1 overflow-y-auto ${activeParticipant ? "max-h-[20vh] md:max-h-[30vh]" : ""}`}>
+//                 <div
+//                   className={`mb-20 lg:mb-0 grid ${getGridColumns()} gap-3 sm:gap-4 w-full ${activeParticipant ? "" : "h-full"}`}
+//                 >
+//                   {gridParticipants.map((participant) => (
+//                     <div
+//                       key={participant.id}
+//                       className={cn(
+//                         "relative cursor-pointer transition-all rounded-[20px]",
+//                         participant.id === activeParticipant?.id ? "border-4 border-green-500" : "",
+//                       )}
+//                       onClick={() => setAsActive(participant)}
 //                     >
-//                       <img src={closeCall || "/placeholder.svg"} className="w-4 sm:w-5" alt="call end icon" />
-//                     </Button>
-//                   </TooltipTrigger>
-//                   <TooltipContent>End call</TooltipContent>
-//                 </Tooltip>
-//               </TooltipProvider>
+//                       <ParticipantVideo
+//                         participant={participant}
+//                         isVideoOn={() => setIsVideoOn(!isVideoOn)}
+//                         isMain={false}
+//                         width={100}
+//                         isTablet={isTablet}
+//                         height={100}
+//                       />
+//                       <div className="absolute top-2 left-2 px-2 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
+//                         {participant.name}
+//                       </div>
+//                     </div>
+//                   ))}
+
+//                   {/* "+X participants" indicator - always show when there are more participants */}
+//                   {remainingParticipantsCount > 0 && (
+//                     <div
+//                       className="rounded-2xl relative cursor-pointer bg-green-100 flex items-center justify-center text-green-800 font-medium"
+//                       onClick={() => setIsSidebarOpen(true)}
+//                     >
+//                       <div className="text-center">
+//                         <div className="text-base sm:text-lg font-bold">+{remainingParticipantsCount}</div>
+//                         <div className="text-xs">participants</div>
+//                       </div>
+//                     </div>
+//                   )}
+//                 </div>
+//               </div>
 //             </div>
-//           </div>
+//           )}
+//         </div>
+
+//         {/* Controls */}
+//         <div className="p-1 fixed bg-white w-full lg:bottom-auto left-0 right-0 lg:left-auto lg:right-auto bottom-0 lg:relative mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0">
+//           <TooltipProvider>
+//             <Tooltip>
+//               <TooltipTrigger>
+//                 <Button
+//                   variant="outline"
+//                   size="icon"
+//                   className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isMicOn ? "bg-medium-green " : "bg-btn-primary"}`}
+//                   onClick={() => {
+//                     setIsMicOn(!isMicOn)
+//                     if (activeParticipant) {
+//                       toggleParticipantAudio(activeParticipant.id)
+//                     }
+//                   }}
+//                   disabled={!activeParticipant}
+//                 >
+//                   {isMicOn ? (
+//                     <img src={micOn } alt="mic on icon" className="w-4 sm:w-5" />
+//                   ) : (
+//                     <img src={micOff} alt="mic off icon" className="w-4 sm:w-5" />
+//                   )}
+//                 </Button>
+//               </TooltipTrigger>
+//               <TooltipContent>Microphone</TooltipContent>
+//             </Tooltip>
+//           </TooltipProvider>
+
+//           <TooltipProvider>
+//             <Tooltip>
+//               <TooltipTrigger>
+//                 <Button
+//                   variant="outline"
+//                   size="icon"
+//                   className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isVideoOn ? "bg-medium-green " : "bg-btn-primary"}`}
+//                   onClick={() => {
+//                     setIsVideoOn(!isVideoOn)
+//                     if (activeParticipant) {
+//                       toggleParticipantVideo(activeParticipant.id)
+//                     }
+//                   }}
+//                   disabled={!activeParticipant}
+//                 >
+//                   {isVideoOn ? (
+//                     <img src={videoOn || "/placeholder.svg"} alt="video on icon" className="w-4 sm:w-5" />
+//                   ) : (
+//                     <img src={videoOff || "/placeholder.svg"} alt="video off icon" className="w-4 sm:w-5" />
+//                   )}
+//                 </Button>
+//               </TooltipTrigger>
+//               <TooltipContent>Video</TooltipContent>
+//             </Tooltip>
+//           </TooltipProvider>
+
+//           <TooltipProvider>
+//             <Tooltip>
+//               <TooltipTrigger>
+//                 <Button
+//                   variant="outline"
+//                   size="icon"
+//                   className={`rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${isShareScreen ? "bg-medium-green " : "bg-btn-primary"}`}
+//                   onClick={() => setIsShareScreen(!isShareScreen)}
+//                 >
+//                   {isShareScreen ? (
+//                     <img src={shareScreenOn || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
+//                   ) : (
+//                     <img src={shareScreen || "/placeholder.svg"} alt="share screen icon" className="w-4 sm:w-5" />
+//                   )}
+//                 </Button>
+//               </TooltipTrigger>
+//               <TooltipContent>Share Your Screen</TooltipContent>
+//             </Tooltip>
+//           </TooltipProvider>
+
+//           {isHost && (
+//             <TooltipProvider>
+//               <Tooltip>
+//                 <TooltipTrigger>
+//                   <Button
+//                     variant="outline"
+//                     size="icon"
+//                     className={cn(
+//                       "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14",
+//                       isWhiteboardOpen ? "bg-medium-green" : "bg-btn-primary",
+//                     )}
+//                     onClick={toggleWhiteboard}
+//                   >
+//                     <PenTool
+//                       className={`h-4 w-4 sm:h-5 sm:w-5 ${isWhiteboardOpen ? "text-white" : "text-medium-green"}`}
+//                     />
+//                   </Button>
+//                 </TooltipTrigger>
+//                 <TooltipContent>Teaching Whiteboard</TooltipContent>
+//               </Tooltip>
+//             </TooltipProvider>
+//           )}
+
+//           <TooltipProvider>
+//             <Tooltip>
+//               <TooltipTrigger>
+//                 <Button
+//                   variant="outline"
+//                   size="icon"
+//                   className={`rounded-3xl hover:bg-btn-primary bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14`}
+//                 >
+//                   <Share2 className="h-4 w-4 sm:h-5 sm:w-5 hover:text-medium-green text-white" />
+//                 </Button>
+//               </TooltipTrigger>
+//               <TooltipContent>Share</TooltipContent>
+//             </Tooltip>
+//           </TooltipProvider>
+
+//           <TooltipProvider>
+//             <Tooltip>
+//               <TooltipTrigger>
+//                 <Button
+//                   variant="outline"
+//                   size="icon"
+//                   className={cn(
+//                     "rounded-3xl hover:bg-btn-primary cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14",
+//                     isSidebarOpen ? "bg-medium-green" : "bg-btn-primary",
+//                   )}
+//                   onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+//                 >
+//                   <Users className={`h-4 w-4 sm:h-5 sm:w-5 ${isSidebarOpen ? "text-white" : "text-medium-green"}`} />
+//                 </Button>
+//               </TooltipTrigger>
+//               <TooltipContent>Open side bar</TooltipContent>
+//             </Tooltip>
+//           </TooltipProvider>
+
+//           <TooltipProvider>
+//             <Tooltip>
+//               <TooltipTrigger>
+//                 <Button
+//                   variant="destructive"
+//                   size="icon"
+//                   className="rounded-3xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14"
+//                 >
+//                   <img src={closeCall || "/placeholder.svg"} className="w-4 sm:w-5" alt="call end icon" />
+//                 </Button>
+//               </TooltipTrigger>
+//               <TooltipContent>End call</TooltipContent>
+//             </Tooltip>
+//           </TooltipProvider>
 //         </div>
 //       </div>
+
 //       {/* Sidebar with tabs */}
 //       <AnimatePresence>
 //         {isSidebarOpen && (
@@ -1294,15 +1429,12 @@ function useWindowSize(breakpoint: number) {
 //       setIsBelow(window.innerWidth < breakpoint)
 //     }
 
-//     // Check on mount
 //     checkSize()
-
-//     // Add event listener
 //     window.addEventListener("resize", checkSize)
 
-//     // Clean up
 //     return () => window.removeEventListener("resize", checkSize)
 //   }, [breakpoint])
 
 //   return isBelow
 // }
+
