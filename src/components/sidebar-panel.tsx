@@ -1,4 +1,3 @@
-
 import type React from "react"
 
 import { useState } from "react"
@@ -15,6 +14,7 @@ interface SidebarPanelProps {
   onClose: () => void
   isMobile: boolean
   onParticipantSelect?: (participant: any) => void
+  part?: TabId // Optional prop to set the initial tab
 }
 
 type TabId = "participants" | "chat" | "conversations"
@@ -26,8 +26,8 @@ interface TabData {
   component: React.ReactNode
 }
 
-export default function SidebarPanel({ participants, onClose, isMobile,onParticipantSelect, }: SidebarPanelProps) {
-  const [openTab, setOpenTab] = useState<TabId | null>("participants")
+export default function SidebarPanel({ participants, onClose, isMobile, onParticipantSelect, part }: SidebarPanelProps) {
+  const [openTab, setOpenTab] = useState<TabId | null>(part || null)
 
   // Define the tabs with their content
   const tabs: TabData[] = [
@@ -62,10 +62,10 @@ export default function SidebarPanel({ participants, onClose, isMobile,onPartici
   return (
 <div>
       <motion.aside
-      initial={{ width: 0, opacity: 1,x:100 }}
-      animate={{ width: "auto", opacity: 1,x:0 }}
-      exit={{ width: 0, opacity: 0,x:100 }}
-      transition={{ duration: 0.3, ease: "easeInOut",type: "spring", stiffness: 300, damping: 30 }}
+      initial={{ x: isMobile ? 500:0 }}
+      animate={{ x:0 }}
+      exit={{ x:isMobile? 700:0 }}
+      transition={{ duration: 0.3, ease: "easeInOut",type: "spring", stiffness: 300, damping: 25 }}
         className={cn(
           "bg-[#F7FFF8] border-gray-200 overflow-y-auto flex mt-5 ml-5 flex-col h-full",
           isMobile ? "fixed top-0 right-0 bottom-0 z-50 w-3/4 mt-0" : "",

@@ -59,13 +59,10 @@ export default function ParticipantVideo({
       .substring(0, 2)
   }
 
-  // Preserve percentage-based sizing from original code
-  const containerStyles = {
-    width: width ? `${width}%` : isMain ? "100%" : "100%",
-    height: height ? `${height}%` : isMain ? "90vh" : "100%",
-    aspectRatio: isMain ? undefined : undefined, // Remove aspect ratio constraint for main video
-    maxHeight: isMain ? "90vh" : undefined, // Allow main video to take up to 90% of viewport height
-  }
+  // For grid thumbnails, always use 1:1 aspect ratio and fill the grid cell
+  const containerStyles = isMain
+    ? { width: "100%", height: "100%", maxHeight: "90vh" }
+    : { width: "100%", aspectRatio: "1 / 1", height: "100%", maxHeight: "100%" }
 
   // Handle video click to toggle
   const handleVideoClick = () => {
@@ -80,7 +77,7 @@ export default function ParticipantVideo({
         "relative overflow-hidden bg-gray-800 rounded-2xl",
         isMain ? "w-full h-full max-h-full" : "w-full h-full",
       )}
-      // style={containerStyles}
+      style={containerStyles}
       onClick={handleVideoClick}
     >
       {participant.videoOn ? (
@@ -106,8 +103,7 @@ export default function ParticipantVideo({
         <div className="w-full h-full flex items-center justify-center bg-gray-700">
           <div
             className={cn(
-              "flex items-center object-cover justify-center rounded-full bg-green-600 text-white",
-              isMain ? "w-24 h-24 text-3xl" : "w-12 h-12 text-sm",
+              "flex items-center object-cover justify-center rounded-full bg-green-600 text-white w-16 h-16 text-xl"
             )}
           >
             {getInitials(participant.name)}
