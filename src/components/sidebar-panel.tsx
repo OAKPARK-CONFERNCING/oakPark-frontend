@@ -1,4 +1,3 @@
-
 import type React from "react"
 
 import { useState } from "react"
@@ -15,6 +14,7 @@ interface SidebarPanelProps {
   onClose: () => void
   isMobile: boolean
   onParticipantSelect?: (participant: any) => void
+  part?: TabId // Optional prop to set the initial tab
 }
 
 type TabId = "participants" | "chat" | "conversations"
@@ -26,8 +26,8 @@ interface TabData {
   component: React.ReactNode
 }
 
-export default function SidebarPanel({ participants, onClose, isMobile,onParticipantSelect, }: SidebarPanelProps) {
-  const [openTab, setOpenTab] = useState<TabId | null>()
+export default function SidebarPanel({ participants, onClose, isMobile, onParticipantSelect, part }: SidebarPanelProps) {
+  const [openTab, setOpenTab] = useState<TabId | null>(part || null)
 
   // Define the tabs with their content
   const tabs: TabData[] = [
