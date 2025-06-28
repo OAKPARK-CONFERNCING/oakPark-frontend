@@ -8,8 +8,8 @@ import UserProfileCard from '../components/UserProfileCard';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleProfileCard, hideProfileCard } from '../redux/userSlice';
 import Toasts from '../components/Toasts';
-import { addToast } from '../redux/toastSlice';
-import NewSession from '@/pages/NewSession';
+// import { addToast } from '../redux/toastSlice';
+import NewSession from '@/components/NewSession';
 
 function AppLayout() {
     const location = useLocation();
@@ -79,7 +79,7 @@ function AppLayout() {
     };
 
     return (
-        <div className="flex flex-row flex-1">
+        <div className="flex flex-row flex-1 ">
             <div className="hidden sm:block">
                 <Sidebar onClose={() => {}} isSidebarOpen={false} />
             </div>
@@ -92,8 +92,8 @@ function AppLayout() {
                 )}
             </AnimatePresence>
             
-            <div className="w-full">
-                <header className="fixed top-0 left-0 sm:left-[100px] lg:left-[250px] right-0 h-[70px] bg-white border-b border-gray-200 z-10 flex items-center justify-between">
+            <div className="w-full"> 
+                <header className="z-50 fixed top-0 left-0 sm:left-[100px] lg:left-[250px] right-0 h-[70px] bg-white border-b border-gray-200 flex items-center justify-between">
                     <div
                         className={`ml-2 sm:ml-0 sm:hidden ham-menu z-[50] ${isSidebarOpen ? "active2" : ""}`}
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -108,15 +108,14 @@ function AppLayout() {
                         <h1 className="sm:w-auto text-xs md:text-base font-inter-600 text-inActive-green">
                             {dynamicHeaderText[location.pathname as keyof typeof dynamicHeaderText] || "Session History"}
                         </h1>
-                        <button className="z-10 w-auto bg-medium-green hover:bg-medium-green/20 rounded-2xl flex items-center px-2 md:px-4 h-10" onClick={()=> setNewSessionalModal(true)}>
-                            <img src={Video} alt="video icon" className="mr-2 w-4" />
+
+                        <button onClick={() => setNewSessionalModal(true)} className="z-0 group w-full md:w-auto relative inline-flex px-2 md:px-4 h-10 items-center justify-center overflow-hidden rounded-2xl bg-medium-green font-medium text-white cursor-pointer transition duration-300 hover:scale-105"><img src={Video} alt="video icon" className="mr-2 w-4" /><span>
                             <p className="font-inter-700 text-[12px] text-white">
                                 New session
-                            </p>
-                        </button>
+                            </p></span><div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]"><div className="relative h-full w-8 bg-white/20"></div></div></button>
                     </div>
                 </header>
-                <main className="ml-0 sm:ml-[100px] lg:ml-[250px] relative mt-[70px] h-[calc(100vh-70px)] overflow-y-auto">
+                <main className="ml-0 sm:ml-[100px] lg:ml-[250px] relative mt-[70px] h-[calc(100vh-70px)] ">
                     {loading ? (
                         <div className="absolute h-full left-0 right-0 z-10 flex items-center justify-center bg-white">
                             <Loader />
@@ -138,12 +137,14 @@ function AppLayout() {
                     />
                 </main>
             </div>
-            {newSessionModal && (
-                <NewSession
-                    onClose={() => setNewSessionalModal(false)}
-                />
-            )
-            }
+            <AnimatePresence>
+                {newSessionModal && (
+                    <NewSession
+                        onClose={() => setNewSessionalModal(false)}
+                    />
+                )
+                }
+            </AnimatePresence>
         </div>
     );
 }

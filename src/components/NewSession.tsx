@@ -1,19 +1,29 @@
 import  { useState } from 'react';
+import {motion,AnimatePresence} from 'framer-motion';
 
 const NewSession = ({onClose}:{onClose:()=>void}) => {
   const [privacy, setPrivacy] = useState('Private');
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                  <div
-                // initial={{ opacity: 0 }}
-                // animate={{ opacity: 1 }}
-                // exit={{ opacity: 0 }}
-                // transition={{ duration: 0.3 }}
+                  <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
                 className="fixed inset-0 bg-bg-secondary/36" 
                 onClick={onClose}
             />
-      <div className="relative z-10 bg-white rounded-2xl shadow-md p-8 w-[600px] max-w-full border border-gray-100">
+      < motion.div 
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0 }}
+      transition={{
+          duration: 0.4,
+          delay: 0.2,
+          scale: { type: "spring", visualDuration: 0.4, bounce: 0.25 },
+      }}
+       className="relative z-10 bg-white rounded-2xl shadow-md p-8 w-[600px] max-w-full border border-gray-100">
         <h1 className="text-center text-2xl font-semibold mb-8">Create a new Session</h1>
         <form className="flex flex-col gap-6">
           {/* Title */}
@@ -59,7 +69,7 @@ const NewSession = ({onClose}:{onClose:()=>void}) => {
             <button type="submit" className="bg-[#4CAF50] text-white px-8 py-2 rounded-full font-semibold flex items-center gap-2"><svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg> Create Session</button>
           </div>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 };

@@ -21,10 +21,10 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ isVisible, onClose, u
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 100 }}
-          transition={{ duration: 0.3, ease: "easeInOut", type: "spring", stiffness: 500, damping: 25 }}
+          initial={{  x: 100 }}
+          animate={{  x: 0 }}
+          exit={{  x: 500 }}
+          transition={{ duration: 0.3, ease: "easeInOut", type: "spring", stiffness: 300, damping: 25 }}
           className="fixed right-0 top-16 w-96 rounded-3xl shadow-2xl z-50 overflow-hidden border border-gray-100 flex flex-col"
         >
           {/* Background image placeholder */}

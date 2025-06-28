@@ -8,8 +8,8 @@ import AppLayout from './layout/AppLayout.tsx'
 import Ongoing from './pages/ongoing.tsx'
 import SessionDetails from './id/sessionDetails.tsx'
 import VideoConference from './video/video-conference.tsx'
-import Edit from './pages/Edit.tsx'
-import NewSession from './pages/NewSession.tsx'
+import Edit from './components/Edit.tsx'
+import NewSession from './components/NewSession.tsx'
 
 const App = () => {
    return (
