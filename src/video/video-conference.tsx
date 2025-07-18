@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, useEffect } from "react";
 import { Share2, Users, PenTool } from "lucide-react";
 import {
@@ -26,7 +24,6 @@ import shareScreen from "@/assets/icons/share-screen.png";
 import SidebarPanel from "@/components/sidebar-panel";
 import { Button } from "@/components/ui/button";
 import { useMobile } from "@/hooks/use-mobile";
-import { useWebcam } from "@/hooks/useWebcam";
 import Link from "next/link";
 
 // Types for participants
@@ -224,42 +221,8 @@ export default function VideoConference() {
   const [sidebarOpenedFromParticipants, setSidebarOpenedFromParticipants] =
     useState(false);
 
-  // NEW: Webcam integration
-  const {
-    stream: webcamStream,
-    isStreaming: isWebcamStreaming,
-    error: webcamError,
-    startStream: startWebcam,
-    stopStream: stopWebcam,
-    toggleStream: toggleWebcam,
-    hasPermission: hasWebcamPermission,
-    isRequesting: isWebcamRequesting
-  } = useWebcam();
-
   // Check if current user is host or co-host
   const isHost = currentUser.role === "host" || currentUser.role === "co-host";
-
-  // NEW: Auto-start webcam when component mounts
-  useEffect(() => {
-    if (isVideoOn && !isWebcamStreaming && !isWebcamRequesting) {
-      startWebcam();
-    }
-  }, [isVideoOn, isWebcamStreaming, isWebcamRequesting, startWebcam]);
-
-  // NEW: Sync webcam state with video toggle
-  useEffect(() => {
-    if (!isVideoOn && isWebcamStreaming) {
-      stopWebcam();
-    }
-  }, [isVideoOn, isWebcamStreaming, stopWebcam]);
-
-  // NEW: Show webcam error if any
-  useEffect(() => {
-    if (webcamError) {
-      console.error('Webcam error:', webcamError);
-      // You could show a toast notification here
-    }
-  }, [webcamError]);
 
   // Add this at the top of the component
   useEffect(() => {
@@ -585,11 +548,11 @@ export default function VideoConference() {
                 <AnimatePresence>
                   {activeParticipant && (
                     <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex-1 relative bg-black/10 rounded-2xl min-h-0 overflow-hidden mb-4"
+                      initial={{ opacity: 0, scale: 0.85, y: 40 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.85, y: 40 }}
+                      transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                      className="flex-1 relative bg-black/10 rounded-2xl min-h-0 overflow-hidden mb-4 shadow-2xl shadow-green-200"
                     >
                       <div className="font-inter-500 absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/50 text-white px-3 sm:px-5 py-1 rounded-2xl text-xs sm:text-sm z-10">
                         {activeParticipant.name}
@@ -622,7 +585,6 @@ export default function VideoConference() {
                           participant={activeParticipant}
                           isVideoOn={() => setIsVideoOn(!isVideoOn)}
                           isMain={true}
-                          stream={activeParticipant.id === currentUser.id ? webcamStream : undefined}
                         />
                       </div>
                     </motion.div>
@@ -641,7 +603,7 @@ export default function VideoConference() {
                         ? "flex justify-center items-center h-full"
                         : activeParticipant
                         ? `flex flex-nowrap gap-3 sm:gap-4 w-full h-full overflow-x-auto`
-                        : `grid ${getGridColumns()} gap-3 sm:gap-4 w-full h-full`
+                        : `grid ${getGridColumns()} gap-3 sm:gap-4 w-full h-full auto-rows-fr`
                     } ${activeParticipant ? "" : "h-full"}`}
                   >
                     {gridParticipants.map((participant) => (
@@ -679,7 +641,6 @@ export default function VideoConference() {
                           height={
                             gridParticipants.length === 1 ? undefined : 100
                           }
-                          stream={participant.id === currentUser.id ? webcamStream : undefined}
                         />
                         <div className="absolute top-2 left-2 px-2 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
                           {participant.name}
@@ -713,8 +674,8 @@ export default function VideoConference() {
           </div>
 
           {/* Controls */}
-          <div className="p-1 fixed bg-white w-full lg:bottom-auto left-0 right-0 lg:left-auto lg:right-auto bottom-0 lg:relative mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0">
-            {/* <div className="p-1 fixed bg-btn-primary/30 rounded-4xl z-50 backdrop-blur-lg mx-auto w-auto sm:w-[500px] bottom-5 left-0 right-0   mt-5 flex justify-center items-center gap-2 py-2 sm:gap-2 flex-wrap "> */}
+          {/* <div className="p-1 fixed bg-white w-full lg:bottom-auto left-0 right-0 lg:left-auto lg:right-auto bottom-0 lg:relative mt-5 flex justify-center items-center gap-1 sm:gap-2 flex-wrap flex-shrink-0"> */}
+            <div className="p-1 fixed bg-btn-primary/30 rounded-4xl z-50 backdrop-blur-lg mx-auto w-auto sm:w-[500px] bottom-5 left-0 right-0   mt-5 flex justify-center items-center gap-2 py-2 sm:gap-2 flex-wrap ">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
@@ -848,7 +809,7 @@ export default function VideoConference() {
                   <Button
                     variant="outline"
                     size="icon"
-                    className="rounded-3xl hover:bg- bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14"
+                    className={`rounded-3xl hover:bg- bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14`}
                   >
                     <Share2 className="h-4 w-4 sm:h-5 sm:w-5 hover:text-medium-green text-white" />
                   </Button>
@@ -925,7 +886,21 @@ function useWindowSize(breakpoint: number) {
 
 
 
-//old
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import { useState, useEffect } from "react";
 // import { Share2, Users, PenTool } from "lucide-react";
@@ -953,6 +928,7 @@ function useWindowSize(breakpoint: number) {
 // import SidebarPanel from "@/components/sidebar-panel";
 // import { Button } from "@/components/ui/button";
 // import { useMobile } from "@/hooks/use-mobile";
+// import { useWebcam } from "@/hooks/useWebcam";
 // import Link from "next/link";
 
 // // Types for participants
@@ -1150,8 +1126,42 @@ function useWindowSize(breakpoint: number) {
 //   const [sidebarOpenedFromParticipants, setSidebarOpenedFromParticipants] =
 //     useState(false);
 
+//   // NEW: Webcam integration
+//   const {
+//     stream: webcamStream,
+//     isStreaming: isWebcamStreaming,
+//     error: webcamError,
+//     startStream: startWebcam,
+//     stopStream: stopWebcam,
+//     toggleStream: toggleWebcam,
+//     hasPermission: hasWebcamPermission,
+//     isRequesting: isWebcamRequesting
+//   } = useWebcam();
+
 //   // Check if current user is host or co-host
 //   const isHost = currentUser.role === "host" || currentUser.role === "co-host";
+
+//   // NEW: Auto-start webcam when component mounts
+//   useEffect(() => {
+//     if (isVideoOn && !isWebcamStreaming && !isWebcamRequesting) {
+//       startWebcam();
+//     }
+//   }, [isVideoOn, isWebcamStreaming, isWebcamRequesting, startWebcam]);
+
+//   // NEW: Sync webcam state with video toggle
+//   useEffect(() => {
+//     if (!isVideoOn && isWebcamStreaming) {
+//       stopWebcam();
+//     }
+//   }, [isVideoOn, isWebcamStreaming, stopWebcam]);
+
+//   // NEW: Show webcam error if any
+//   useEffect(() => {
+//     if (webcamError) {
+//       console.error('Webcam error:', webcamError);
+//       // You could show a toast notification here
+//     }
+//   }, [webcamError]);
 
 //   // Add this at the top of the component
 //   useEffect(() => {
@@ -1321,20 +1331,19 @@ function useWindowSize(breakpoint: number) {
 //   // Determine grid columns based on number of participants and screen size
 //   const getGridColumns = () => {
 //     const count = gridParticipants.length;
-//     let maxCols = 3;
-//     if (isSmallScreen) maxCols = 1;
-//     else if (isTablet) maxCols = 2;
-//     else if (gridParticipants.length === 4) maxCols = 2;
-
-//     // If there's an active participant, always use 5 columns for thumbnails
+    
+//     // If there's an active participant, use horizontal scroll layout
 //     if (activeParticipant) {
 //       return "grid-cols-5";
 //     }
 
-//     // Original logic for when no active participant
+//     // For single participant, use full screen
 //     if (count === 1) return "";
-//     const cols = Math.min(count, maxCols);
-//     return `grid-cols-${cols}`;
+   
+//     // For multiple participants, use responsive grid
+//     if (isSmallScreen) return "grid-cols-1"; // Mobile: 1 column
+//     if (isTablet) return "grid-cols-2"; // Tablet: 2 columns
+//     return "grid-cols-3"; // Desktop: 3 columns
 //   };
 
 //   // Toggle whiteboard
@@ -1477,11 +1486,11 @@ function useWindowSize(breakpoint: number) {
 //                 <AnimatePresence>
 //                   {activeParticipant && (
 //                     <motion.div
-//                       initial={{ opacity: 0, height: 0 }}
-//                       animate={{ opacity: 1, height: "auto" }}
-//                       exit={{ opacity: 0, height: 0 }}
+//                       initial={{ height: 0 }}
+//                       animate={{ opacity: 1, height: "80vh" }}
+//                       exit={{ height: 0 }}
 //                       transition={{ duration: 0.3 }}
-//                       className="flex-1 relative bg-black/10 rounded-2xl min-h-0 overflow-hidden mb-4"
+//                       className="relative bg-black/10 rounded-2xl overflow-hidden mb-4"
 //                     >
 //                       <div className="font-inter-500 absolute top-2 sm:top-4 left-2 sm:left-4 bg-black/50 text-white px-3 sm:px-5 py-1 rounded-2xl text-xs sm:text-sm z-10">
 //                         {activeParticipant.name}
@@ -1508,12 +1517,13 @@ function useWindowSize(breakpoint: number) {
 //                         </svg>
 //                       </button>
 
-//                       <div className="h-full lg:h-[90vh] w-full">
+//                       <div className="h-full w-full">
 //                         <ParticipantVideo
 //                           onToggleVideo={toggleParticipantVideo}
 //                           participant={activeParticipant}
 //                           isVideoOn={() => setIsVideoOn(!isVideoOn)}
 //                           isMain={true}
+//                           stream={activeParticipant.id === currentUser.id ? webcamStream : undefined}
 //                         />
 //                       </div>
 //                     </motion.div>
@@ -1523,7 +1533,7 @@ function useWindowSize(breakpoint: number) {
 //                 {/* Grid of participants */}
 //                 <div
 //                   className={`flex-1 overflow-y-auto mb-1 ${
-//                     activeParticipant ? "max-h-[30vh] " : ""
+//                     activeParticipant ? "h-[20vh]" : "h-full"
 //                   }`}
 //                 >
 //                   <div
@@ -1531,8 +1541,8 @@ function useWindowSize(breakpoint: number) {
 //                       gridParticipants.length === 1 && !activeParticipant
 //                         ? "flex justify-center items-center h-full"
 //                         : activeParticipant
-//                         ? `flex flex-nowrap gap-3 sm:gap-4 w-full h-full overflow-x-auto`
-//                         : `grid ${getGridColumns()} gap-3 sm:gap-4 w-full h-full`
+//                         ? `flex flex-nowrap gap-3 sm:gap-4 w-full h-full overflow-x-auto items-center`
+//                         : `grid ${getGridColumns()} gap-3 sm:gap-4 w-full h-full auto-rows-fr`
 //                     } ${activeParticipant ? "" : "h-full"}`}
 //                   >
 //                     {gridParticipants.map((participant) => (
@@ -1544,7 +1554,7 @@ function useWindowSize(breakpoint: number) {
 //                             : "",
 //                           activeParticipant
 //                             ? "flex-shrink-0 w-full sm:w-1/2 xl:w-1/5 "
-//                             : "",
+//                             : "aspect-square w-full h-full",
 //                           "relative transition-all rounded-[20px]",
 //                           participant.id === activeParticipant?.id
 //                             ? "border-4 border-green-500"
@@ -1570,6 +1580,7 @@ function useWindowSize(breakpoint: number) {
 //                           height={
 //                             gridParticipants.length === 1 ? undefined : 100
 //                           }
+//                           stream={participant.id === currentUser.id ? webcamStream : undefined}
 //                         />
 //                         <div className="absolute top-2 left-2 px-2 bg-black/50 w-auto rounded-2xl text-white text-xs p-1 truncate font-inter-500">
 //                           {participant.name}
@@ -1738,7 +1749,7 @@ function useWindowSize(breakpoint: number) {
 //                   <Button
 //                     variant="outline"
 //                     size="icon"
-//                     className={`rounded-3xl hover:bg- bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14`}
+//                     className="rounded-3xl hover:bg- bg-medium-green cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14"
 //                   >
 //                     <Share2 className="h-4 w-4 sm:h-5 sm:w-5 hover:text-medium-green text-white" />
 //                   </Button>
@@ -1812,3 +1823,9 @@ function useWindowSize(breakpoint: number) {
 
 //   return isBelow;
 // }
+
+//old
+
+
+
+

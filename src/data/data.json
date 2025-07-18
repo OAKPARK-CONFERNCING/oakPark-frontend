@@ -42,800 +42,1381 @@
 ],
 
 
-  "meetings": [
-    {
-      "id": 1,
-      "meetingTitle": "Quarterly Financial Review",
-      "date": "2023-11-05T13:00:00Z",
-      "status": "Completed",
-      "duration": "55 minutes",
-      "participants": [
-        {
-          "id": 1,
+"meetings": [
+  {
+    "id": 1,
+    "meetingTitle": "Quarterly Financial Review",
+    "date": "2023-11-05T13:00:00Z",
+    "status": "Completed",
+    "duration": "55 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Michael Chen",
+        "email": "michael.chen@company.com",
+        "messages": 25,
+        "minutes": 55,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Lisa Rodriguez",
+        "email": "l.rodriguez@partner.com",
+        "messages": 12,
+        "minutes": 55,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Samuel Wilson",
+        "email": "sam.wilson@company.com",
+        "messages": 18,
+        "minutes": 50,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Financial_Report_Q4",
+        "fileType": "xlsx",
+        "fileSize": "1.2MB",
+        "uploadedBy": {
           "name": "Michael Chen",
-          "email": "michael.chen@company.com",
-          "messages": 25,
-          "minutes": 55,
-          "role": "Host"
+          "email": "michael.chen@company.com"
         },
-        {
-          "id": 2,
+        "numberOfViews": 18,
+        "lastViewed": "2023-11-10T09:30:00Z"
+      },
+      {
+        "fileName": "Revenue_Analysis",
+        "fileType": "pdf",
+        "fileSize": "1.2MB",
+        "uploadedBy": {
           "name": "Lisa Rodriguez",
-          "email": "l.rodriguez@partner.com",
-          "messages": 12,
-          "minutes": 55,
-          "role": "Guest"
+          "email": "l.rodriguez@partner.com"
         },
-        {
-          "id": 3,
-          "name": "Samuel Wilson",
-          "email": "sam.wilson@company.com",
-          "messages": 18,
-          "minutes": 50,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "meetingTitle": "Product Design Sprint",
-      "date": "2023-11-07T10:30:00Z",
-      "status": "Completed",
-      "duration": "35 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 12,
+        "lastViewed": "2023-11-07T14:15:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Google",
+        "link": "https://www.google.com",
+        "sharedBy": {
+          "name": "Michael Chen",
+          "email": "michael.chen@company.com"
+        },
+        "numberOfViews": 18,
+        "lastViewed": "2023-11-10T09:30:00Z"
+      },
+      {
+        "linkName": "Company Portal",
+        "link": "https://portal.company.com",
+        "sharedBy": {
+          "name": "Lisa Rodriguez",
+          "email": "l.rodriguez@partner.com"
+        },
+        "numberOfViews": 12,
+        "lastViewed": "2023-11-07T14:15:00Z"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "meetingTitle": "Product Design Sprint",
+    "date": "2023-11-07T10:30:00Z",
+    "status": "Completed",
+    "duration": "35 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Emily Zhang",
+        "email": "emily.z@design.io",
+        "messages": 42,
+        "minutes": 35,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Raj Patel",
+        "email": "raj.p@uxteam.com",
+        "messages": 28,
+        "minutes": 35,
+        "role": "Participant"
+      },
+      {
+        "id": 3,
+        "name": "Sophie Martin",
+        "email": "sophie@wireframe.co",
+        "messages": 15,
+        "minutes": 25,
+        "role": "Guest"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Wireframes_v2",
+        "fileSize": "1.2MB",
+        "fileType": "fig",
+        "uploadedBy": {
           "name": "Emily Zhang",
-          "email": "emily.z@design.io",
-          "messages": 42,
-          "minutes": 35,
-          "role": "Host"
+          "email": "emily.z@design.io"
         },
-        {
-          "id": 2,
-          "name": "Raj Patel",
-          "email": "raj.p@uxteam.com",
-          "messages": 28,
-          "minutes": 35,
-          "role": "Participant"
+        "numberOfViews": 24,
+        "lastViewed": "2023-11-12T11:20:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Figma Board",
+        "link": "https://www.figma.com/file/xyz",
+        "sharedBy": {
+          "name": "Emily Zhang",
+          "email": "emily.z@design.io"
         },
-        {
-          "id": 3,
-          "name": "Sophie Martin",
-          "email": "sophie@wireframe.co",
-          "messages": 15,
-          "minutes": 25,
-          "role": "Guest"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "meetingTitle": "Marketing Strategy Q4",
-      "date": "2023-10-20T14:00:00Z",
-      "status": "Completed",
-      "duration": "60 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 24,
+        "lastViewed": "2023-11-12T11:20:00Z"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "meetingTitle": "Marketing Strategy Q4",
+    "date": "2023-10-20T14:00:00Z",
+    "status": "Completed",
+    "duration": "60 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Olivia Thompson",
+        "email": "olivia@marketing.com",
+        "messages": 30,
+        "minutes": 60,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "James Carter",
+        "email": "j.carter@agency.com",
+        "messages": 8,
+        "minutes": 60,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Aisha Khan",
+        "email": "aisha.k@marketing.com",
+        "messages": 20,
+        "minutes": 60,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Q4_Campaign_Plan",
+        "fileSize": "1.2MB",
+        "fileType": "pdf",
+        "uploadedBy": {
           "name": "Olivia Thompson",
-          "email": "olivia@marketing.com",
-          "messages": 30,
-          "minutes": 60,
-          "role": "Host"
+          "email": "olivia@marketing.com"
         },
-        {
-          "id": 2,
-          "name": "James Carter",
-          "email": "j.carter@agency.com",
-          "messages": 8,
-          "minutes": 60,
-          "role": "Guest"
+        "numberOfViews": 22,
+        "lastViewed": "2023-10-28T16:45:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Campaign Dashboard",
+        "link": "https://dashboard.marketing.com/q4",
+        "sharedBy": {
+          "name": "Olivia Thompson",
+          "email": "olivia@marketing.com"
         },
-        {
-          "id": 3,
-          "name": "Aisha Khan",
-          "email": "aisha.k@marketing.com",
-          "messages": 20,
-          "minutes": 60,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "meetingTitle": "Technical Architecture Review",
-      "date": "2023-11-15T16:45:00Z",
-      "status": "Completed",
-      "duration": "25 minutes",
-      "participants": [
-        {
-          "id": 1,
-          "name": "Daniel Kim",
-          "email": "daniel.k@eng.io",
-          "messages": 15,
-          "minutes": 25,
-          "role": "Host"
-        },
-        {
-          "id": 2,
+        "numberOfViews": 22,
+        "lastViewed": "2023-10-28T16:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "meetingTitle": "Technical Architecture Review",
+    "date": "2023-11-15T16:45:00Z",
+    "status": "Completed",
+    "duration": "25 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Daniel Kim",
+        "email": "daniel.k@eng.io",
+        "messages": 15,
+        "minutes": 25,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Priya Sharma",
+        "email": "priya.s@backend.com",
+        "messages": 22,
+        "minutes": 25,
+        "role": "Member"
+      },
+      {
+        "id": 3,
+        "name": "Chris O'Neil",
+        "email": "chris@cloud.dev",
+        "messages": 18,
+        "minutes": 20,
+        "role": "Guest"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "System_Architecture",
+        "fileSize": "1.2MB",
+        "fileType": "drawio",
+        "uploadedBy": {
           "name": "Priya Sharma",
-          "email": "priya.s@backend.com",
-          "messages": 22,
-          "minutes": 25,
-          "role": "Member"
+          "email": "priya.s@backend.com"
         },
-        {
-          "id": 3,
-          "name": "Chris O'Neil",
-          "email": "chris@cloud.dev",
-          "messages": 18,
-          "minutes": 20,
-          "role": "Guest"
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "meetingTitle": "Customer Success Workshop",
-      "date": "2023-12-01T11:15:00Z",
-      "status": "Completed",
-      "duration": "90 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 15,
+        "lastViewed": "2023-11-20T10:15:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "System Diagram",
+        "link": "https://draw.io/arch-review",
+        "sharedBy": {
+          "name": "Priya Sharma",
+          "email": "priya.s@backend.com"
+        },
+        "numberOfViews": 15,
+        "lastViewed": "2023-11-20T10:15:00Z"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "meetingTitle": "Customer Success Workshop",
+    "date": "2023-12-01T11:15:00Z",
+    "status": "Completed",
+    "duration": "90 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Sarah Johnson",
+        "email": "sarah@success.com",
+        "messages": 40,
+        "minutes": 90,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Mark Lee",
+        "email": "mark@clientcorp.com",
+        "messages": 5,
+        "minutes": 90,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Nadia Petrova",
+        "email": "nadia@success.com",
+        "messages": 25,
+        "minutes": 90,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Customer_Journey_Map",
+        "fileSize": "1.2MB",
+        "fileType": "pptx",
+        "uploadedBy": {
           "name": "Sarah Johnson",
-          "email": "sarah@success.com",
-          "messages": 40,
-          "minutes": 90,
-          "role": "Host"
+          "email": "sarah@success.com"
         },
-        {
-          "id": 2,
-          "name": "Mark Lee",
-          "email": "mark@clientcorp.com",
-          "messages": 5,
-          "minutes": 90,
-          "role": "Guest"
+        "numberOfViews": 28,
+        "lastViewed": "2023-12-10T13:20:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Workshop Slides",
+        "link": "https://slides.com/customer-success",
+        "sharedBy": {
+          "name": "Sarah Johnson",
+          "email": "sarah@success.com"
         },
-        {
-          "id": 3,
-          "name": "Nadia Petrova",
-          "email": "nadia@success.com",
-          "messages": 25,
-          "minutes": 90,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "meetingTitle": "HR Policy Update",
-      "date": "2024-01-10T09:00:00Z",
-      "status": "Completed",
-      "duration": "45 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 28,
+        "lastViewed": "2023-12-10T13:20:00Z"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "meetingTitle": "HR Policy Update",
+    "date": "2024-01-10T09:00:00Z",
+    "status": "Completed",
+    "duration": "45 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Emma Davis",
+        "email": "emma.d@hr.com",
+        "messages": 28,
+        "minutes": 45,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Tom Wilson",
+        "email": "tom.w@legal.com",
+        "messages": 12,
+        "minutes": 45,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Lucas Martin",
+        "email": "lucas@hr.com",
+        "messages": 18,
+        "minutes": 45,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Updated_Policy_Document",
+        "fileSize": "1.2MB",
+        "fileType": "pdf",
+        "uploadedBy": {
           "name": "Emma Davis",
-          "email": "emma.d@hr.com",
-          "messages": 28,
-          "minutes": 45,
-          "role": "Host"
+          "email": "emma.d@hr.com"
         },
-        {
-          "id": 2,
-          "name": "Tom Wilson",
-          "email": "tom.w@legal.com",
-          "messages": 12,
-          "minutes": 45,
-          "role": "Guest"
+        "numberOfViews": 32,
+        "lastViewed": "2024-01-18T11:05:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Policy Update",
+        "link": "https://hr.com/policy-update",
+        "sharedBy": {
+          "name": "Emma Davis",
+          "email": "emma.d@hr.com"
         },
-        {
-          "id": 3,
-          "name": "Lucas Martin",
-          "email": "lucas@hr.com",
-          "messages": 18,
-          "minutes": 45,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "meetingTitle": "AI Integration Brainstorm",
-      "date": "2023-11-20T15:30:00Z",
-      "status": "Completed",
-      "duration": "120 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 32,
+        "lastViewed": "2024-01-18T11:05:00Z"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "meetingTitle": "AI Integration Brainstorm",
+    "date": "2023-11-20T15:30:00Z",
+    "status": "Completed",
+    "duration": "120 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Dr. Alan Turing",
+        "email": "alan@airesearch.org",
+        "messages": 50,
+        "minutes": 120,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Grace Hopper",
+        "email": "grace@navy.mil",
+        "messages": 35,
+        "minutes": 120,
+        "role": "Participant"
+      },
+      {
+        "id": 3,
+        "name": "Yoshua Bengio",
+        "email": "y.bengio@mila.quebec",
+        "messages": 40,
+        "minutes": 110,
+        "role": "Guest"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "AI_Integration_Scenarios",
+        "fileSize": "1.2MB",
+        "fileType": "docx",
+        "uploadedBy": {
           "name": "Dr. Alan Turing",
-          "email": "alan@airesearch.org",
-          "messages": 50,
-          "minutes": 120,
-          "role": "Host"
+          "email": "alan@airesearch.org"
         },
-        {
-          "id": 2,
+        "numberOfViews": 27,
+        "lastViewed": "2023-12-01T14:30:00Z"
+      },
+      {
+        "fileName": "Technical_Feasibility",
+        "fileType": "pdf",
+        "fileSize": "1.2MB",
+        "uploadedBy": {
           "name": "Grace Hopper",
-          "email": "grace@navy.mil",
-          "messages": 35,
-          "minutes": 120,
-          "role": "Participant"
+          "email": "grace@navy.mil"
         },
-        {
-          "id": 3,
-          "name": "Yoshua Bengio",
-          "email": "y.bengio@mila.quebec",
-          "messages": 40,
-          "minutes": 110,
-          "role": "Guest"
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "meetingTitle": "Sales Pipeline Review",
-      "date": "2023-11-25T10:00:00Z",
-      "status": "Completed",
-      "duration": "30 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 19,
+        "lastViewed": "2023-11-28T10:45:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Integration Scenarios",
+        "link": "https://docs.airesearch.org/integration",
+        "sharedBy": {
+          "name": "Dr. Alan Turing",
+          "email": "alan@airesearch.org"
+        },
+        "numberOfViews": 27,
+        "lastViewed": "2023-12-01T14:30:00Z"
+      },
+      {
+        "linkName": "Feasibility Report",
+        "link": "https://navy.mil/feasibility",
+        "sharedBy": {
+          "name": "Grace Hopper",
+          "email": "grace@navy.mil"
+        },
+        "numberOfViews": 19,
+        "lastViewed": "2023-11-28T10:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "meetingTitle": "Sales Pipeline Review",
+    "date": "2023-11-25T10:00:00Z",
+    "status": "Completed",
+    "duration": "30 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Richard Hendricks",
+        "email": "richard@piedpiper.com",
+        "messages": 30,
+        "minutes": 30,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Erlich Bachman",
+        "email": "erlich@aviato.com",
+        "messages": 15,
+        "minutes": 30,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Dinesh Chugtai",
+        "email": "dinesh@ppdev.com",
+        "messages": 20,
+        "minutes": 30,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Sales_Forecast_Q4",
+        "fileSize": "1.2MB",
+        "fileType": "xlsx",
+        "uploadedBy": {
           "name": "Richard Hendricks",
-          "email": "richard@piedpiper.com",
-          "messages": 30,
-          "minutes": 30,
-          "role": "Host"
+          "email": "richard@piedpiper.com"
         },
-        {
-          "id": 2,
-          "name": "Erlich Bachman",
-          "email": "erlich@aviato.com",
-          "messages": 15,
-          "minutes": 30,
-          "role": "Guest"
+        "numberOfViews": 15,
+        "lastViewed": "2023-12-02T09:15:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Sales Forecast",
+        "link": "https://piedpiper.com/sales-q4",
+        "sharedBy": {
+          "name": "Richard Hendricks",
+          "email": "richard@piedpiper.com"
         },
-        {
-          "id": 3,
-          "name": "Dinesh Chugtai",
-          "email": "dinesh@ppdev.com",
-          "messages": 20,
-          "minutes": 30,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "meetingTitle": "Security Audit Debrief",
-      "date": "2023-11-30T14:00:00Z",
-      "status": "Completed",
-      "duration": "60 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 15,
+        "lastViewed": "2023-12-02T09:15:00Z"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "meetingTitle": "Security Audit Debrief",
+    "date": "2023-11-30T14:00:00Z",
+    "status": "Completed",
+    "duration": "60 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Anna Morales",
+        "email": "anna@security.io",
+        "messages": 22,
+        "minutes": 60,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Brian Lee",
+        "email": "brian@auditcorp.com",
+        "messages": 10,
+        "minutes": 60,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Jamal Rivers",
+        "email": "jamal@security.io",
+        "messages": 16,
+        "minutes": 55,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Audit_Report_Final",
+        "fileSize": "1.2MB",
+        "fileType": "pdf",
+        "uploadedBy": {
           "name": "Anna Morales",
-          "email": "anna@security.io",
-          "messages": 22,
-          "minutes": 60,
-          "role": "Host"
+          "email": "anna@security.io"
         },
-        {
-          "id": 2,
-          "name": "Brian Lee",
-          "email": "brian@auditcorp.com",
-          "messages": 10,
-          "minutes": 60,
-          "role": "Guest"
+        "numberOfViews": 21,
+        "lastViewed": "2023-12-10T15:20:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Audit Report",
+        "link": "https://security.io/audit-final",
+        "sharedBy": {
+          "name": "Anna Morales",
+          "email": "anna@security.io"
         },
-        {
-          "id": 3,
-          "name": "Jamal Rivers",
-          "email": "jamal@security.io",
-          "messages": 16,
-          "minutes": 55,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "meetingTitle": "Team Retrospective",
-      "date": "2023-12-05T09:30:00Z",
-      "status": "Completed",
-      "duration": "45 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 21,
+        "lastViewed": "2023-12-10T15:20:00Z"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "meetingTitle": "Team Retrospective",
+    "date": "2023-12-05T09:30:00Z",
+    "status": "Completed",
+    "duration": "45 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Leila Mahmoud",
+        "email": "leila@agileteam.com",
+        "messages": 35,
+        "minutes": 45,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Carlos Mendoza",
+        "email": "carlos@devshop.com",
+        "messages": 18,
+        "minutes": 45,
+        "role": "Member"
+      },
+      {
+        "id": 3,
+        "name": "Natalie Brooks",
+        "email": "natalie@retros.io",
+        "messages": 12,
+        "minutes": 40,
+        "role": "Guest"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Action_Items",
+        "fileType": "csv",
+        "fileSize": "1.1MB",
+        "uploadedBy": {
           "name": "Leila Mahmoud",
-          "email": "leila@agileteam.com",
-          "messages": 35,
-          "minutes": 45,
-          "role": "Host"
+          "email": "leila@agileteam.com"
         },
-        {
-          "id": 2,
-          "name": "Carlos Mendoza",
-          "email": "carlos@devshop.com",
-          "messages": 18,
-          "minutes": 45,
-          "role": "Member"
+        "numberOfViews": 14,
+        "lastViewed": "2023-12-12T11:10:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Retrospective Notes",
+        "link": "https://agileteam.com/retro-notes",
+        "sharedBy": {
+          "name": "Leila Mahmoud",
+          "email": "leila@agileteam.com"
         },
-        {
-          "id": 3,
-          "name": "Natalie Brooks",
-          "email": "natalie@retros.io",
-          "messages": 12,
-          "minutes": 40,
-          "role": "Guest"
-        }
-      ]
-    },
-    {
-      "id": 11,
-      "meetingTitle": "Legal Compliance Sync",
-      "date": "2023-12-10T13:00:00Z",
-      "status": "Completed",
-      "duration": "75 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 14,
+        "lastViewed": "2023-12-12T11:10:00Z"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "meetingTitle": "Legal Compliance Sync",
+    "date": "2023-12-10T13:00:00Z",
+    "status": "Completed",
+    "duration": "75 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Harriet Jones",
+        "email": "harriet@legalteam.com",
+        "messages": 20,
+        "minutes": 75,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "David Chen",
+        "email": "david@lawpartner.com",
+        "messages": 10,
+        "minutes": 75,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Irene Adler",
+        "email": "irene@legalteam.com",
+        "messages": 15,
+        "minutes": 70,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Compliance_Checklist",
+        "fileType": "docx",
+        "fileSize": "2.3MB",
+        "uploadedBy": {
           "name": "Harriet Jones",
-          "email": "harriet@legalteam.com",
-          "messages": 20,
-          "minutes": 75,
-          "role": "Host"
+          "email": "harriet@legalteam.com"
         },
-        {
-          "id": 2,
-          "name": "David Chen",
-          "email": "david@lawpartner.com",
-          "messages": 10,
-          "minutes": 75,
-          "role": "Guest"
+        "numberOfViews": 19,
+        "lastViewed": "2023-12-18T09:45:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Compliance Docs",
+        "link": "https://legalteam.com/compliance-checklist",
+        "sharedBy": {
+          "name": "Harriet Jones",
+          "email": "harriet@legalteam.com"
         },
-        {
-          "id": 3,
-          "name": "Irene Adler",
-          "email": "irene@legalteam.com",
-          "messages": 15,
-          "minutes": 70,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 12,
-      "meetingTitle": "DevOps Standup",
-      "date": "2023-12-14T08:45:00Z",
-      "status": "Completed",
-      "duration": "20 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 19,
+        "lastViewed": "2023-12-18T09:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "meetingTitle": "DevOps Standup",
+    "date": "2023-12-14T08:45:00Z",
+    "status": "Completed",
+    "duration": "20 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Jake Collins",
+        "email": "jake@devops.net",
+        "messages": 25,
+        "minutes": 20,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Mina Park",
+        "email": "mina@infrastructure.dev",
+        "messages": 20,
+        "minutes": 20,
+        "role": "Member"
+      },
+      {
+        "id": 3,
+        "name": "Leo Zhang",
+        "email": "leo@platform.io",
+        "messages": 18,
+        "minutes": 18,
+        "role": "Guest"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Deployment_Schedule",
+        "fileType": "md",
+        "fileSize": "900KB",
+        "uploadedBy": {
           "name": "Jake Collins",
-          "email": "jake@devops.net",
-          "messages": 25,
-          "minutes": 20,
-          "role": "Host"
+          "email": "jake@devops.net"
         },
-        {
-          "id": 2,
-          "name": "Mina Park",
-          "email": "mina@infrastructure.dev",
-          "messages": 20,
-          "minutes": 20,
-          "role": "Member"
+        "numberOfViews": 22,
+        "lastViewed": "2023-12-15T10:30:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Deployment Plan",
+        "link": "https://devops.net/deployment-schedule",
+        "sharedBy": {
+          "name": "Jake Collins",
+          "email": "jake@devops.net"
         },
-        {
-          "id": 3,
-          "name": "Leo Zhang",
-          "email": "leo@platform.io",
-          "messages": 18,
-          "minutes": 18,
-          "role": "Guest"
-        }
-      ]
-    },
-    {
-      "id": 13,
-      "meetingTitle": "Investor Relations Call",
-      "date": "2023-12-18T16:00:00Z",
-      "status": "Completed",
-      "duration": "40 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 22,
+        "lastViewed": "2023-12-15T10:30:00Z"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "meetingTitle": "Investor Relations Call",
+    "date": "2023-12-18T16:00:00Z",
+    "status": "Completed",
+    "duration": "40 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Chloe Bennett",
+        "email": "chloe@ventures.com",
+        "messages": 32,
+        "minutes": 40,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Victor Hugo",
+        "email": "victor@capitalgroup.com",
+        "messages": 14,
+        "minutes": 40,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Ethan Wells",
+        "email": "ethan@ventures.com",
+        "messages": 19,
+        "minutes": 35,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Investor_Deck_Q4",
+        "fileType": "pdf",
+        "fileSize": "1.7MB",
+        "uploadedBy": {
           "name": "Chloe Bennett",
-          "email": "chloe@ventures.com",
-          "messages": 32,
-          "minutes": 40,
-          "role": "Host"
+          "email": "chloe@ventures.com"
         },
-        {
-          "id": 2,
-          "name": "Victor Hugo",
-          "email": "victor@capitalgroup.com",
-          "messages": 14,
-          "minutes": 40,
-          "role": "Guest"
+        "numberOfViews": 25,
+        "lastViewed": "2023-12-22T14:20:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Investor Portal",
+        "link": "https://ventures.com/investor-deck",
+        "sharedBy": {
+          "name": "Chloe Bennett",
+          "email": "chloe@ventures.com"
         },
-        {
-          "id": 3,
-          "name": "Ethan Wells",
-          "email": "ethan@ventures.com",
-          "messages": 19,
-          "minutes": 35,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 14,
-      "meetingTitle": "UX Research Presentation",
-      "date": "2024-01-05T14:30:00Z",
-      "status": "Completed",
-      "duration": "50 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 25,
+        "lastViewed": "2023-12-22T14:20:00Z"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "meetingTitle": "UX Research Presentation",
+    "date": "2024-01-05T14:30:00Z",
+    "status": "Completed",
+    "duration": "50 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Tina Morales",
+        "email": "tina@uxhub.io",
+        "messages": 45,
+        "minutes": 50,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Kevin Stone",
+        "email": "kevin@researchlab.net",
+        "messages": 20,
+        "minutes": 50,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Maya Allen",
+        "email": "maya@uxhub.io",
+        "messages": 30,
+        "minutes": 48,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "User_Research_Findings",
+        "fileType": "pptx",
+        "fileSize": "2.1MB",
+        "uploadedBy": {
           "name": "Tina Morales",
-          "email": "tina@uxhub.io",
-          "messages": 45,
-          "minutes": 50,
-          "role": "Host"
+          "email": "tina@uxhub.io"
         },
-        {
-          "id": 2,
-          "name": "Kevin Stone",
-          "email": "kevin@researchlab.net",
-          "messages": 20,
-          "minutes": 50,
-          "role": "Guest"
+        "numberOfViews": 31,
+        "lastViewed": "2024-01-12T10:45:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Research Slides",
+        "link": "https://uxhub.io/research-findings",
+        "sharedBy": {
+          "name": "Tina Morales",
+          "email": "tina@uxhub.io"
         },
-        {
-          "id": 3,
-          "name": "Maya Allen",
-          "email": "maya@uxhub.io",
-          "messages": 30,
-          "minutes": 48,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 15,
-      "meetingTitle": "Annual Budget Planning",
-      "date": "2024-01-15T09:00:00Z",
-      "status": "In Progress",
-      "duration": "60 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 31,
+        "lastViewed": "2024-01-12T10:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "meetingTitle": "Annual Budget Planning",
+    "date": "2024-01-15T09:00:00Z",
+    "status": "In Progress",
+    "duration": "60 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Emily Johnson",
+        "email": "emily.j@finance.com",
+        "messages": 20,
+        "minutes": 45,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Mark Thompson",
+        "email": "mark.t@consulting.com",
+        "messages": 8,
+        "minutes": 40,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Sarah Lee",
+        "email": "sarah.lee@finance.com",
+        "messages": 15,
+        "minutes": 45,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Budget_Draft_2024",
+        "fileType": "xlsx",
+        "fileSize": "1.4MB",
+        "uploadedBy": {
           "name": "Emily Johnson",
-          "email": "emily.j@finance.com",
-          "messages": 20,
-          "minutes": 45,
-          "role": "Host"
+          "email": "emily.j@finance.com"
         },
-        {
-          "id": 2,
-          "name": "Mark Thompson",
-          "email": "mark.t@consulting.com",
-          "messages": 8,
-          "minutes": 40,
-          "role": "Guest"
+        "numberOfViews": 12,
+        "lastViewed": "2024-01-20T11:30:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Budget Sheet",
+        "link": "https://finance.com/budget-2024",
+        "sharedBy": {
+          "name": "Emily Johnson",
+          "email": "emily.j@finance.com"
         },
-        {
-          "id": 3,
-          "name": "Sarah Lee",
-          "email": "sarah.lee@finance.com",
-          "messages": 15,
-          "minutes": 45,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 16,
-      "meetingTitle": "Engineering Team Sync",
-      "date": "2024-01-16T14:15:00Z",
-      "status": "In Progress",
-      "duration": "30 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 12,
+        "lastViewed": "2024-01-20T11:30:00Z"
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "meetingTitle": "Engineering Team Sync",
+    "date": "2024-01-16T14:15:00Z",
+    "status": "In Progress",
+    "duration": "30 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Alex Rivera",
+        "email": "alex@engteam.io",
+        "messages": 25,
+        "minutes": 25,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Priya Kapoor",
+        "email": "priya.k@devops.com",
+        "messages": 18,
+        "minutes": 25,
+        "role": "Member"
+      },
+      {
+        "id": 3,
+        "name": "James O'Connor",
+        "email": "james@cloudarch.net",
+        "messages": 12,
+        "minutes": 20,
+        "role": "Guest"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Sprint_Backlog",
+        "fileType": "md",
+        "fileSize": "1.0MB",
+        "uploadedBy": {
           "name": "Alex Rivera",
-          "email": "alex@engteam.io",
-          "messages": 25,
-          "minutes": 25,
-          "role": "Host"
+          "email": "alex@engteam.io"
         },
-        {
-          "id": 2,
-          "name": "Priya Kapoor",
-          "email": "priya.k@devops.com",
-          "messages": 18,
-          "minutes": 25,
-          "role": "Member"
+        "numberOfViews": 8,
+        "lastViewed": "2024-01-18T09:45:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Sprint Backlog",
+        "link": "https://engteam.io/sprint-backlog",
+        "sharedBy": {
+          "name": "Alex Rivera",
+          "email": "alex@engteam.io"
         },
-        {
-          "id": 3,
-          "name": "James O'Connor",
-          "email": "james@cloudarch.net",
-          "messages": 12,
-          "minutes": 20,
-          "role": "Guest"
-        }
-      ]
-    },
-    {
-      "id": 17,
-      "meetingTitle": "Client Onboarding Workshop",
-      "date": "2024-01-18T11:00:00Z",
-      "status": "In Progress",
-      "duration": "90 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 8,
+        "lastViewed": "2024-01-18T09:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "meetingTitle": "Client Onboarding Workshop",
+    "date": "2024-01-18T11:00:00Z",
+    "status": "In Progress",
+    "duration": "90 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Rachel Green",
+        "email": "rachel@onboarding.co",
+        "messages": 35,
+        "minutes": 60,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Paul Matthews",
+        "email": "paul@clientcorp.com",
+        "messages": 10,
+        "minutes": 55,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Hannah Kim",
+        "email": "hannah@onboarding.co",
+        "messages": 25,
+        "minutes": 60,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Onboarding_Checklist",
+        "fileType": "pdf",
+        "fileSize": "1.6MB",
+        "uploadedBy": {
           "name": "Rachel Green",
-          "email": "rachel@onboarding.co",
-          "messages": 35,
-          "minutes": 60,
-          "role": "Host"
+          "email": "rachel@onboarding.co"
         },
-        {
-          "id": 2,
-          "name": "Paul Matthews",
-          "email": "paul@clientcorp.com",
-          "messages": 10,
-          "minutes": 55,
-          "role": "Guest"
+        "numberOfViews": 15,
+        "lastViewed": "2024-01-22T14:20:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Onboarding Guide",
+        "link": "https://onboarding.co/guide",
+        "sharedBy": {
+          "name": "Rachel Green",
+          "email": "rachel@onboarding.co"
         },
-        {
-          "id": 3,
-          "name": "Hannah Kim",
-          "email": "hannah@onboarding.co",
-          "messages": 25,
-          "minutes": 60,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 18,
-      "meetingTitle": "Sales Strategy Q1",
-      "date": "2024-01-22T13:30:00Z",
-      "status": "In Progress",
-      "duration": "45 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 15,
+        "lastViewed": "2024-01-22T14:20:00Z"
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "meetingTitle": "Sales Strategy Q1",
+    "date": "2024-01-22T13:30:00Z",
+    "status": "In Progress",
+    "duration": "45 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Tom Reynolds",
+        "email": "tom@salesforce.com",
+        "messages": 30,
+        "minutes": 30,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Linda Chen",
+        "email": "linda@partnerorg.com",
+        "messages": 15,
+        "minutes": 30,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Gregory Stone",
+        "email": "greg@salesforce.com",
+        "messages": 20,
+        "minutes": 30,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Q1_Targets",
+        "fileType": "pptx",
+        "fileSize": "2.0MB",
+        "uploadedBy": {
           "name": "Tom Reynolds",
-          "email": "tom@salesforce.com",
-          "messages": 30,
-          "minutes": 30,
-          "role": "Host"
+          "email": "tom@salesforce.com"
         },
-        {
-          "id": 2,
-          "name": "Linda Chen",
-          "email": "linda@partnerorg.com",
-          "messages": 15,
-          "minutes": 30,
-          "role": "Guest"
+        "numberOfViews": 9,
+        "lastViewed": "2024-01-25T16:45:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Q1 Targets",
+        "link": "https://salesforce.com/q1-targets",
+        "sharedBy": {
+          "name": "Tom Reynolds",
+          "email": "tom@salesforce.com"
         },
-        {
-          "id": 3,
-          "name": "Gregory Stone",
-          "email": "greg@salesforce.com",
-          "messages": 20,
-          "minutes": 30,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 19,
-      "meetingTitle": "Product Launch Review",
-      "date": "2024-01-24T15:00:00Z",
-      "status": "In Progress",
-      "duration": "75 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 9,
+        "lastViewed": "2024-01-25T16:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "meetingTitle": "Product Launch Review",
+    "date": "2024-01-24T15:00:00Z",
+    "status": "In Progress",
+    "duration": "75 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Sophie Turner",
+        "email": "sophie@productlaunch.io",
+        "messages": 40,
+        "minutes": 50,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Eric Nguyen",
+        "email": "eric@designpartner.com",
+        "messages": 18,
+        "minutes": 45,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Megan Park",
+        "email": "megan@productlaunch.io",
+        "messages": 25,
+        "minutes": 50,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Launch_Timeline",
+        "fileType": "xlsx",
+        "fileSize": "1.8MB",
+        "uploadedBy": {
           "name": "Sophie Turner",
-          "email": "sophie@productlaunch.io",
-          "messages": 40,
-          "minutes": 50,
-          "role": "Host"
+          "email": "sophie@productlaunch.io"
         },
-        {
-          "id": 2,
-          "name": "Eric Nguyen",
-          "email": "eric@designpartner.com",
-          "messages": 18,
-          "minutes": 45,
-          "role": "Guest"
+        "numberOfViews": 11,
+        "lastViewed": "2024-01-28T10:15:00Z"
+      }
+    ],
+    "links": [
+      {
+        "linkName": "Launch Timeline",
+        "link": "https://productlaunch.io/launch-timeline",
+        "sharedBy": {
+          "name": "Sophie Turner",
+          "email": "sophie@productlaunch.io"
         },
-        {
-          "id": 3,
-          "name": "Megan Park",
-          "email": "megan@productlaunch.io",
-          "messages": 25,
-          "minutes": 50,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 20,
-      "meetingTitle": "IT Infrastructure Upgrade",
-      "date": "2024-01-25T10:00:00Z",
-      "status": "In Progress",
-      "duration": "50 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 11,
+        "lastViewed": "2024-01-28T10:15:00Z"
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "meetingTitle": "IT Infrastructure Upgrade",
+    "date": "2024-01-25T10:00:00Z",
+    "status": "In Progress",
+    "duration": "50 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Daniel Harris",
+        "email": "daniel@itinfra.com",
+        "messages": 22,
+        "minutes": 35,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Fatima Ali",
+        "email": "fatima@network.co",
+        "messages": 15,
+        "minutes": 30,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Nathan Brooks",
+        "email": "nathan@itinfra.com",
+        "messages": 18,
+        "minutes": 35,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Migration_Plan",
+        "fileType": "pdf",
+        "fileSize": "1.3MB",
+        "uploadedBy": {
           "name": "Daniel Harris",
-          "email": "daniel@itinfra.com",
-          "messages": 22,
-          "minutes": 35,
-          "role": "Host"
+          "email": "daniel@itinfra.com"
         },
-        {
-          "id": 2,
-          "name": "Fatima Ali",
-          "email": "fatima@network.co",
-          "messages": 15,
-          "minutes": 30,
-          "role": "Guest"
-        },
-        {
-          "id": 3,
-          "name": "Nathan Brooks",
-          "email": "nathan@itinfra.com",
-          "messages": 18,
-          "minutes": 35,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 21,
-      "meetingTitle": "Customer Feedback Analysis",
-      "date": "2024-01-29T14:45:00Z",
-      "status": "In Progress",
-      "duration": "40 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 7,
+        "lastViewed": "2024-01-28T14:30:00Z"
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "meetingTitle": "Customer Feedback Analysis",
+    "date": "2024-01-29T14:45:00Z",
+    "status": "In Progress",
+    "duration": "40 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Olivia Smith",
+        "email": "olivia@feedbacklab.com",
+        "messages": 28,
+        "minutes": 25,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Samuel Lee",
+        "email": "samuel@clienthelp.com",
+        "messages": 12,
+        "minutes": 20,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Emma Wilson",
+        "email": "emma@feedbacklab.com",
+        "messages": 20,
+        "minutes": 25,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Sentiment_Analysis",
+        "fileType": "csv",
+        "fileSize": "1.5MB",
+        "uploadedBy": {
           "name": "Olivia Smith",
-          "email": "olivia@feedbacklab.com",
-          "messages": 28,
-          "minutes": 25,
-          "role": "Host"
+          "email": "olivia@feedbacklab.com"
         },
-        {
-          "id": 2,
-          "name": "Samuel Lee",
-          "email": "samuel@clienthelp.com",
-          "messages": 12,
-          "minutes": 20,
-          "role": "Guest"
-        },
-        {
-          "id": 3,
-          "name": "Emma Wilson",
-          "email": "emma@feedbacklab.com",
-          "messages": 20,
-          "minutes": 25,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 22,
-      "meetingTitle": "Content Marketing Brainstorm",
-      "date": "2024-02-01T10:30:00Z",
-      "status": "In Progress",
-      "duration": "55 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 6,
+        "lastViewed": "2024-02-02T11:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "meetingTitle": "Content Marketing Brainstorm",
+    "date": "2024-02-01T10:30:00Z",
+    "status": "In Progress",
+    "duration": "55 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Liam Johnson",
+        "email": "liam@contentstudio.com",
+        "messages": 35,
+        "minutes": 40,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Ava Martinez",
+        "email": "ava@creativeteam.com",
+        "messages": 25,
+        "minutes": 40,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Ethan Brown",
+        "email": "ethan@contentstudio.com",
+        "messages": 30,
+        "minutes": 40,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Content_Calendar",
+        "fileType": "xlsx",
+        "fileSize": "1.9MB",
+        "uploadedBy": {
           "name": "Liam Johnson",
-          "email": "liam@contentstudio.com",
-          "messages": 35,
-          "minutes": 40,
-          "role": "Host"
+          "email": "liam@contentstudio.com"
         },
-        {
-          "id": 2,
-          "name": "Ava Martinez",
-          "email": "ava@creativeteam.com",
-          "messages": 25,
-          "minutes": 40,
-          "role": "Guest"
-        },
-        {
-          "id": 3,
-          "name": "Ethan Brown",
-          "email": "ethan@contentstudio.com",
-          "messages": 30,
-          "minutes": 40,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 23,
-      "meetingTitle": "R&D Innovation Workshop",
-      "date": "2024-02-05T13:00:00Z",
-      "status": "In Progress",
-      "duration": "120 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 8,
+        "lastViewed": "2024-02-03T15:20:00Z"
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "meetingTitle": "R&D Innovation Workshop",
+    "date": "2024-02-05T13:00:00Z",
+    "status": "In Progress",
+    "duration": "120 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Dr. Sophia Lin",
+        "email": "sophia@rndlabs.com",
+        "messages": 45,
+        "minutes": 80,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Dr. Rajesh Kumar",
+        "email": "rajesh@techinnovate.com",
+        "messages": 30,
+        "minutes": 75,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "Isabella Chen",
+        "email": "isabella@rndlabs.com",
+        "messages": 38,
+        "minutes": 80,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Innovation_Backlog",
+        "fileType": "docx",
+        "fileSize": "2.2MB",
+        "uploadedBy": {
           "name": "Dr. Sophia Lin",
-          "email": "sophia@rndlabs.com",
-          "messages": 45,
-          "minutes": 80,
-          "role": "Host"
+          "email": "sophia@rndlabs.com"
         },
-        {
-          "id": 2,
-          "name": "Dr. Rajesh Kumar",
-          "email": "rajesh@techinnovate.com",
-          "messages": 30,
-          "minutes": 75,
-          "role": "Guest"
-        },
-        {
-          "id": 3,
-          "name": "Isabella Chen",
-          "email": "isabella@rndlabs.com",
-          "messages": 38,
-          "minutes": 80,
-          "role": "Member"
-        }
-      ]
-    },
-    {
-      "id": 24,
-      "meetingTitle": "Partnership Negotiation",
-      "date": "2024-02-08T16:00:00Z",
-      "status": "In Progress",
-      "duration": "65 minutes",
-      "participants": [
-        {
-          "id": 1,
+        "numberOfViews": 10,
+        "lastViewed": "2024-02-08T09:45:00Z"
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "meetingTitle": "Partnership Negotiation",
+    "date": "2024-02-08T16:00:00Z",
+    "status": "In Progress",
+    "duration": "65 minutes",
+    "participants": [
+      {
+        "id": 1,
+        "name": "Michael Grant",
+        "email": "michael@partners.io",
+        "messages": 25,
+        "minutes": 45,
+        "role": "Host"
+      },
+      {
+        "id": 2,
+        "name": "Sara Yamamoto",
+        "email": "sara@globalsolutions.com",
+        "messages": 18,
+        "minutes": 40,
+        "role": "Guest"
+      },
+      {
+        "id": 3,
+        "name": "David Miller",
+        "email": "david@partners.io",
+        "messages": 20,
+        "minutes": 45,
+        "role": "Member"
+      }
+    ],
+    "files": [
+      {
+        "fileName": "Term_Sheet_Draft",
+        "fileType": "pdf",
+        "fileSize": "1.4MB",
+        "uploadedBy": {
           "name": "Michael Grant",
-          "email": "michael@partners.io",
-          "messages": 25,
-          "minutes": 45,
-          "role": "Host"
+          "email": "michael@partners.io"
         },
-        {
-          "id": 2,
-          "name": "Sara Yamamoto",
-          "email": "sara@globalsolutions.com",
-          "messages": 18,
-          "minutes": 40,
-          "role": "Guest"
-        },
-        {
-          "id": 3,
-          "name": "David Miller",
-          "email": "david@partners.io",
-          "messages": 20,
-          "minutes": 45,
-          "role": "Member"
-        }
-      ]
-    }
-    
-  ]
+        "numberOfViews": 5,
+        "lastViewed": "2024-02-10T11:30:00Z"
+      }
+    ]
+  }
+]
   
 }
