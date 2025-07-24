@@ -39,10 +39,12 @@ function sessionDetails() {
               <div className="flex flex-row flex-wrap  mt-10 justify-between gap-10 ">
                 <div className="flex items-center gap-20 ">
                   <div className="flex items-center  gap-5 ">
-                    <img
-                      src="https://picsum.photos/300/200"
+                    <div className="size-16 rounded-full bg-grey"></div>
+                    {/* <img
+                      src=""
+                      // src="https://picsum.photos/300/200"
                       className="size-16 rounded-full"
-                    />
+                    /> */}
 
                     {role && (
                       <div className="">
@@ -167,13 +169,13 @@ function sessionDetails() {
                 <Participants users={meeting.participants} />
               </TabsContent>
               <TabsContent value="files">
-                <Files files={meeting.files} />
+                <Files files={meeting.files ?? []} />
               </TabsContent>
               <TabsContent value="link">
                 <LinkTab links={meeting.links ?? []}/>
               </TabsContent>
               <TabsContent value="conversations">
-                <Conversation />
+                <Conversation conversations={meeting.conversations}/>
               </TabsContent>
             </Tabs>
           </section>

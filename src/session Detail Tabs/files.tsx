@@ -12,8 +12,8 @@ function Files({ files }: { files: { fileName: string, fileType: string, fileSiz
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-100">
-                <th className="px-4 py-3 text-left text-xs  font-inter-500 text-inActive-green uppercase tracking-wider w-16">
-
+                <th className="px-4 py-3 text-left text-xs  w-[1%] font-inter-500 text-inActive-green uppercase  tracking-wider ">
+                ㅤㅤㅤ
                 </th>
                 <th className="px-4 py-3 text-left text-sm font-inter-500 text-inActive-green uppercase tracking-wider">NAME</th>
                 <th className="px-4 py-3 text-left text-sm font-inter-500 text-inActive-green uppercase tracking-wider">Type</th>
@@ -69,7 +69,8 @@ function Files({ files }: { files: { fileName: string, fileType: string, fileSiz
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="text-sm flex text-inActive-green font-inter-500">
-                        <img src='https://placehold.co/400' className='size-10 rounded-full' />
+                        <div className="size-10 bg-grey rounded-full "></div >
+                        {/* <img src='https://placehold.co/400' className='size-10 rounded-full' /> */}
                         <div className="ml-4">
                           <p className="text-sm  text-text-primary font-inter-500">{file.uploadedBy.name}</p>
                           <p className="text-sm  text-inActive-green font-inter-500">{file.uploadedBy.email}</p>

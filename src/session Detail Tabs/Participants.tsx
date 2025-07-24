@@ -55,15 +55,15 @@ function Participants({
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="flex  items-center">
-                        <div className="h-10 w-10 flex-shrink-0">
-                          <img
+                        <div className="h-10 w-10 flex-shrink-0 rounded-full bg-grey">
+                          {/* <img
                             className="h-10 w-10 rounded-full object-cover"
                             // src={user.avatar || "/placeholder.svg"}
                             src="https://placehold.co/400"
                             alt={user.name}
                             width={40}
                             height={40}
-                          />
+                          /> */}
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-text-primary font-inter-500">

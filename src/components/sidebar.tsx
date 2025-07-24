@@ -90,11 +90,11 @@ function Sidebar({
               }}
             >
               <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-2">
-                <img
+                {/* <img
                   src={currentUser.avatar}
                   alt="User avatar"
                   className="w-full h-full object-cover"
-                />
+                /> */}
               </div>
               <div className="hidden lg:block">
                 <div className="text-gray-800 font-medium">
@@ -198,11 +198,11 @@ function Sidebar({
             <div className="hidden sm:flex bg-fade-bg  items-center mx-2 justify-between p-2  border-gray-200 rounded-2xl mt-6">
               <div className="flex items-center ">
                 <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden mr-2">
-                  <img
+                  {/* <img
                     src="https://picsum.photos/300/200"
                     alt="User avatar"
                     className="w-full h-full object-cover"
-                  />
+                  /> */}
                 </div>
                 <div className="">
                   <div className="text-gray-800 font-medium">Emmanuel A.</div>

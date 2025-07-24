@@ -3,7 +3,7 @@ import { formatFileLastViewed } from "@/constants/constants"
 import { MoreHorizontal } from "lucide-react"
 import linkIcon from '@/assets/icons/linkIcon.png'
 import viewLinkIcon from '@/assets/icons/viewLinkIcon.png'
-import { Link } from "react-router"
+
 
 function LinkTab({links}: { links: { linkName: string,  link:string, sharedBy: { name: string, email: string }, numberOfViews: number, lastViewed: string }[] }) {
   return (
@@ -76,8 +76,9 @@ function LinkTab({links}: { links: { linkName: string,  link:string, sharedBy: {
                     </a>
                   </td>
                   <td className="px-4 py-4 whitespace-nowrap">
-                    <div className="text-sm flex text-inActive-green font-inter-500">
-                      <img src='https://placehold.co/400' className='size-10 rounded-full' />
+                    <div className="text-sm flex  text-inActive-green font-inter-500">
+                    <div className="size-10 bg-grey rounded-full "></div >
+                      {/* <img src='https://placehold.co/400' className='size-10 rounded-full' /> */}
                       <div className="ml-4">
                         <p className="text-sm  text-text-primary font-inter-500">{link.sharedBy.name}</p>
                         <p className="text-sm  text-inActive-green font-inter-500">{link.sharedBy.email}</p>
