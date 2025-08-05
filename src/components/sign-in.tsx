@@ -1,6 +1,6 @@
 // components/SignIn.tsx
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import closeBtn from '../assets/icons/closeBtn.png';
@@ -18,10 +18,13 @@ interface FormInputs {
 
 const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<FormInputs>();
+        const navigate = useNavigate();
 
     const onSubmit = (data: FormInputs) => {
         console.log(data);
         // Handle form submission here
+        onClose();
+        navigate('/dashboard');
     };
 
     // Reset form when modal is closed

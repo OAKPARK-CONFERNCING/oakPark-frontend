@@ -1,6 +1,6 @@
 // components/Crea.tsx
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import closeBtn from '../assets/icons/closeBtn.png';
 import GoogleLogo from "../assets/icons/googleLogo.png";
@@ -23,6 +23,7 @@ interface FormInputs {
 const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<FormInputs>();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const onSubmit = (data: FormInputs) => {
         console.log(data);
@@ -33,6 +34,10 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose }) => {
             type: 'success',
             open: true,
         }));
+        
+        // Close the modal and navigate to dashboard
+        onClose();
+        navigate('/dashboard');
     };
 
     // Reset form when modal is closed
