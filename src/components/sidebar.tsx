@@ -138,7 +138,10 @@ function Sidebar({
                 </li>
               ))}
             </ul>
-            <div className="inline-flex mb-10 hover:scale-105 transition-all duration-300 ease-in-out  cursor-pointer ml-5 hover:text-gray-700" onClick={logoutUser}>
+            <div
+              className="inline-flex mb-10 hover:scale-105 transition-all duration-300 ease-in-out  cursor-pointer ml-5 hover:text-gray-700"
+              onClick={logoutUser}
+            >
               <img src={logout} alt="logout" className="w-5 " />
               <p className="font-inter-500 text-text-grey lg:block hidden hover:text-gray-700 hover:scale-105 text-base  ml-2">
                 Log Out
