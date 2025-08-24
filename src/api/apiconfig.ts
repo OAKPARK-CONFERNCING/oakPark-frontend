@@ -12,6 +12,31 @@ export interface ApiResponse<T = any> {
   success: boolean;
   message: string;
   data?: T;
+  status?: string;
+}
+
+export interface RegisterEmailData {
+  email: string;
+}
+
+export interface VerifyTokenData {
+  email: string;
+  token: string;
+}
+
+export interface LoginData {
+  email: string;
+  password: string;
+}
+
+export interface PasswordResetInitiateData {
+  email: string;
+}
+
+export interface PasswordResetData {
+  email: string;
+  password: string;
+  rePassword: string;
 }
 
 const api = axios.create({
@@ -77,50 +102,180 @@ api.interceptors.response.use(
 );
 
 // API Functions
-export const createAccount = async (accountData: CreateAccountData): Promise<ApiResponse> => {
+
+// Step 1: Register email for signup
+export const registerEmail = async (email: string): Promise<ApiResponse> => {
   try {
-    const response = await api.post('/auth/account/create', accountData);
+    const response = await api.post('auth/register', { email });
     return {
       success: true,
-      message: 'Account created successfully!',
+      message: response.data.message || 'Verification email sent successfully!',
       data: response.data
     };
-  } catch (error: any) {
-    const errorMessage = error.response?.data?.message || 
-                        error.response?.data?.detail || 
-                        'Failed to create account. Please try again.';
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
+                        'Failed to send verification email. Please try again.';
     
     return {
       success: false,
       message: errorMessage,
-      data: error.response?.data
+      data: axiosError.response?.data
     };
   }
 };
 
-export const loginUser = async (email: string, password: string): Promise<ApiResponse> => {
+// Step 2: Verify registration token
+export const verifyRegistrationToken = async (email: string, token: string): Promise<ApiResponse> => {
   try {
-    const response = await api.post('/auth/login', { email, password });
+    const response = await api.post('auth/register/verify', { email, token });
+    return {
+      success: true,
+      message: response.data.message || 'Email verified successfully!',
+      data: response.data
+    };
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
+                        'Invalid or expired verification code.';
     
-    if (response.data.access_token) {
-      localStorage.setItem('authToken', response.data.access_token);
+    return {
+      success: false,
+      message: errorMessage,
+      data: axiosError.response?.data
+    };
+  }
+};
+
+// Step 3: Create account after verification
+export const createAccount = async (accountData: CreateAccountData): Promise<ApiResponse> => {
+  try {
+    const response = await api.post('auth/account/create', accountData);
+    
+    if (response.data.token || response.data.access_token) {
+      const token = response.data.token || response.data.access_token;
+      localStorage.setItem('authToken', token);
       localStorage.setItem('isAuthenticated', 'true');
     }
     
     return {
       success: true,
-      message: 'Login successful!',
+      message: response.data.message || 'Account created successfully!',
       data: response.data
     };
-  } catch (error: any) {
-    const errorMessage = error.response?.data?.message || 
-                        error.response?.data?.detail || 
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
+                        'Failed to create account. Please try again.';
+    
+    return {
+      success: false,
+      message: errorMessage,
+      data: axiosError.response?.data
+    };
+  }
+};
+
+// Login user
+export const loginUser = async (email: string, password: string): Promise<ApiResponse> => {
+  try {
+    const response = await api.post('auth/login', { email, password });
+    
+    if (response.data.access_token || response.data.token) {
+      const token = response.data.access_token || response.data.token;
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('isAuthenticated', 'true');
+    }
+    
+    return {
+      success: true,
+      message: response.data.message || 'Login successful!',
+      data: response.data
+    };
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
                         'Login failed. Please try again.';
     
     return {
       success: false,
       message: errorMessage,
-      data: error.response?.data
+      data: axiosError.response?.data
+    };
+  }
+};
+
+// Initiate password reset
+export const initiatePasswordReset = async (email: string): Promise<ApiResponse> => {
+  try {
+    const response = await api.post('auth/password/reset/initiate', { email });
+    return {
+      success: true,
+      message: response.data.message || 'Password reset email sent successfully!',
+      data: response.data,
+      status: response.data.status
+    };
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
+                        'Failed to send password reset email.';
+    
+    return {
+      success: false,
+      message: errorMessage,
+      data: axiosError.response?.data
+    };
+  }
+};
+
+// Verify password reset token
+export const verifyPasswordResetToken = async (email: string, token: string): Promise<ApiResponse> => {
+  try {
+    const response = await api.post('auth/password/rest/verify', { email, token });
+    return {
+      success: true,
+      message: response.data.message || 'Token verified successfully!',
+      data: response.data,
+      status: response.data.status
+    };
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
+                        'Invalid or expired token.';
+    
+    return {
+      success: false,
+      message: errorMessage,
+      data: axiosError.response?.data
+    };
+  }
+};
+
+// Reset password
+export const resetPassword = async (email: string, password: string, rePassword: string): Promise<ApiResponse> => {
+  try {
+    const response = await api.post('auth/password/rest', { email, password, rePassword });
+    return {
+      success: response.data.success !== false,
+      message: response.data.message || 'Password updated successfully!',
+      data: response.data
+    };
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
+                        'Failed to reset password.';
+    
+    return {
+      success: false,
+      message: errorMessage,
+      data: axiosError.response?.data
     };
   }
 };
