@@ -285,8 +285,8 @@ const MultiStepSignup: React.FC<MultiStepSignupProps> = ({ isOpen, onClose }) =>
                                 {...tokenForm.register("token", { 
                                     required: "Verification code is required",
                                     pattern: {
-                                        value: /^\d{6}$/,
-                                        message: "Please enter a valid 6-digit code"
+                                        value: /^.{6}$/,
+                                        message: "Please enter a valid 6-character code"
                                     }
                                 })}
                                 type="text"
