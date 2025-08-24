@@ -15,7 +15,7 @@ export interface ApiResponse<T = any> {
 }
 
 const api = axios.create({
-  baseURL: 'https://video-conferencing-ne35.onrender.com/',  
+  baseURL: 'https://video-conferencing-ne35.onrender.com/api/v1',  
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

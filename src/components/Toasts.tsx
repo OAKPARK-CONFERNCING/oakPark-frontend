@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/redux/store';
-import { removeToast } from '@/redux/toastSlice';
+import { RootState } from '../redux/store';
+import { removeToast } from '../redux/toastSlice';
 
 export default function Toasts() {
   const toasts = useSelector((state: RootState) => state.toast.toasts);

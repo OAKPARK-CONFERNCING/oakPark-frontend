@@ -10,24 +10,26 @@ import SessionDetails from './id/sessionDetails.tsx'
 import VideoConference from './video/video-conference.tsx'
 import Edit from './components/Edit.tsx'
 import NewSession from './components/NewSession.tsx'
+import Toasts from './components/Toasts.tsx'
 
 const App = () => {
    return (
     <BrowserRouter>
-    <Routes> 
-      <Route index path="/" element={<Index />} />
-      <Route element={<AppLayout/>}>
-        <Route index path="/dashboard" element={<Dashboard />} />
-        <Route  path="/history" element={<History />} />
-        <Route path="/contacts" element={<Contact />} />
-        <Route path='/ongoing' element={<Ongoing/>}/>
-        <Route path='/history/:id' element={<SessionDetails/>}/>
-      </Route>
-      <Route path='/video' element={<VideoConference/>}/>
-      <Route path='/edit-profile' element={<Edit/>}/>
-      {/* <Route path='/new-session' element={<NewSession/>}/> */}
-    </Routes>
-  </BrowserRouter>
+      <Toasts />
+      <Routes> 
+        <Route index path="/" element={<Index />} />
+        <Route element={<AppLayout/>}>
+          <Route index path="/dashboard" element={<Dashboard />} />
+          <Route  path="/history" element={<History />} />
+          <Route path="/contacts" element={<Contact />} />
+          <Route path='/ongoing' element={<Ongoing/>}/>
+          <Route path='/history/:id' element={<SessionDetails/>}/>
+        </Route>
+        <Route path='/video' element={<VideoConference/>}/>
+        <Route path='/edit-profile' element={<Edit/>}/>
+        {/* <Route path='/new-session' element={<NewSession/>}/> */}
+      </Routes>
+    </BrowserRouter>
    )
  }
  

@@ -1,16 +1,15 @@
 // components/Crea.tsx
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import closeBtn from '../assets/icons/closeBtn.png';
 import GoogleLogo from "../assets/icons/googleLogo.png";
 import { motion } from 'framer-motion';
-import { useDispatch } from 'react-redux';
-import { addToast } from '../redux/toastSlice';
+import { useCreateAccount } from '../hooks/useAuth';
 
 interface CreateAccountProps {
     isOpen: boolean;
     onClose: () => void;
+    onSwitchToSignIn?: () => void; // New prop to handle switching to sign-in
 }
 
 interface FormInputs {
@@ -20,24 +19,22 @@ interface FormInputs {
     lastName: string;
 }
 
-const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose }) => {
+const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose, onSwitchToSignIn }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<FormInputs>();
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const createAccountMutation = useCreateAccount();
 
     const onSubmit = (data: FormInputs) => {
-        console.log(data);
-        // Handle form submission here
-        dispatch(addToast({
-            id: Date.now().toString(),
-            message: 'Account created successfully!',
-            type: 'success',
-            open: true,
-        }));
-        
-        // Close the modal and navigate to dashboard
-        onClose();
-        navigate('/dashboard');
+        createAccountMutation.mutate(data, {
+            onSuccess: (response) => {
+                if (response.success) {
+                    // Close current modal and switch to sign-in
+                    onClose();
+                    if (onSwitchToSignIn) {
+                        onSwitchToSignIn();
+                    }
+                }
+            }
+        });
     };
 
     // Reset form when modal is closed
@@ -86,21 +83,41 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose }) => {
                     <div>
                         <label htmlFor="firstName" className="sr-only">First Name</label>
                         <input
-                            {...register("firstName", { required: "First name is required" })}
+                            {...register("firstName", { 
+                                required: "First name is required",
+                                minLength: {
+                                    value: 2,
+                                    message: "First name must be at least 2 characters"
+                                },
+                                pattern: {
+                                    value: /^[A-Za-z\s]+$/,
+                                    message: "First name should only contain letters"
+                                }
+                            })}
                             type="text"
                             id="firstName"
                             className="bg-white border-2 border-[#cccccc] focus:outline-[#cccccc] focus:ring-0 focus:border-[#cccccc] p-3 rounded-2xl w-full indent-3 font-inter-400"
-                            placeholder="FirstName"
+                            placeholder="First Name"
                         />
                         {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName.message}</p>}
 
                         <label htmlFor="lastName" className="sr-only">Last Name</label>
                         <input
-                            {...register("lastName", { required: "Last name is required" })}
+                            {...register("lastName", { 
+                                required: "Last name is required",
+                                minLength: {
+                                    value: 2,
+                                    message: "Last name must be at least 2 characters"
+                                },
+                                pattern: {
+                                    value: /^[A-Za-z\s]+$/,
+                                    message: "Last name should only contain letters"
+                                }
+                            })}
                             type="text"
                             id="lastName"
                             className="mt-2 bg-white border-2 border-[#cccccc] focus:outline-[#cccccc] focus:ring-0 focus:border-[#cccccc] p-3 rounded-2xl w-full indent-3 font-inter-400"
-                            placeholder="Lastname"
+                            placeholder="Last Name"
                         />
                         {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName.message}</p>}
 
@@ -110,7 +127,7 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose }) => {
                                 required: "Email is required",
                                 pattern: {
                                     value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                                    message: "Invalid email address"
+                                    message: "Please enter a valid email address"
                                 }
                             })}
                             type="email"
@@ -125,8 +142,12 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose }) => {
                             {...register("password", { 
                                 required: "Password is required",
                                 minLength: {
-                                    value: 6,
-                                    message: "Password must be at least 6 characters"
+                                    value: 8,
+                                    message: "Password must be at least 8 characters"
+                                },
+                                pattern: {
+                                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/,
+                                    message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character"
                                 }
                             })}
                             type="password"
@@ -136,15 +157,29 @@ const CreateAccount: React.FC<CreateAccountProps> = ({ isOpen, onClose }) => {
                         />
                         {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
                     </div>
-                    <button type="submit" className="cursor-pointer font-inter-400 text-white p-3 mb-3 bg-medium-green rounded-2xl w-full">
-                        Create Account
+                    <button 
+                        type="submit" 
+                        disabled={createAccountMutation.isPending}
+                        className="cursor-pointer font-inter-400 text-white p-3 mb-3 bg-medium-green rounded-2xl w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {createAccountMutation.isPending ? 'Creating Account...' : 'Create Account'}
                     </button>
                     <p className="text-text-grey uppercase text-center font-inter-400">or</p>
                     <button type="button" className='p-3 border bg-white border-border-color-grey w-full rounded-2xl flex justify-center items-center space-x-2'>
                         <img src={GoogleLogo} className='size-8' alt="google logo" />
                         <span className="font-inter-400">Continue with Google</span>
                     </button>
-                    <p className='cursor-pointer text-text-grey underline font-inter-400 text-right'>Already have an account? Sign in</p>
+                    <p 
+                        className='cursor-pointer text-text-grey underline font-inter-400 text-right'
+                        onClick={() => {
+                            onClose();
+                            if (onSwitchToSignIn) {
+                                onSwitchToSignIn();
+                            }
+                        }}
+                    >
+                        Already have an account? Sign in
+                    </p>
                 </form>
             </motion.div>
         </div>

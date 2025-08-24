@@ -58,6 +58,10 @@ const App = () => {
               key="signin-modal"
               isOpen={isModalOpen}
               onClose={() => setIsModalOpen(false)}
+              onSwitchToCreateAccount={() => {
+                setIsModalOpen(false);
+                setIsCreateAccountOpen(true);
+              }}
             />
           )}
         </AnimatePresence>
@@ -68,6 +72,10 @@ const App = () => {
               key="create-account-modal"
               isOpen={isCreateAccountOpen}
               onClose={() => setIsCreateAccountOpen(false)}
+              onSwitchToSignIn={() => {
+                setIsCreateAccountOpen(false);
+                setIsModalOpen(true);
+              }}
             />
           )}
         </AnimatePresence>
