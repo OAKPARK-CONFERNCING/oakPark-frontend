@@ -8,6 +8,7 @@ import { AnimatePresence } from "framer-motion";
 import gridBg from "./assets/images/grid.png";
 // import SessionModal from "./components/SessionalModal";
 import { Link } from "react-router";
+import Toasts from "./components/Toasts";
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,6 +72,9 @@ const App = () => {
             />
           )}
         </AnimatePresence>
+        
+        {/* Toast notifications */}
+        <Toasts />
       </div>
     </div>
   );

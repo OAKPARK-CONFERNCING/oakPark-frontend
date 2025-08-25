@@ -9,13 +9,15 @@ import Ongoing from './pages/ongoing.tsx'
 import SessionDetails from './id/sessionDetails.tsx'
 import VideoConference from './video/video-conference.tsx'
 import Edit from './components/Edit.tsx'
-import NewSession from './components/NewSession.tsx'
+// import NewSession from './components/NewSession.tsx'
+import GoogleCallback from './components/GoogleCallback.tsx'
 
 const App = () => {
    return (
     <BrowserRouter>
     <Routes> 
       <Route index path="/" element={<Index />} />
+      <Route path="/auth/google/callback" element={<GoogleCallback />} />
       <Route element={<AppLayout/>}>
         <Route index path="/dashboard" element={<Dashboard />} />
         <Route  path="/history" element={<History />} />

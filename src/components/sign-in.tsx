@@ -1,10 +1,13 @@
 // components/SignIn.tsx
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
+import { useDispatch } from 'react-redux';
 import closeBtn from '../assets/icons/closeBtn.png';
 import GoogleLogo from "../assets/icons/googleLogo.png";
+import { loginUser, initiateGoogleAuth } from '../api/apiconfig';
+import { addToast } from '../redux/toastSlice';
 
 interface SignInProps {
     isOpen: boolean;
@@ -18,13 +21,56 @@ interface FormInputs {
 
 const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<FormInputs>();
-        const navigate = useNavigate();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const onSubmit = (data: FormInputs) => {
-        console.log(data);
-        // Handle form submission here
-        onClose();
-        navigate('/dashboard');
+    const onSubmit = async (data: FormInputs) => {
+        setIsLoading(true);
+        try {
+            const result = await loginUser(data.email, data.password);
+            
+            if (result.success) {
+                dispatch(addToast({
+                    id: Date.now().toString(),
+                    message: result.message,
+                    type: 'success',
+                    open: true,
+                }));
+                
+                onClose();
+                navigate('/dashboard');
+            } else {
+                dispatch(addToast({
+                    id: Date.now().toString(),
+                    message: result.message,
+                    type: 'error',
+                    open: true,
+                }));
+            }
+        } catch (error) {
+            dispatch(addToast({
+                id: Date.now().toString(),
+                message: 'An unexpected error occurred. Please try again.',
+                type: 'error',
+                open: true,
+            }));
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleGoogleAuth = () => {
+        try {
+            initiateGoogleAuth();
+        } catch (error) {
+            dispatch(addToast({
+                id: Date.now().toString(),
+                message: 'Failed to initiate Google authentication. Please try again.',
+                type: 'error',
+                open: true,
+            }));
+        }
     };
 
     // Reset form when modal is closed
@@ -103,13 +149,21 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
                         />
                         {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
                     </div>
-                    <button type="submit" className="cursor-pointer font-inter-400 text-white p-3 mb-3 bg-medium-green rounded-2xl w-full">
-                        Login
+                    <button 
+                        type="submit" 
+                        disabled={isLoading}
+                        className="cursor-pointer font-inter-400 text-white p-3 mb-3 bg-medium-green rounded-2xl w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {isLoading ? 'Logging in...' : 'Login'}
                     </button>
                     <p className="text-text-grey uppercase text-center font-inter-400">or</p>
-                    <button type="button" className='p-3 border bg-white border-border-color-grey w-full rounded-2xl flex justify-center items-center space-x-2'>
+                    <button 
+                        type="button" 
+                        onClick={handleGoogleAuth}
+                        className='p-3 border bg-white border-border-color-grey w-full rounded-2xl flex justify-center cursor-pointer items-center space-x-2 hover:bg-gray-50 transition-colors'
+                    >
                         <img src={GoogleLogo} className='size-8' alt="google logo" />
-                        <span className="font-inter-400">Continue with Google</span>
+                        <span className="font-inter-400 ">Continue with Google</span>
                     </button>
                     <p className='cursor-pointer text-text-grey underline font-inter-400 text-right'>Forget password?</p>
                 </form>
