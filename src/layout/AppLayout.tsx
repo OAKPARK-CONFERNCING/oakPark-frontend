@@ -1,4 +1,4 @@
-import { Outlet, useLocation, useNavigate } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
 import { useState, useEffect } from 'react';
 import Sidebar from '../components/sidebar';
 import Loader from '../loader/loader';
@@ -13,7 +13,6 @@ import NewSession from '@/components/NewSession';
 
 function AppLayout() {
     const location = useLocation();
-    const navigate = useNavigate();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [newSessionModal, setNewSessionalModal]=useState(false);
@@ -74,9 +73,6 @@ function AppLayout() {
         return pageVariants.dashboard; // default
     };
 
-    const handleNewSessionClick = () => {
-        navigate('/new-session');
-    };
 
     return (
         <div className="flex flex-row flex-1 ">

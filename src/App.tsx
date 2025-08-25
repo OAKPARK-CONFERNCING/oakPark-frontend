@@ -17,37 +17,14 @@ import ProtectedRoute from "./components/ProtectedRoute.tsx";
 const App = () => {
   return (
     <BrowserRouter>
-{/* <<<<<<< HEAD
-    <Routes> 
-      <Route index path="/" element={<Index />} />
-      <Route path="/auth/google/callback" element={<GoogleCallback />} />
-      <Route element={<AppLayout/>}>
-        <Route index path="/dashboard" element={<Dashboard />} />
-        <Route  path="/history" element={<History />} />
-        <Route path="/contacts" element={<Contact />} />
-        <Route path='/ongoing' element={<Ongoing/>}/>
-        <Route path='/history/:id' element={<SessionDetails/>}/>
-      </Route>
-      <Route path='/video' element={<VideoConference/>}/>
-      <Route path='/edit-profile' element={<Edit/>}/>
-      {/* <Route path='/new-session' element={<NewSession/>}/> *
-    {/* </Routes>
-  </BrowserRouter>
-   )
- }
- 
- export default App */}
-
-
       <Routes>
         <Route index path="/" element={<Index />} />
-              <Route path="/auth/google/callback" element={<GoogleCallback />} />
+        <Route path="/auth/google/callback" element={<GoogleCallback />} />
         <Route
           element={
-            // <ProtectedRoute>
-            //   <AppLayout />
-            // </ProtectedRoute>
-             <AppLayout />
+            <ProtectedRoute>
+              <AppLayout />
+            </ProtectedRoute>
           }
         >
           <Route index path="/dashboard" element={<Dashboard />} />
@@ -72,7 +49,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        {/* <Route path='/new-session' element={<NewSession/>}/> */}
       </Routes>
     </BrowserRouter>
   );

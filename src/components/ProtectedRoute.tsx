@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface ProtectedRouteProps {
@@ -7,20 +7,50 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const navigate = useNavigate();
-  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
-  const authToken = localStorage.getItem("authToken");
+  const [isLoading, setIsLoading] = useState(true);
+  
+  // Check authentication status
+  const checkAuthentication = () => {
+    const isAuthenticated = localStorage.getItem("isAuthenticated");
+    const authToken = localStorage.getItem("authToken");
+    
+    // Debug logs to see what's in localStorage
+    console.log("ProtectedRoute - isAuthenticated:", isAuthenticated);
+    console.log("ProtectedRoute - authToken:", authToken ? "exists" : "missing");
+    
+    return isAuthenticated === "true" && authToken && authToken.trim() !== "";
+  };
+  
+  const [isAuth, setIsAuth] = useState(checkAuthentication());
 
   useEffect(() => {
-    if (!isAuthenticated || !authToken) {
+    const authStatus = checkAuthentication();
+    setIsAuth(authStatus);
+    
+    if (!authStatus) {
+      console.log("ProtectedRoute - User not authenticated, redirecting to home");
       // Clear any invalid auth data
       localStorage.removeItem("authToken");
       localStorage.removeItem("isAuthenticated");
-      navigate("/", { replace: true }); // Redirect to home page, not dashboard
+      navigate("/", { replace: true });
+    } else {
+      console.log("ProtectedRoute - User authenticated, allowing access");
     }
-  }, [isAuthenticated, authToken, navigate]);
+    
+    setIsLoading(false);
+  }, [navigate]);
+
+  // Show loading state while checking auth
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-medium-green"></div>
+      </div>
+    );
+  }
 
   // Only render children if authenticated
-  if (!isAuthenticated || !authToken) {
+  if (!isAuth) {
     return null;
   }
 

@@ -161,10 +161,21 @@ export const createAccount = async (accountData: CreateAccountData): Promise<Api
   try {
     const response = await api.post('/api/v1/auth/account/create', accountData);
     
-    if (response.data.token || response.data.access_token) {
-      const token = response.data.token || response.data.access_token;
+    console.log("createAccount response:", response.data); // Debug log
+    
+    // Check for token in multiple possible locations
+    const token = response.data.data?.token || 
+                  response.data.access_token || 
+                  response.data.token;
+
+    if (token) {
+      console.log("Setting authToken:", token); // Debug log
       localStorage.setItem('authToken', token);
       localStorage.setItem('isAuthenticated', 'true');
+      console.log("Auth state set - isAuthenticated:", localStorage.getItem('isAuthenticated')); // Debug log
+    } else {
+      console.log("No token received in createAccount response"); // Debug log
+      console.log("Full response structure:", JSON.stringify(response.data, null, 2)); // Debug log
     }
     
     return {
@@ -191,10 +202,21 @@ export const loginUser = async (email: string, password: string): Promise<ApiRes
   try {
     const response = await api.post('/api/v1/auth/login', { email, password });
 
-    if (response.data.access_token || response.data.token) {
-      const token = response.data.access_token || response.data.token;
+    console.log("loginUser response:", response.data); // Debug log
+
+    // Check for token in multiple possible locations
+    const token = response.data.data?.token || 
+                  response.data.access_token || 
+                  response.data.token;
+
+    if (token) {
+      console.log("Setting authToken from login:", token); // Debug log
       localStorage.setItem('authToken', token);
       localStorage.setItem('isAuthenticated', 'true');
+      console.log("Auth state set from login - isAuthenticated:", localStorage.getItem('isAuthenticated')); // Debug log
+    } else {
+      console.log("No token received in login response"); // Debug log
+      console.log("Full response structure:", JSON.stringify(response.data, null, 2)); // Debug log
     }
     
     return {
@@ -311,12 +333,25 @@ export const initiateGoogleAuth = (): void => {
 
 export const handleGoogleCallback = async (code: string): Promise<ApiResponse> => {
   try {
+    console.log("handleGoogleCallback called with code:", code); // Debug log
     // Submit the auth code to the userdata endpoint
     const response = await api.post('/api/v1/auth/google/userdata', { authToken: code });
     
-    if (response.data.access_token) {
-      localStorage.setItem('authToken', response.data.access_token);
+    console.log("Google OAuth response:", response.data); // Debug log
+    
+    // Check for token in multiple possible locations
+    const token = response.data.data?.token || 
+                  response.data.access_token || 
+                  response.data.token;
+
+    if (token) {
+      console.log("Setting authToken from Google OAuth:", token); // Debug log
+      localStorage.setItem('authToken', token);
       localStorage.setItem('isAuthenticated', 'true');
+      console.log("Auth state set from Google - isAuthenticated:", localStorage.getItem('isAuthenticated')); // Debug log
+    } else {
+      console.log("No access_token received in Google OAuth response"); // Debug log
+      console.log("Full response structure:", JSON.stringify(response.data, null, 2)); // Debug log
     }
     
     return {
@@ -325,6 +360,7 @@ export const handleGoogleCallback = async (code: string): Promise<ApiResponse> =
       data: response.data
     };
   } catch (error: any) {
+    console.error("Google OAuth error:", error); // Debug log
     const errorMessage = error.response?.data?.message || 
                         error.response?.data?.detail || 
                         'Google authentication failed. Please try again.';
