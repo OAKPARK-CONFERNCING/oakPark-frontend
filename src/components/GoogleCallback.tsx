@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { handleGoogleCallback, getUserDataWithToken } from '../api/apiconfig';
+import { handleGoogleCallback } from '../api/apiconfig';
 import { addToast } from '../redux/toastSlice';
 
 const GoogleCallback: React.FC = () => {
@@ -28,7 +28,7 @@ const GoogleCallback: React.FC = () => {
                 return;
             }
 
-            // If backend sends token directly (send to userdata endpoint)
+            // If backend sends token directly (store directly)
             if (token || access_token) {
                 const authToken = token || access_token;
                 
@@ -39,43 +39,26 @@ const GoogleCallback: React.FC = () => {
                         type: 'error',
                         open: true,
                     }));
-                    navigate('/');
+                    navigate('/dashboard');
                     return;
                 }
 
-                try {
-                    const result = await getUserDataWithToken(authToken);
-                    
-                    if (result.success) {
-                        dispatch(addToast({
-                            id: Date.now().toString(),
-                            message: 'Google authentication successful!',
-                            type: 'success',
-                            open: true,
-                        }));
-                        
-                        // Redirect to dashboard
-                        const preAuthUrl = localStorage.getItem('preAuthUrl') || '/dashboard';
-                        localStorage.removeItem('preAuthUrl');
-                        navigate(preAuthUrl);
-                    } else {
-                        dispatch(addToast({
-                            id: Date.now().toString(),
-                            message: result.message,
-                            type: 'error',
-                            open: true,
-                        }));
-                        navigate('/');
-                    }
-                } catch (error) {
-                    dispatch(addToast({
-                        id: Date.now().toString(),
-                        message: 'Failed to authenticate with Google. Please try again.',
-                        type: 'error',
-                        open: true,
-                    }));
-                    navigate('/');
-                }
+                // Store the token directly
+                localStorage.setItem('authToken', authToken);
+                localStorage.setItem('isAuthenticated', 'true');
+                
+                dispatch(addToast({
+                    id: Date.now().toString(),
+                    message: 'Google authentication successful!',
+                    type: 'success',
+                    open: true,
+                }));
+                
+                // Redirect to dashboard
+                // const preAuthUrl = localStorage.getItem('preAuthUrl') || '/dashboard';
+                // localStorage.removeItem('preAuthUrl');
+                // navigate(preAuthUrl);
+                navigate('/dashboard')
                 return;
             }
 
@@ -87,7 +70,7 @@ const GoogleCallback: React.FC = () => {
                     type: 'error',
                     open: true,
                 }));
-                navigate('/');
+                navigate('/'); // Redirect to home, not dashboard
                 return;
             }
 
@@ -102,10 +85,8 @@ const GoogleCallback: React.FC = () => {
                         open: true,
                     }));
                     
-                    // Redirect to the page they were on before auth, or dashboard
-                    const preAuthUrl = localStorage.getItem('preAuthUrl') || '/dashboard';
-                    localStorage.removeItem('preAuthUrl');
-                    navigate(preAuthUrl);
+                    // Redirect to dashboard on success
+                    navigate('/dashboard');
                 } else {
                     dispatch(addToast({
                         id: Date.now().toString(),

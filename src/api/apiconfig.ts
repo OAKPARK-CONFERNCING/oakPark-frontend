@@ -110,7 +110,7 @@ api.interceptors.response.use(
 export const registerEmail = async (email: string): Promise<ApiResponse> => {
   try {
 
-    const response = await api.post('auth/register', { email });
+    const response = await api.post('/api/v1/auth/register', { email });
 
     return {
       success: true,
@@ -135,7 +135,7 @@ export const registerEmail = async (email: string): Promise<ApiResponse> => {
 export const verifyRegistrationToken = async (email: string, token: string): Promise<ApiResponse> => {
   try {
 
-    const response = await api.post('auth/register/verify', { email, token });
+    const response = await api.post('/api/v1/auth/register/verify', { email, token });
     return {
       success: true,
       message: response.data.message || 'Email verified successfully!',
@@ -328,41 +328,6 @@ export const handleGoogleCallback = async (code: string): Promise<ApiResponse> =
     const errorMessage = error.response?.data?.message || 
                         error.response?.data?.detail || 
                         'Google authentication failed. Please try again.';
-    
-    return {
-      success: false,
-      message: errorMessage,
-      data: error.response?.data
-    };
-  }
-};
-
-// Function to get user data using auth token (commented out for testing)
-export const getUserDataWithToken = async (authToken: string): Promise<ApiResponse> => {
-  try {
-    // Commented out for testing - keeping for later use
-    // const response = await api.post('/api/v1/auth/google/userdata', { authToken: authToken });
-    
-    // For testing purposes, just return success without API call
-    // if (response.data.access_token || response.data.token) {
-    //   const token = response.data.access_token || response.data.token;
-    //   localStorage.setItem('authToken', token);
-    //   localStorage.setItem('isAuthenticated', 'true');
-    // }
-    
-    // Store the token directly for testing
-    localStorage.setItem('authToken', authToken);
-    localStorage.setItem('isAuthenticated', 'true');
-    
-    return {
-      success: true,
-      message: 'User data retrieved successfully!',
-      data: { token: authToken } // Return the token for testing
-    };
-  } catch (error: any) {
-    const errorMessage = error.response?.data?.message || 
-                        error.response?.data?.detail || 
-                        'Failed to retrieve user data. Please try again.';
     
     return {
       success: false,

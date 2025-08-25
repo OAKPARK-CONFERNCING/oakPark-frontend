@@ -268,16 +268,20 @@ const PasswordReset: React.FC<PasswordResetProps> = ({ isOpen, onClose }) => {
                             <input
                                 {...tokenForm.register("token", { 
                                     required: "Reset code is required",
-                                    pattern: {
-                                        value: /^\d{6}$/,
-                                        message: "Please enter a valid 6-digit code"
+                                     minLength: {
+                                        value: 6,
+                                        message: "Reset code must be 6 characters"
+                                    },
+                                    maxLength: {
+                                        value: 6,
+                                        message: "Reset code must be 6 characters"
                                     }
                                 })}
                                 type="text"
                                 id="token"
                                 disabled={isLoading}
                                 className="bg-white border-2 border-[#cccccc] focus:outline-[#cccccc] focus:ring-0 focus:border-[#cccccc] p-3 rounded-2xl w-full text-center font-inter-400 disabled:opacity-50 text-2xl tracking-widest"
-                                placeholder="123456"
+                                placeholder="ABC123"
                                 maxLength={6}
                             />
                             {tokenForm.formState.errors.token && (

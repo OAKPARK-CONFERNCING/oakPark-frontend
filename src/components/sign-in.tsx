@@ -2,14 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-// <<<<<<< HEAD
-// import { motion } from 'framer-motion';
-// import { useDispatch } from 'react-redux';
-// import closeBtn from '../assets/icons/closeBtn.png';
-// import GoogleLogo from "../assets/icons/googleLogo.png";
-
-// import { addToast } from '../redux/toastSlice';
-// =======
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDispatch } from 'react-redux';
 import closeBtn from '../assets/icons/closeBtn.png';
@@ -70,6 +62,7 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
                     type: 'error',
                     open: true,
                 }));
+                console.log(result)
             }
 
         } catch {
@@ -80,6 +73,7 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
                 type: 'error',
                 open: true,
             }));
+
         } finally {
             setIsLoading(false);
         }
@@ -186,7 +180,7 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
         //             >
         //                 {isLoading ? 'Logging in...' : 'Login'}
         //             </button>
-        //             <p className="text-text-grey uppercase text-center font-inter-400">or</p>
+//             <p className="text-text-grey uppercase text-center font-inter-400">or</p>
         //             <button 
         //                 type="button" 
         //                 onClick={handleGoogleAuth}

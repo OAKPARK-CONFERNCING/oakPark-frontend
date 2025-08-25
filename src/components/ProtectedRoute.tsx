@@ -15,7 +15,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       // Clear any invalid auth data
       localStorage.removeItem("authToken");
       localStorage.removeItem("isAuthenticated");
-      navigate("/", { replace: true });
+      navigate("/", { replace: true }); // Redirect to home page, not dashboard
     }
   }, [isAuthenticated, authToken, navigate]);
 

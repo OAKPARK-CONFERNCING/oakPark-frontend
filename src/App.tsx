@@ -44,9 +44,10 @@ const App = () => {
               <Route path="/auth/google/callback" element={<GoogleCallback />} />
         <Route
           element={
-            <ProtectedRoute>
-              <AppLayout />
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            //   <AppLayout />
+            // </ProtectedRoute>
+             <AppLayout />
           }
         >
           <Route index path="/dashboard" element={<Dashboard />} />
