@@ -354,7 +354,7 @@ export const handleGoogleCallback = async (code: string): Promise<ApiResponse> =
     
     // Check for token in multiple possible locations
     const token = response.data.data?.token || 
-                  response.data.access_token || 
+                  response.data.data.accessToken || 
                   response.data.token;
 
     if (token) {

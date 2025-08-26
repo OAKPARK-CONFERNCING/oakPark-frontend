@@ -6,7 +6,7 @@ import Video from "../assets/icons/video.png";
 import { AnimatePresence, motion } from 'framer-motion';
 import UserProfileCard from '../components/UserProfileCard';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleProfileCard, hideProfileCard } from '../redux/userSlice';
+
 import Toasts from '../components/Toasts';
 // import { addToast } from '../redux/toastSlice';
 import NewSession from '@/components/NewSession';

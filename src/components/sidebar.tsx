@@ -13,7 +13,7 @@ import logout from "../assets/icons/LogOutIcon.png";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleProfileCard } from "../redux/userSlice";
-import UserProfileCard from "./UserProfileCard";
+
 import { logoutUser } from "../api/apiconfig";
 
 function Sidebar({
@@ -24,7 +24,7 @@ function Sidebar({
   onClose: () => void;
 }) {
   const dispatch = useDispatch();
-  const { currentUser, isProfileCardVisible } = useSelector(
+  const { currentUser } = useSelector(
     (state: any) => state.user
   );
 
