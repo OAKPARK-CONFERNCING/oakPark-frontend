@@ -172,6 +172,13 @@ export const createAccount = async (accountData: CreateAccountData): Promise<Api
       console.log("Setting authToken:", token); // Debug log
       localStorage.setItem('authToken', token);
       localStorage.setItem('isAuthenticated', 'true');
+      
+      // Store user data in localStorage for Redux
+      const userDataFromResponse = response.data.data?.userData || response.data.data?.user || accountData;
+      if (userDataFromResponse) {
+        localStorage.setItem('userData', JSON.stringify(userDataFromResponse));
+      }
+      
       console.log("Auth state set - isAuthenticated:", localStorage.getItem('isAuthenticated')); // Debug log
     } else {
       console.log("No token received in createAccount response"); // Debug log
@@ -213,6 +220,12 @@ export const loginUser = async (email: string, password: string): Promise<ApiRes
       console.log("Setting authToken from login:", token); // Debug log
       localStorage.setItem('authToken', token);
       localStorage.setItem('isAuthenticated', 'true');
+      
+      // Store user data in localStorage for Redux
+      if (response.data.data?.userData) {
+        localStorage.setItem('userData', JSON.stringify(response.data.data.userData));
+      }
+      
       console.log("Auth state set from login - isAuthenticated:", localStorage.getItem('isAuthenticated')); // Debug log
     } else {
       console.log("No token received in login response"); // Debug log

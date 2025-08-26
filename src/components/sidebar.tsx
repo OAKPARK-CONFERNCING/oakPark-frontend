@@ -99,7 +99,7 @@ function Sidebar({
               </div>
               <div className="hidden lg:block">
                 <div className="text-gray-800 font-medium">
-                  {currentUser.name}
+                  {currentUser.firstName} {currentUser.lastName}
                 </div>
                 <div className="text-xs text-gray-500">{currentUser.email}</div>
               </div>

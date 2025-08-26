@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../redux/userSlice";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -7,6 +9,7 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(true);
   
   // Check authentication status
@@ -32,13 +35,26 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
       // Clear any invalid auth data
       localStorage.removeItem("authToken");
       localStorage.removeItem("isAuthenticated");
+      localStorage.removeItem("userData");
       navigate("/", { replace: true });
     } else {
       console.log("ProtectedRoute - User authenticated, allowing access");
+      
+      // Load user data into Redux if available
+      const storedUserData = localStorage.getItem("userData");
+      if (storedUserData) {
+        try {
+          const userData = JSON.parse(storedUserData);
+          console.log("ProtectedRoute - Loading user data into Redux:", userData);
+          dispatch(updateUser(userData));
+        } catch (error) {
+          console.error("ProtectedRoute - Error parsing stored user data:", error);
+        }
+      }
     }
     
     setIsLoading(false);
-  }, [navigate]);
+  }, [navigate, dispatch]);
 
   // Show loading state while checking auth
   if (isLoading) {

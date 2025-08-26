@@ -129,11 +129,28 @@ const MultiStepSignup: React.FC<MultiStepSignupProps> = ({ isOpen, onClose }) =>
 
             const result = await createAccount(accountData);
             if (result.success) {
-                // Update user state in Redux
-                dispatch(updateUser({
-                    name: `${data.firstName} ${data.lastName}`,
-                    email: verifiedEmail,
-                }));
+                // Extract user data from the response
+                const userData = result.data?.data?.userData || result.data?.data?.user || result.data?.user;
+                
+                if (userData) {
+                    // Update user state in Redux with actual response data
+                    dispatch(updateUser({
+                        firstName: userData.firstName || userData.first_name || data.firstName,
+                        lastName: userData.lastName || userData.last_name || data.lastName,
+                        email: userData.email || verifiedEmail,
+                    }));
+                    
+                    console.log("MultiStepSignup - Updated Redux with user data:", userData);
+                } else {
+                    // Fallback to form data if no response userData
+                    dispatch(updateUser({
+                        firstName: data.firstName,
+                        lastName: data.lastName,
+                        email: verifiedEmail,
+                    }));
+                    
+                    console.log("MultiStepSignup - No user data in response, using form data");
+                }
 
                 dispatch(addToast({
                     id: Date.now().toString(),

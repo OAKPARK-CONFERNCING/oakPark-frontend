@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { handleGoogleCallback } from '../api/apiconfig';
 import { addToast } from '../redux/toastSlice';
+import { updateUser } from '../redux/userSlice';
 
 const GoogleCallback: React.FC = () => {
     const navigate = useNavigate();
@@ -78,6 +79,22 @@ const GoogleCallback: React.FC = () => {
                 const result = await handleGoogleCallback(code);
                 
                 if (result.success) {
+                    // Extract user data from the response if available
+                    const userData = result.data?.data?.userData || result.data?.data?.user || result.data?.user;
+                    
+                    if (userData) {
+                        // Update user state in Redux with actual response data
+                        dispatch(updateUser({
+                            firstName: userData.firstName || userData.first_name || '',
+                            lastName: userData.lastName || userData.last_name || '',
+                            email: userData.email || '',
+                        }));
+                        
+                        console.log("GoogleCallback - Updated Redux with user data:", userData);
+                    } else {
+                        console.log("GoogleCallback - No user data in response:", result.data);
+                    }
+                    
                     dispatch(addToast({
                         id: Date.now().toString(),
                         message: result.message,

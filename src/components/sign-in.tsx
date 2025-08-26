@@ -38,12 +38,21 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
             const result = await loginUser(data.email, data.password);
 
             if (result.success) {
-                // Update user state in Redux
-                dispatch(updateUser({
-                    name: result.data.user?.name || result.data.firstName + ' ' + result.data.lastName || '',
-                    email: result.data.user?.email || data.email,
-                }));
-
+                // Extract user data from the response
+                const userData = result.data.data?.userData || result.data.data?.user || result.data.user;
+                
+                if (userData) {
+                    // Update user state in Redux with actual response data
+                    dispatch(updateUser({
+                        firstName: userData.firstName || userData.first_name || '',
+                        lastName: userData.lastName || userData.last_name || '',
+                        email: userData.email || data.email,
+                    }));
+                    
+                    console.log("SignIn - Updated Redux with user data:", userData);
+                } else {
+                    console.log("SignIn - No user data in response:", result.data);
+                }
 
                 dispatch(addToast({
                     id: Date.now().toString(),
@@ -51,7 +60,6 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
                     type: 'success',
                     open: true,
                 }));
-
 
                 onClose();
                 navigate('/dashboard');
