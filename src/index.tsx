@@ -69,6 +69,10 @@ const App = () => {
               key="multi-step-signup-modal"
               isOpen={isCreateAccountOpen}
               onClose={() => setIsCreateAccountOpen(false)}
+              onSwitchToSignIn={() => {
+                setIsCreateAccountOpen(false);
+                setIsModalOpen(true);
+              }}
             />
           )}
         </AnimatePresence>

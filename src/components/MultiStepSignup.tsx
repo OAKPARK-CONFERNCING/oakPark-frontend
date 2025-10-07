@@ -7,11 +7,12 @@ import closeBtn from '../assets/icons/closeBtn.png';
 import GoogleLogo from "../assets/icons/googleLogo.png";
 import { addToast } from '../redux/toastSlice';
 import { updateUser } from '../redux/userSlice';
-import { registerEmail, verifyRegistrationToken, createAccount } from '../api/apiconfig';
+import { registerEmail, verifyRegistrationToken, createAccount, initiateGoogleAuth } from '../api/apiconfig';
 
 interface MultiStepSignupProps {
     isOpen: boolean;
     onClose: () => void;
+    onSwitchToSignIn?: () => void;
 }
 
 interface EmailFormInputs {
@@ -30,7 +31,7 @@ interface AccountFormInputs {
 
 type StepType = 'email' | 'token' | 'account';
 
-const MultiStepSignup: React.FC<MultiStepSignupProps> = ({ isOpen, onClose }) => {
+const MultiStepSignup: React.FC<MultiStepSignupProps> = ({ isOpen, onClose, onSwitchToSignIn }) => {
     const [currentStep, setCurrentStep] = useState<StepType>('email');
     const [verifiedEmail, setVerifiedEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -181,6 +182,18 @@ const MultiStepSignup: React.FC<MultiStepSignupProps> = ({ isOpen, onClose }) =>
         }
     };
 
+     const handleGoogleAuth = () => {
+            try {
+                initiateGoogleAuth();
+            } catch (error) {
+                dispatch(addToast({
+                    id: Date.now().toString(),
+                    message: 'Failed to initiate Google authentication. Please try again.',
+                    type: 'error',
+                    open: true,
+                }));
+            }
+        };
     const getStepTitle = () => {
         switch (currentStep) {
             case 'email': return 'Create Account';
@@ -287,7 +300,7 @@ const MultiStepSignup: React.FC<MultiStepSignupProps> = ({ isOpen, onClose }) =>
                         </button>
 
                         <p className="text-text-grey uppercase text-center font-inter-400">or</p>
-                        <button type="button" className='p-3 border bg-white border-border-color-grey w-full rounded-2xl flex justify-center items-center space-x-2'>
+                        <button onClick={handleGoogleAuth} type="button" className='p-3 border cursor-pointer bg-white border-border-color-grey w-full rounded-2xl flex justify-center items-center space-x-2'>
                             <img src={GoogleLogo} className='size-8' alt="google logo" />
                             <span className="font-inter-400">Continue with Google</span>
                         </button>
@@ -411,9 +424,16 @@ const MultiStepSignup: React.FC<MultiStepSignupProps> = ({ isOpen, onClose }) =>
                 )}
 
                 {currentStep !== 'account' && (
-                    <p className='cursor-pointer text-text-grey underline font-inter-400 text-right mt-3'>
+                    <button 
+                        className='cursor-pointer text-text-grey underline font-inter-400 text-right mt-3 hover:text-medium-green'
+                        onClick={() => {
+                            if (onSwitchToSignIn) {
+                                onSwitchToSignIn();
+                            }
+                        }}
+                    >
                         Already have an account? Sign in
-                    </p>
+                    </button>
                 )}
             </motion.div>
         </div>

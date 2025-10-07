@@ -224,7 +224,7 @@ const SignIn: React.FC<SignInProps> = ({ isOpen, onClose }) => {
                             disabled={isLoading}
                             className="cursor-pointer font-inter-400 text-white p-3 mb-3 bg-medium-green rounded-2xl w-full disabled:opacity-50"
                         >
-                            {isLoading ? 'Signing in...' : 'Login'}
+                            {isLoading ? 'Signing in...' : 'Sign in'}
                         </button>
                         <p className="text-text-grey uppercase text-center font-inter-400">or</p>
                         <button 
