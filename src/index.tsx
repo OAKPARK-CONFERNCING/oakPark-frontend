@@ -3,11 +3,12 @@ import { useState } from "react";
 import homeImage from "./assets/images/Meeting-room.png";
 import videoRecording from "./assets/icons/video-recording.png";
 import SignIn from "./components/sign-in";
-import CreateAccount from "./components/createAcct";
+import MultiStepSignup from "./components/MultiStepSignup";
 import { AnimatePresence } from "framer-motion";
 import gridBg from "./assets/images/grid.png";
 // import SessionModal from "./components/SessionalModal";
 import { Link } from "react-router";
+import Toasts from "./components/Toasts";
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,13 +65,20 @@ const App = () => {
 
         <AnimatePresence mode="wait">
           {isCreateAccountOpen && (
-            <CreateAccount
-              key="create-account-modal"
+            <MultiStepSignup
+              key="multi-step-signup-modal"
               isOpen={isCreateAccountOpen}
               onClose={() => setIsCreateAccountOpen(false)}
+              onSwitchToSignIn={() => {
+                setIsCreateAccountOpen(false);
+                setIsModalOpen(true);
+              }}
             />
           )}
         </AnimatePresence>
+        
+        {/* Toast notifications */}
+        <Toasts />
       </div>
     </div>
   );

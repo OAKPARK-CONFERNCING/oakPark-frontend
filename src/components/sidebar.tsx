@@ -13,7 +13,8 @@ import logout from "../assets/icons/LogOutIcon.png";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleProfileCard } from "../redux/userSlice";
-import UserProfileCard from "./UserProfileCard";
+
+import { logoutUser } from "../api/apiconfig";
 
 function Sidebar({
   isSidebarOpen,
@@ -23,7 +24,7 @@ function Sidebar({
   onClose: () => void;
 }) {
   const dispatch = useDispatch();
-  const { currentUser, isProfileCardVisible } = useSelector(
+  const { currentUser } = useSelector(
     (state: any) => state.user
   );
 
@@ -98,7 +99,7 @@ function Sidebar({
               </div>
               <div className="hidden lg:block">
                 <div className="text-gray-800 font-medium">
-                  {currentUser.name}
+                  {currentUser.firstName} {currentUser.lastName}
                 </div>
                 <div className="text-xs text-gray-500">{currentUser.email}</div>
               </div>
@@ -137,7 +138,10 @@ function Sidebar({
                 </li>
               ))}
             </ul>
-            <div className="inline-flex mb-10 hover:scale-105 transition-all duration-300 ease-in-out  cursor-pointer ml-5 hover:text-gray-700">
+            <div
+              className="inline-flex mb-10 hover:scale-105 transition-all duration-300 ease-in-out  cursor-pointer ml-5 hover:text-gray-700"
+              onClick={logoutUser}
+            >
               <img src={logout} alt="logout" className="w-5 " />
               <p className="font-inter-500 text-text-grey lg:block hidden hover:text-gray-700 hover:scale-105 text-base  ml-2">
                 Log Out

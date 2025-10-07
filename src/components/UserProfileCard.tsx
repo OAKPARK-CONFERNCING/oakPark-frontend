@@ -6,7 +6,8 @@ interface UserProfileCardProps {
   isVisible: boolean;
   onClose: () => void;
   user: {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     role?: string;
     description?: string;
@@ -25,7 +26,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ isVisible, onClose, u
           animate={{  x: 0 }}
           exit={{  x: 500 }}
           transition={{ duration: 0.3, ease: "easeInOut", type: "spring", stiffness: 300, damping: 25 }}
-          className="fixed right-0 top-16 w-96 rounded-3xl shadow-2xl z-50 overflow-hidden border border-gray-100 flex flex-col"
+          className="fixed right-0 top-16 w-96 rounded-3xl shadow-2xl z-100 overflow-hidden border border-gray-100 flex flex-col"
         >
           {/* Background image placeholder */}
           <div className="h-32 w-full bg-[url('/profilecardtopimg.png')] bg-cover bg-center flex items-center justify-center relative">
@@ -46,7 +47,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ isVisible, onClose, u
             {/* Name, role, verified */}
             <div className="flex flex-col items-center">
               <div className="flex items-center gap-2">
-                <h2 className="text-2xl font-semibold text-[#2B3A29]">{user.name || 'Stephen Joe'}</h2>
+                <h2 className="text-2xl font-semibold text-[#2B3A29]">{user.firstName} {user.lastName}</h2>
                 {/* Verified badge */}
                 <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                   <circle cx="10" cy="10" r="10" fill="#4CAF50" />
@@ -97,7 +98,7 @@ const UserProfileCard: React.FC<UserProfileCardProps> = ({ isVisible, onClose, u
               <div className="text-[#5B6D5B] text-sm">{user.email || 'staff@oauife.edu.ng'}</div>
             </div>
             {/* Edit Profile Button */}
-            <button className="mt-6 w-full py-3 bg-[#4CAF50] text-white rounded-2xl text-lg font-semibold hover:bg-[#43a047] transition"><Link to="/edit-profile"> Edit your Profile</Link></button>
+            <button className="mt-6 w-full py-3 bg-[#4CAF50] text-white rounded-2xl text-lg font-semibold hover:bg-[#43a047] transition cursor-pointer"><Link to="/edit-profile"> Edit your Profile</Link></button>
             {/* Footer */}
             <div className="flex justify-center items-center gap-4 mt-6 w-full text-xs text-[#7A8B7A] border-t border-gray-200 pt-4">
               <a href="#" className="hover:underline">Privacy Policy</a>

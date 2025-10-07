@@ -13,7 +13,8 @@ interface User {
 // Initial state
 interface UserState {
   currentUser: {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     avatar: string;
     role?: string;
@@ -27,7 +28,8 @@ interface UserState {
 
 const initialState: UserState = {
   currentUser: {
-    name: "Emmanuel A.",
+    firstName: "Emmanuel A.",
+    lastName: "Doe",
     email: "emmanuel@example.com",
     avatar: "https://picsum.photos/300/200", // Using the avatar from sidebar
     role: "Admin",
