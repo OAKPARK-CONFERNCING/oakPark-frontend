@@ -10,12 +10,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import Toasts from '../components/Toasts';
 // import { addToast } from '../redux/toastSlice';
 import NewSession from '@/components/NewSession';
+import JoinRoom from '../components/JoinRoom';
+import { hideProfileCard } from '../redux/userSlice';
 
 function AppLayout() {
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [newSessionModal, setNewSessionalModal]=useState(false);
+    const [joinRoomModal, setJoinRoomModal]=useState(false);
     const dispatch = useDispatch();
     const { currentUser, isProfileCardVisible } = useSelector((state: any) => state.user);
 
@@ -105,11 +108,20 @@ function AppLayout() {
                             {dynamicHeaderText[location.pathname as keyof typeof dynamicHeaderText] || "Session History"}
                         </h1>
 
-                        <button onClick={() => setNewSessionalModal(true)} className="z-0 group w-full md:w-auto relative inline-flex px-2 md:px-4 h-10 items-center justify-center overflow-hidden rounded-2xl bg-medium-green font-medium text-white cursor-pointer transition duration-300 hover:scale-105"><img src={Video} alt="video icon" className="mr-2 w-4" /><span>
+<div className="flex items-center space-x-4">
+                            <button onClick={() => setJoinRoomModal(true)} className="z-0 group w-full md:w-auto relative inline-flex px-2 md:px-4 h-10 items-center justify-center overflow-hidden rounded-2xl bg-medium-green font-medium text-white cursor-pointer transition duration-300 hover:scale-105">
+                                <span>
                             <p className="font-inter-700 text-[12px] text-white">
-                                New session
+                                Join Room
                             </p></span><div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]"><div className="relative h-full w-8 bg-white/20"></div></div></button>
-                    </div>
+
+
+                            <button onClick={() => setNewSessionalModal(true)} className="z-0 group w-full md:w-auto relative inline-flex px-2 md:px-4 h-10 items-center justify-center overflow-hidden rounded-2xl bg-medium-green font-medium text-white cursor-pointer transition duration-300 hover:scale-105"><img src={Video} alt="video icon" className="mr-2 w-4" /><span>
+                                <p className="font-inter-700 text-[12px] text-white">
+                                    New session
+                                </p></span><div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]"><div className="relative h-full w-8 bg-white/20"></div></div></button>
+    
+</div>                    </div>
                 </header>
                 <main className="ml-0 sm:ml-[100px] lg:ml-[250px] relative mt-[70px] h-[calc(100vh-70px)] ">
                     {loading ? (
@@ -138,8 +150,13 @@ function AppLayout() {
                     <NewSession
                         onClose={() => setNewSessionalModal(false)}
                     />
-                )
-                }
+                )}
+                {joinRoomModal && (
+                    <JoinRoom
+                        isOpen={joinRoomModal}
+                        onClose={() => setJoinRoomModal(false)}
+                    />
+                )}
             </AnimatePresence>
         </div>
     );
