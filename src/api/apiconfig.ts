@@ -386,4 +386,29 @@ export const handleGoogleCallback = async (code: string): Promise<ApiResponse> =
   }
 };
 
+// Get rooms with optional status filter
+export const getRooms = async (status?: 'ongoing' | 'ended'): Promise<ApiResponse> => {
+  try {
+    const params = status ? { status } : {};
+    const response = await api.get('/api/v1/rooms', { params });
+    
+    return {
+      success: true,
+      message: 'Rooms fetched successfully!',
+      data: response.data
+    };
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
+                        'Failed to fetch rooms. Please try again.';
+    
+    return {
+      success: false,
+      message: errorMessage,
+      data: axiosError.response?.data
+    };
+  }
+};
+
 export default api;
