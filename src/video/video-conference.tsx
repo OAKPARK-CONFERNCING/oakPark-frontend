@@ -24,7 +24,12 @@ import shareScreen from "@/assets/icons/share-screen.png";
 import SidebarPanel from "@/components/sidebar-panel";
 import { Button } from "@/components/ui/button";
 import { useMobile } from "@/hooks/use-mobile";
-import Link from "next/link";
+import { useSocket } from "@/hooks/useSocket";
+import { useMediasoup } from "@/hooks/useMediasoup";
+import { useUserMedia } from "@/hooks/useUserMedia";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToast } from "@/redux/toastSlice";
 
 // Types for participants
 type Role = "host" | "co-host" | "member" | "participant" | "guest";
@@ -203,26 +208,180 @@ const mockParticipants: Participant[] = [
 ];
 
 export default function VideoConference() {
-  const [participants, setParticipants] =
-    useState<Participant[]>(mockParticipants);
-  const [activeParticipant, setActiveParticipant] =
-    useState<Participant | null>(null);
-  const [isMicOn, setIsMicOn] = useState(true);
-  const [isVideoOn, setIsVideoOn] = useState(true);
-  const [isShareScreen, setIsShareScreen] = useState(true);
+  // Router and Redux
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+
+  // Video conferencing hooks
+  const { socket } = useSocket(
+    import.meta.env.VITE_BASE_URL
+  );
+  const { 
+    participants: mediasoupParticipants,
+    isJoined,
+    joinRoom,
+    leaveRoom,
+    produceMedia,
+  } = useMediasoup(socket);
+  const {
+    localStream,
+    isVideoEnabled,
+    isAudioEnabled,
+    initializeMedia,
+    toggleVideo,
+    toggleAudio,
+    stopMedia,
+    getVideoTrack,
+    getAudioTrack,
+  } = useUserMedia();
+
+  // Local state
+  const [participants, setParticipants] = useState<Participant[]>([]);
+  const [activeParticipant, setActiveParticipant] = useState<Participant | null>(null);
+  const [isShareScreen, setIsShareScreen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [meetingTime, setMeetingTime] = useState(0);
-  const [currentUser] = useState<Participant>(mockParticipants[0]);
   const [thumbnailCount, setThumbnailCount] = useState(8);
+  const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
+  const [sidebarOpenedFromParticipants, setSidebarOpenedFromParticipants] = useState(false);
+  const [roomData, setRoomData] = useState<{roomId: string; userName: string; userId: string} | null>(null);
+
+  // Responsive hooks
   const isMobile = useMobile();
   const isTablet = useWindowSize(1280);
   const isSmallScreen = useWindowSize(640);
-  const [isWhiteboardOpen, setIsWhiteboardOpen] = useState(false);
-  const [sidebarOpenedFromParticipants, setSidebarOpenedFromParticipants] =
-    useState(false);
+
+  // Current user (derived from room data)
+  const currentUser = roomData ? {
+    id: roomData.userId,
+    name: roomData.userName,
+    email: '',
+    role: 'host' as Role,
+    videoOn: isVideoEnabled,
+    audioOn: isAudioEnabled,
+  } : mockParticipants[0];
 
   // Check if current user is host or co-host
   const isHost = currentUser.role === "host" || currentUser.role === "co-host";
+
+  // Initialize room data from URL params or localStorage
+  useEffect(() => {
+    const roomIdParam = searchParams.get('roomId');
+    const userNameParam = searchParams.get('userName');
+    
+    if (roomIdParam && userNameParam) {
+      setRoomData({
+        roomId: roomIdParam,
+        userName: decodeURIComponent(userNameParam),
+        userId: `user_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`
+      });
+    } else {
+      // Try to get from localStorage
+      const storedRoomData = localStorage.getItem('roomData');
+      if (storedRoomData) {
+        try {
+          setRoomData(JSON.parse(storedRoomData));
+        } catch (error) {
+          console.error('Failed to parse room data:', error);
+        }
+      }
+    }
+  }, [searchParams]);
+
+  // Initialize media and join room when room data is available
+  useEffect(() => {
+    if (roomData && socket && !isJoined) {
+      const initializeAndJoin = async () => {
+        try {
+          // Initialize user media first
+          await initializeMedia();
+          
+          // Join the room
+          await joinRoom({
+            roomId: roomData.roomId,
+            userId: roomData.userId,
+            peerName: roomData.userName
+          });
+
+          dispatch(addToast({
+            id: Date.now().toString(),
+            message: `Joined room ${roomData.roomId}`,
+            type: 'success',
+            open: true,
+          }));
+        } catch (error) {
+          console.error('Failed to join room:', error);
+          dispatch(addToast({
+            id: Date.now().toString(),
+            message: `Failed to join room: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            type: 'error',
+            open: true,
+          }));
+        }
+      };
+
+      initializeAndJoin();
+    }
+  }, [roomData, socket, isJoined, initializeMedia, joinRoom, dispatch]);
+
+  // Produce media tracks when available
+  useEffect(() => {
+    if (isJoined && localStream) {
+      const videoTrack = getVideoTrack();
+      const audioTrack = getAudioTrack();
+
+      if (videoTrack && isVideoEnabled) {
+        produceMedia(videoTrack).catch(console.error);
+      }
+
+      if (audioTrack && isAudioEnabled) {
+        produceMedia(audioTrack).catch(console.error);
+      }
+    }
+  }, [isJoined, localStream, getVideoTrack, getAudioTrack, isVideoEnabled, isAudioEnabled, produceMedia]);
+
+  // Update participants list
+  useEffect(() => {
+    const allParticipants = [
+      currentUser,
+      ...mediasoupParticipants.map(p => ({
+        id: p.id,
+        name: p.name,
+        email: '',
+        role: 'participant' as Role,
+        videoOn: true,
+        audioOn: true
+      }))
+    ];
+    setParticipants(allParticipants);
+  }, [currentUser, mediasoupParticipants]);
+
+  // Handle video toggle
+  const handleVideoToggle = () => {
+    toggleVideo();
+    // Update active participant if it's the current user
+    if (activeParticipant && activeParticipant.id === currentUser.id) {
+      setActiveParticipant({ ...activeParticipant, videoOn: !isVideoEnabled });
+    }
+  };
+
+  // Handle audio toggle
+  const handleAudioToggle = () => {
+    toggleAudio();
+    // Update active participant if it's the current user
+    if (activeParticipant && activeParticipant.id === currentUser.id) {
+      setActiveParticipant({ ...activeParticipant, audioOn: !isAudioEnabled });
+    }
+  };
+
+  // Handle leave room
+  const handleLeaveRoom = () => {
+    leaveRoom();
+    stopMedia();
+    localStorage.removeItem('roomData');
+    navigate('/dashboard');
+  };
 
   // Add this at the top of the component
   useEffect(() => {
@@ -288,11 +447,7 @@ export default function VideoConference() {
       .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  useEffect(() => {
-    if (activeParticipant) {
-      setIsVideoOn(activeParticipant.videoOn);
-    }
-  }, [activeParticipant]);
+  // Video state is now managed by useUserMedia hook
 
   // Toggle participant video (in a real app, this would interact with WebRTC)
   const toggleParticipantVideo = (id: string) => {
@@ -304,7 +459,7 @@ export default function VideoConference() {
       setActiveParticipant((prev) =>
         prev ? { ...prev, videoOn: !prev.videoOn } : null
       );
-      setIsVideoOn(!activeParticipant.videoOn);
+      // Video state managed by useUserMedia hook
     }
   };
 
@@ -318,15 +473,9 @@ export default function VideoConference() {
       setActiveParticipant((prev) =>
         prev ? { ...prev, audioOn: !prev.audioOn } : null
       );
-      setIsMicOn(!activeParticipant.audioOn);
+      // Audio state managed by useUserMedia hook
     }
   };
-
-  useEffect(() => {
-    if (activeParticipant) {
-      setIsMicOn(activeParticipant.audioOn);
-    }
-  }, [activeParticipant]);
 
   // Set a participant as the main active view
   const setAsActive = (participant: Participant) => {
@@ -334,8 +483,7 @@ export default function VideoConference() {
       setActiveParticipant(null);
     } else {
       setActiveParticipant(participant);
-      setIsVideoOn(participant.videoOn);
-      setIsMicOn(participant.audioOn);
+      // Video and audio states are managed by useUserMedia hook
     }
   };
 
@@ -482,7 +630,7 @@ export default function VideoConference() {
           {/* Header */}
           <header className="border border-light-green rounded-2xl my-4 bg-white px-2 sm:px-4 py-1 flex justify-between items-center flex-shrink-0">
             <Link
-              href="/"
+              to="/"
               className="hidden md:flex items-center cursor-pointer space-x-1"
             >
               <img
@@ -581,9 +729,10 @@ export default function VideoConference() {
 
                       <div className="h-full lg:h-[90vh] w-full">
                         <ParticipantVideo
-                          onToggleVideo={toggleParticipantVideo}
                           participant={activeParticipant}
-                          isVideoOn={() => setIsVideoOn(!isVideoOn)}
+                          onToggleVideo={toggleParticipantVideo}
+                          onToggleAudio={toggleParticipantAudio}
+                          stream={localStream}
                           isMain={true}
                         />
                       </div>
@@ -632,7 +781,9 @@ export default function VideoConference() {
                       >
                         <ParticipantVideo
                           participant={participant}
-                          isVideoOn={() => setIsVideoOn(!isVideoOn)}
+                          onToggleVideo={toggleParticipantVideo}
+                          onToggleAudio={toggleParticipantAudio}
+                          stream={participant.id === currentUser.id ? localStream : null}
                           isMain={gridParticipants.length === 1}
                           width={
                             gridParticipants.length === 1 ? undefined : 100
@@ -683,17 +834,12 @@ export default function VideoConference() {
                     variant="outline"
                     size="icon"
                     className={`rounded-3xl hover:bg- cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${
-                      isMicOn ? "bg-medium-green " : "bg-btn-primary"
+                      isAudioEnabled ? "bg-medium-green " : "bg-btn-primary"
                     }`}
-                    onClick={() => {
-                      setIsMicOn(!isMicOn);
-                      if (activeParticipant) {
-                        toggleParticipantAudio(activeParticipant.id);
-                      }
-                    }}
+                    onClick={handleAudioToggle}
                     disabled={!activeParticipant}
                   >
-                    {isMicOn ? (
+                    {isAudioEnabled ? (
                       <img
                         src={micOn}
                         alt="mic on icon"
@@ -719,17 +865,12 @@ export default function VideoConference() {
                     variant="outline"
                     size="icon"
                     className={`rounded-3xl hover:bg- cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14 ${
-                      isVideoOn ? "bg-medium-green " : "bg-btn-primary"
+                      isVideoEnabled ? "bg-medium-green " : "bg-btn-primary"
                     }`}
-                    onClick={() => {
-                      setIsVideoOn(!isVideoOn);
-                      if (activeParticipant) {
-                        toggleParticipantVideo(activeParticipant.id);
-                      }
-                    }}
+                    onClick={handleVideoToggle}
                     disabled={!activeParticipant}
                   >
-                    {isVideoOn ? (
+                    {isVideoEnabled ? (
                       <img
                         src={videoOn || "/placeholder.svg"}
                         alt="video on icon"
@@ -848,6 +989,7 @@ export default function VideoConference() {
                     variant="destructive"
                     size="icon"
                     className="rounded-3xl cursor-pointer hover:scale-105 transition-all duration-300 ease-in-out size-12 sm:size-14"
+                    onClick={handleLeaveRoom}
                   >
                     <img
                       src={closeCall || "/placeholder.svg"}
