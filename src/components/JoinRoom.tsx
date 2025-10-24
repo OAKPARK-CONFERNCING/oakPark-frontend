@@ -5,9 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import closeBtn from '../assets/icons/closeBtn.png';
 import { addToast } from '../redux/toastSlice';
-import { useSocket } from '../hooks/useSocket';
-import { useMediasoup } from '../hooks/useMediasoup';
-import { useUserMedia } from '../hooks/useUserMedia';
 
 interface JoinRoomProps {
     isOpen: boolean;
@@ -25,11 +22,6 @@ const JoinRoom: React.FC<JoinRoomProps> = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { currentUser } = useSelector((state: any) => state.user);
-    
-    // Socket and mediasoup hooks
-    const { socket, isConnected } = useSocket();
-    const { joinRoom, produceMedia } = useMediasoup(socket);
-    const { initializeMedia, getVideoTrack, getAudioTrack } = useUserMedia();
 
     const onSubmit = async (data: FormInputs) => {
         setIsLoading(true);
@@ -37,59 +29,30 @@ const JoinRoom: React.FC<JoinRoomProps> = ({ isOpen, onClose }) => {
         const userName = (data.userName || `${currentUser.firstName} ${currentUser.lastName}`.trim() || 'Anonymous User').trim();
         const userId = `user_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
 
-        // Helper: wait for socket to be ready (up to timeoutMs)
-        const waitForSocket = (timeoutMs = 5000) => {
-            return new Promise<void>((resolve, reject) => {
-                if (socket && isConnected) return resolve();
-                const start = Date.now();
-                const iv = setInterval(() => {
-                    if (socket && (isConnected)) {
-                        clearInterval(iv);
-                        resolve();
-                    } else if (Date.now() - start > timeoutMs) {
-                        clearInterval(iv);
-                        reject(new Error('Socket connection timed out'));
-                    }
-                }, 200);
-            });
-        };
-
         try {
-            dispatch(addToast({ id: Date.now().toString(), message: `Preparing to join ${roomId}...`, type: 'info', open: true }));
-
-            // Wait for socket connection
-            await waitForSocket(7000);
-
-            // Initialize local media (camera/mic)
-            await initializeMedia();
-
-            // Attempt to join the room on the server
-            await joinRoom({ roomId, userId, peerName: userName });
-
-            // Persist room data for the video conference page (fallback)
+            // Persist room data for the video conference page
             localStorage.setItem('roomData', JSON.stringify({ roomId, userName, userId }));
 
-            // Produce media tracks (if available)
-            const videoTrack = getVideoTrack();
-            const audioTrack = getAudioTrack();
-
-            if (videoTrack) {
-                try { await produceMedia(videoTrack); } catch (err) { console.warn('Failed to produce video:', err); }
-            }
-            if (audioTrack) {
-                try { await produceMedia(audioTrack); } catch (err) { console.warn('Failed to produce audio:', err); }
-            }
-
-            dispatch(addToast({ id: Date.now().toString(), message: `Joined room ${roomId}`, type: 'success', open: true }));
+            dispatch(addToast({ 
+                id: Date.now().toString(), 
+                message: `Joining room ${roomId}...`, 
+                type: 'info', 
+                open: true 
+            }));
 
             onClose();
             reset();
 
-            // Navigate to ongoing route (video conference UI)
+            // Navigate to video conference - let that page handle WebSocket connection
             navigate(`/video?roomId=${encodeURIComponent(roomId)}&userName=${encodeURIComponent(userName)}`);
         } catch (error: any) {
             console.error('JoinRoom error:', error);
-            dispatch(addToast({ id: Date.now().toString(), message: error?.message || 'Failed to join room', type: 'error', open: true }));
+            dispatch(addToast({ 
+                id: Date.now().toString(), 
+                message: error?.message || 'Failed to join room', 
+                type: 'error', 
+                open: true 
+            }));
         } finally {
             setIsLoading(false);
         }

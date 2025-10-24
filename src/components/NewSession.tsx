@@ -63,7 +63,7 @@ const NewSession = ({ onClose }: NewSessionProps) => {
 
       console.log("Creating room with data:", roomData);
       const response = await createRoom(roomData);
-
+      console.log("Create room response:", response.data);
       if (response.success && response.data) {
         setRoomCreated(response.data);
         dispatch(addToast({
@@ -93,8 +93,8 @@ const NewSession = ({ onClose }: NewSessionProps) => {
   };
 
   const handleCopyCode = () => {
-    if (roomCreated?.code) {
-      navigator.clipboard.writeText(roomCreated.code);
+    if (roomCreated?.roomCode) {
+      navigator.clipboard.writeText(roomCreated.roomCode);
       setCopied(true);
       dispatch(addToast({
         id: Date.now().toString(),
@@ -107,9 +107,9 @@ const NewSession = ({ onClose }: NewSessionProps) => {
   };
 
   const handleJoinNow = () => {
-    if (roomCreated?.code) {
+    if (roomCreated?.roomCode) {
       // Store room code in localStorage
-      localStorage.setItem('roomCode', roomCreated.code);
+      localStorage.setItem('roomCode', roomCreated.roomCode);
       localStorage.setItem('roomId', roomCreated._id);
       // Navigate to video conference
       navigate('/video');
@@ -160,7 +160,7 @@ const NewSession = ({ onClose }: NewSessionProps) => {
             <div className="bg-gray-50 rounded-lg p-4 mb-6 w-full">
               <p className="text-sm text-gray-600 mb-2">Room Code</p>
               <div className="flex items-center justify-center gap-2">
-                <span className="text-2xl font-bold text-medium-green tracking-wider">{roomCreated.code}</span>
+                <span className="text-2xl font-bold text-medium-green tracking-wider">{roomCreated.roomCode}</span>
                 <button
                   onClick={handleCopyCode}
                   className="p-2 hover:bg-gray-200 rounded-lg transition-colors"

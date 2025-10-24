@@ -397,6 +397,7 @@ export const getRooms = async (status?: 'ongoing' | 'ended'): Promise<ApiRespons
       message: 'Rooms fetched successfully!',
       data: response.data
     };
+    console.log("getRooms response:", response.data); // Debug log
   } catch (error: unknown) {
     const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
     const errorMessage = axiosError.response?.data?.message || 
@@ -428,7 +429,7 @@ export interface CreateRoomResponse {
   description: string;
   banner?: string;
   host: string;
-  code: string;
+  roomCode: string;
 }
 
 export const createRoom = async (roomData: CreateRoomData): Promise<ApiResponse<CreateRoomResponse>> => {

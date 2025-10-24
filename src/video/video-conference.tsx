@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Share2, Users, PenTool } from "lucide-react";
 import {
   Tooltip,
@@ -252,15 +252,20 @@ export default function VideoConference() {
   const isTablet = useWindowSize(1280);
   const isSmallScreen = useWindowSize(640);
 
-  // Current user (derived from room data)
-  const currentUser = roomData ? {
-    id: roomData.userId,
-    name: roomData.userName,
-    email: '',
-    role: 'host' as Role,
-    videoOn: isVideoEnabled,
-    audioOn: isAudioEnabled,
-  } : mockParticipants[0];
+  // Current user (derived from room data) - memoized to avoid recreating object each render
+  const currentUser = useMemo(() => {
+    if (roomData) {
+      return {
+        id: roomData.userId,
+        name: roomData.userName,
+        email: '',
+        role: 'host' as Role,
+        videoOn: isVideoEnabled,
+        audioOn: isAudioEnabled,
+      } as Participant;
+    }
+    return mockParticipants[0];
+  }, [roomData?.userId, roomData?.userName, isVideoEnabled, isAudioEnabled]);
 
   // Check if current user is host or co-host
   const isHost = currentUser.role === "host" || currentUser.role === "co-host";
@@ -837,7 +842,7 @@ export default function VideoConference() {
                       isAudioEnabled ? "bg-medium-green " : "bg-btn-primary"
                     }`}
                     onClick={handleAudioToggle}
-                    disabled={!activeParticipant}
+                    disabled={!(isJoined || localStream)}
                   >
                     {isAudioEnabled ? (
                       <img
@@ -868,7 +873,7 @@ export default function VideoConference() {
                       isVideoEnabled ? "bg-medium-green " : "bg-btn-primary"
                     }`}
                     onClick={handleVideoToggle}
-                    disabled={!activeParticipant}
+                    disabled={!(isJoined || localStream)}
                   >
                     {isVideoEnabled ? (
                       <img

@@ -21,7 +21,7 @@ function Ongoing() {
       setIsLoading(true);
       try {
         const result = await getRooms('ongoing');
-        
+        console.log("Ongoing rooms fetched:", result.data.data); // Debug log
         if (result.success && result.data) {
           const roomsData = Array.isArray(result.data) ? result.data : result.data.rooms || [];
           setRooms(roomsData);
