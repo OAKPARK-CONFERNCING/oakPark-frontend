@@ -52,7 +52,7 @@ const NewSession = ({ onClose }: NewSessionProps) => {
 
     try {
       const roomData = {
-        startTime: "2024-01-15T10:00:00Z",
+        startTime: "2025-11-15T10:00:00Z",
         title,
         description,
         tag,
@@ -112,7 +112,7 @@ const NewSession = ({ onClose }: NewSessionProps) => {
       localStorage.setItem('roomCode', roomCreated.roomCode);
       localStorage.setItem('roomId', roomCreated._id);
       // Navigate to video conference
-      navigate('/video');
+      navigate(`/video?roomId=${encodeURIComponent(roomCreated.roomCode)}`);
       onClose();
     }
   };
