@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 export const useUserMedia = () => {
     const [localStream, setLocalStream] = useState<MediaStream | null>(null);
@@ -8,8 +8,10 @@ export const useUserMedia = () => {
     const [isInitializing, setIsInitializing] = useState(false);
     const streamRef = useRef<MediaStream | null>(null);
 
-    const initializeMedia = async () => {
+    const initializeMedia = useCallback(async () => {
+        // If stream already exists, return it
         if (streamRef.current) {
+            console.log('[useUserMedia] Stream already exists, returning existing stream');
             return streamRef.current;
         }
 
@@ -17,6 +19,7 @@ export const useUserMedia = () => {
         setMediaError(null);
 
         try {
+            console.log('[useUserMedia] Requesting user media...');
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: {
                     width: { ideal: 1280 },
@@ -30,6 +33,7 @@ export const useUserMedia = () => {
                 }
             });
 
+            console.log('[useUserMedia] Successfully obtained user media');
             streamRef.current = stream;
             setLocalStream(stream);
             setIsInitializing(false);
@@ -40,45 +44,46 @@ export const useUserMedia = () => {
             setIsInitializing(false);
             throw error;
         }
-    };
+    }, []); // No dependencies - function is stable
 
-    const toggleVideo = () => {
+    const toggleVideo = useCallback(() => {
         if (streamRef.current) {
             const videoTracks = streamRef.current.getVideoTracks();
             videoTracks.forEach(track => {
                 track.enabled = !track.enabled;
             });
-            setIsVideoEnabled(!isVideoEnabled);
+            setIsVideoEnabled(prev => !prev);
         }
-    };
+    }, []);
 
-    const toggleAudio = () => {
+    const toggleAudio = useCallback(() => {
         if (streamRef.current) {
             const audioTracks = streamRef.current.getAudioTracks();
             audioTracks.forEach(track => {
                 track.enabled = !track.enabled;
             });
-            setIsAudioEnabled(!isAudioEnabled);
+            setIsAudioEnabled(prev => !prev);
         }
-    };
+    }, []);
 
-    const stopMedia = () => {
+    const stopMedia = useCallback(() => {
         if (streamRef.current) {
+            console.log('[useUserMedia] Stopping media stream');
             streamRef.current.getTracks().forEach(track => {
                 track.stop();
             });
             streamRef.current = null;
             setLocalStream(null);
         }
-    };
+    }, []);
 
-    const getVideoTrack = () => {
+    const getVideoTrack = useCallback(() => {
         return streamRef.current?.getVideoTracks()[0] || null;
-    };
+    }, []);
 
-    const getAudioTrack = () => {
+    const getAudioTrack = useCallback(() => {
         return streamRef.current?.getAudioTracks()[0] || null;
-    };
+    }, []);
 
     // Cleanup on unmount
     useEffect(() => {

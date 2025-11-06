@@ -133,6 +133,7 @@ export const useMediasoup = (socket: Socket | null) => {
     const joinRoom = useCallback(async (roomData: RoomJoinData) => {
         if (!socketRef.current) throw new Error('Socket not connected');
 
+        console.log('[useMediasoup] Attempting to join room:', roomData);
         setError(null);
         setRoomId(roomData.roomId);
         setUserId(roomData.userId);
@@ -140,6 +141,9 @@ export const useMediasoup = (socket: Socket | null) => {
         return new Promise<void>((resolve, reject) => {
             const handleJoinSuccess = async (data: JoinRoomSuccessData) => {
                 try {
+                    console.log('[useMediasoup] Join room success:', data);
+                    console.log('[useMediasoup] Existing peers:', data.existingPeers);
+                    
                     // Initialize device with RTP capabilities
                     await initializeDevice(data.rtpCapabilities);
 
@@ -152,16 +156,19 @@ export const useMediasoup = (socket: Socket | null) => {
                     // Add existing peers to participants
                     const newParticipants = new Map<string, Participant>();
                     data.existingPeers.forEach(peer => {
+                        console.log('[useMediasoup] Adding existing peer:', peer);
                         newParticipants.set(peer.peerId, {
                             id: peer.peerId,
                             name: peer.peerName,
                         });
                     });
                     setParticipants(newParticipants);
+                    console.log('[useMediasoup] Participants map after join:', newParticipants);
 
                     setIsJoined(true);
                     resolve();
                 } catch (err) {
+                    console.error('[useMediasoup] Error during join success handler:', err);
                     reject(err);
                 }
                 socketRef.current?.off('join-room-success', handleJoinSuccess);
@@ -169,6 +176,7 @@ export const useMediasoup = (socket: Socket | null) => {
             };
 
             const handleJoinError = (data: { message: string }) => {
+                console.error('[useMediasoup] Join room error:', data);
                 setError(data.message);
                 reject(new Error(data.message));
                 socketRef.current?.off('join-room-success', handleJoinSuccess);
@@ -179,6 +187,7 @@ export const useMediasoup = (socket: Socket | null) => {
                 socketRef.current.on('join-room-success', handleJoinSuccess);
                 socketRef.current.on('join-room-error', handleJoinError);
                 socketRef.current.emit('join-room', roomData);
+                console.log('[useMediasoup] Emitted join-room event');
             } else {
                 reject(new Error('Socket disconnected'));
             }
@@ -305,12 +314,17 @@ export const useMediasoup = (socket: Socket | null) => {
 
     // Set up socket event listeners
     useEffect(() => {
-        if (!socketRef.current) return;
+        if (!socketRef.current) {
+            console.log('[useMediasoup] No socket available for event listeners');
+            return;
+        }
 
         const socket = socketRef.current;
+        console.log('[useMediasoup] Setting up socket event listeners');
 
         // Handle transport creation
         const handleTransportCreated = (data: WebRtcTransportCreatedData) => {
+            console.log('[useMediasoup] Transport created:', data);
             if (data.success) {
                 // Determine if this is for sending or receiving based on existing transports
                 const producing = !sendTransportRef.current;
@@ -322,6 +336,7 @@ export const useMediasoup = (socket: Socket | null) => {
 
         // Handle new producer from remote peer
         const handleNewProducer = async (data: NewProducerData) => {
+            console.log('[useMediasoup] New producer from peer:', data);
             try {
                 const consumer = await consumeMedia(data.producerId);
 
@@ -348,6 +363,7 @@ export const useMediasoup = (socket: Socket | null) => {
 
         // Handle peer left
         const handlePeerLeft = (data: PeerLeftData) => {
+            console.log('[useMediasoup] Peer left:', data);
             setParticipants(prev => {
                 const updated = new Map(prev);
                 const participant = updated.get(data.peerId);
@@ -371,6 +387,7 @@ export const useMediasoup = (socket: Socket | null) => {
 
         // Handle new peer joined
         const handleNewPeer = (data: { peerId: string; peerName: string }) => {
+            console.log('[useMediasoup] New peer joined:', data);
             setParticipants(prev => {
                 const updated = new Map(prev);
                 updated.set(data.peerId, {
@@ -381,18 +398,20 @@ export const useMediasoup = (socket: Socket | null) => {
             });
         };
 
+        console.log('[useMediasoup] Registering socket event listeners');
         socket.on('webrtc-transport-created', handleTransportCreated);
         socket.on('new-producer', handleNewProducer);
         socket.on('peer-left', handlePeerLeft);
         socket.on('new-peer', handleNewPeer);
 
         return () => {
+            console.log('[useMediasoup] Cleaning up socket event listeners');
             socket.off('webrtc-transport-created', handleTransportCreated);
             socket.off('new-producer', handleNewProducer);
             socket.off('peer-left', handlePeerLeft);
             socket.off('new-peer', handleNewPeer);
         };
-    }, [socket]);
+    }, [socket, consumeMedia, createTransport]);
 
     // Memoize participants array so consumers don't get a new array reference every render
     const participantsArray = useMemo(() => Array.from(participants.values()), [participants]);
