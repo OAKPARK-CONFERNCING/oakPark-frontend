@@ -22,9 +22,9 @@ const App = () => {
         <Route path="/auth/google/callback" element={<GoogleCallback />} />
         <Route
           element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <AppLayout />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         >
           <Route index path="/dashboard" element={<Dashboard />} />
@@ -36,9 +36,9 @@ const App = () => {
         <Route
           path="/video"
           element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <VideoConference />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         />
         <Route

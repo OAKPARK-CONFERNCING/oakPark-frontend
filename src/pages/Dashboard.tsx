@@ -164,13 +164,12 @@ const Dashboard = () => {
 
   const dispatch = useDispatch();
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.3 }}
-      className="overflow-x-hidden px-4 md:px-6 max-w-[1400px] mx-auto relative"
-    >
+    <motion.div 
+    //  initial= {{ opacity: 0, y: 20 }}
+    //  animate= {{ opacity: 1, y: 0 }}
+    //  exit= {{ opacity: 0, y: -20 }}
+    //   transition= { {duration: 0.3} }
+    className="overflow-x-hidden px-4 md:px-6 max-w-[1400px] mx-auto relative">
         {/* Add UserProfileCard component */}
       <UserProfileCard 
          isVisible={isProfileCardVisible} 

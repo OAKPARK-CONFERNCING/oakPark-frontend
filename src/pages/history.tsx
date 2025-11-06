@@ -1,72 +1,88 @@
-import data from '../data/data.json';
-import Searcbar from '../components/searchbar';
-import MeetingList from '../components/MeetingList';
-import viewIcon from '../assets/icons/viewIcon.png'
 import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import Searchbar from '../components/searchbar';
+import MeetingList from '../components/MeetingList';
+import viewIcon from '../assets/icons/viewIcon.png';
 import useDebounce from '../hooks/useDebounce';
-
-interface Participant {
-  id: number;
-  name: string;
-  email: string;
-  messages: number;
-  minutes: number;
-  role: string;
-}
-
-interface Meeting {
-  id: number;
-  meetingTitle: string;
-  date: string;
-  status: string;
-  duration: string;
-  participants: Participant[];
-}
-
-interface Data {
-  meetings: Meeting[];
-}
+import { getRooms } from '../api/apiconfig';
+import { addToast } from '../redux/toastSlice';
+import type { Room } from '../types/room.types';
 
 function History() {
-  const meetingsData = data as Data;
+  const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize meetings immediately
+  // Fetch completed rooms
   useEffect(() => {
-    setFilteredMeetings(meetingsData.meetings);
-  }, [meetingsData]);
+    const fetchRooms = async () => {
+      setIsLoading(true);
+      try {
+        const result = await getRooms('ended');
+        
+        if (result.success && result.data) {
+          const roomsData = Array.isArray(result.data) ? result.data : result.data.rooms || [];
+          setRooms(roomsData);
+          setFilteredRooms(roomsData);
+        } else {
+          dispatch(addToast({
+            id: Date.now().toString(),
+            message: result.message || 'Failed to fetch rooms',
+            type: 'error',
+            open: true,
+          }));
+        }
+      } catch (error) {
+        dispatch(addToast({
+          id: Date.now().toString(),
+          message: 'An error occurred while fetching rooms',
+          type: 'error',
+          open: true,
+        }));
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Only use debounce for search
+    fetchRooms();
+  }, [dispatch]);
+
+  // Debounced search
   useDebounce({
     effect: () => {
       if (searchTerm) {
-        setFilteredMeetings(
-          meetingsData.meetings.filter(m =>
-            m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase())
+        setFilteredRooms(
+          rooms.filter(room =>
+            room.title.toLowerCase().includes(searchTerm.toLowerCase())
           )
         );
       } else {
-        setFilteredMeetings(meetingsData.meetings);
+        setFilteredRooms(rooms);
       }
     },
-    dependencies: [searchTerm, meetingsData],
+    dependencies: [searchTerm, rooms],
     delay: 500,
   });
 
-  const completedCount = meetingsData.meetings.filter(meeting => meeting.status === 'Completed').length;
-  const ongoingCount = meetingsData.meetings.filter(meeting => meeting.status === "In Progress").length;
+  const completedCount = rooms.length;
+  const ongoingCount = 0; // No ongoing sessions in history page
   
   return (
     <section className='p-3 sm:p-5 md:p-7'>
-      <Searcbar completedcount={completedCount} ongoingcount={ongoingCount} setOnSearch={setSearchTerm}/>
+      <Searchbar 
+        completedcount={completedCount} 
+        ongoingcount={ongoingCount} 
+        setOnSearch={setSearchTerm}
+      />
       <MeetingList 
-        data={{meetings: filteredMeetings}}
-        statusFilter="Completed"     
+        rooms={filteredRooms}
         status='Completed'
         buttonText="View"
         buttonIcon={viewIcon}
         buttonAction="view"
+        isLoading={isLoading}
       />
     </section>
   )

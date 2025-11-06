@@ -10,7 +10,7 @@ function Participants({
   users,
 }: {
   users: {
-    id: number;
+    id: number | string;
     name: string;
     email: string;
     minutes: number;

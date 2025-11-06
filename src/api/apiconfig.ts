@@ -386,4 +386,74 @@ export const handleGoogleCallback = async (code: string): Promise<ApiResponse> =
   }
 };
 
+// Get rooms with optional status filter
+export const getRooms = async (status?: 'ongoing' | 'ended'): Promise<ApiResponse> => {
+  try {
+    const params = status ? { status } : {};
+    const response = await api.get('/api/v1/rooms', { params });
+    
+    return {
+      success: true,
+      message: 'Rooms fetched successfully!',
+      data: response.data
+    };
+    console.log("getRooms response:", response.data); // Debug log
+  } catch (error: unknown) {
+    const axiosError = error as { response?: { data?: { message?: string; detail?: string } } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
+                        'Failed to fetch rooms. Please try again.';
+    
+    return {
+      success: false,
+      message: errorMessage,
+      data: axiosError.response?.data
+    };
+  }
+};
+
+// Create a new room
+export interface CreateRoomData {
+  title: string;
+  description: string;
+  tag: string;
+  durationInSeconds: number; // in seconds
+  roomImage?: string;
+  isPrivateRoom?: boolean;
+  startTime?: string; // ISO string
+}
+
+export interface CreateRoomResponse {
+  _id: string;
+  title: string;
+  description: string;
+  banner?: string;
+  host: string;
+  roomCode: string;
+}
+
+export const createRoom = async (roomData: CreateRoomData): Promise<ApiResponse<CreateRoomResponse>> => {
+  try {
+    const response = await api.post('/api/v1/rooms/create', roomData);
+    
+    return {
+      success: true,
+      message: response.data.message || 'Room created successfully!',
+      data: response.data.data
+    };
+  } catch (error: unknown) {
+    console.error("Create room error:", error); // Debug log
+    const axiosError = error as { response?: { data?: any } };
+    const errorMessage = axiosError.response?.data?.message || 
+                        axiosError.response?.data?.detail || 
+                        'Failed to create room. Please try again.';
+    
+    return {
+      success: false,
+      message: errorMessage
+    };
+    
+  }
+};
+
 export default api;

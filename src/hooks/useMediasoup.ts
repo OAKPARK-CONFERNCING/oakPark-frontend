@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Device, types } from 'mediasoup-client';
 import { Socket } from 'socket.io-client';
 import type {
@@ -394,9 +394,12 @@ export const useMediasoup = (socket: Socket | null) => {
         };
     }, [socket]);
 
+    // Memoize participants array so consumers don't get a new array reference every render
+    const participantsArray = useMemo(() => Array.from(participants.values()), [participants]);
+
     return {
         device,
-        participants: Array.from(participants.values()),
+        participants: participantsArray,
         isJoined,
         roomId,
         userId,

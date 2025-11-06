@@ -1,69 +1,73 @@
-import data from '../data/data.json';
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import Searchbar from '../components/searchbar';
 import MeetingList from '../components/MeetingList';
 import viewIcon from '../assets/icons/viewIcon.png';
-import { useState,useEffect } from 'react';
-import  useDebounce  from '../hooks/useDebounce';
-
-
-export interface Participant {
-  id: number;
-  name: string;
-  email: string;
-  messages: number;
-  minutes: number;
-  role: string;
-}
-
-export interface Meeting {
-  id: number;
-  meetingTitle: string;
-  date: string;
-  status: string;
-  duration: string;
-  participants: Participant[];
-}
-
-interface Data {
-  meetings: Meeting[];
-}
+import useDebounce from '../hooks/useDebounce';
+import { getRooms } from '../api/apiconfig';
+import { addToast } from '../redux/toastSlice';
+import type { Room } from '../types/room.types';
 
 function Ongoing() {
-  const meetingsData = data as Data;
-
-  // const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
-
-  // Count totals
-  const completedCount = meetingsData.meetings.filter(m => m.status === 'Completed').length;
-  const ongoingCount = meetingsData.meetings.filter(m => m.status === 'In Progress').length;
-
-  // Search term state
+  const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [filteredMeetings, setFilteredMeetings] = useState<Meeting[]>([]);
+  const [rooms, setRooms] = useState<Room[]>([]);
+  const [filteredRooms, setFilteredRooms] = useState<Room[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Filter meetings by status and search term
+  // Fetch ongoing rooms
   useEffect(() => {
-    setFilteredMeetings(meetingsData.meetings);
-  }, [meetingsData]);
+    const fetchRooms = async () => {
+      setIsLoading(true);
+      try {
+        const result = await getRooms('ongoing');
+        console.log("Ongoing rooms fetched:", result.data.data); // Debug log
+        if (result.success && result.data) {
+          const roomsData = Array.isArray(result.data) ? result.data : result.data.rooms || [];
+          setRooms(roomsData);
+          setFilteredRooms(roomsData);
+        } else {
+          dispatch(addToast({
+            id: Date.now().toString(),
+            message: result.message || 'Failed to fetch rooms',
+            type: 'error',
+            open: true,
+          }));
+        }
+      } catch (error) {
+        dispatch(addToast({
+          id: Date.now().toString(),
+          message: 'An error occurred while fetching rooms',
+          type: 'error',
+          open: true,
+        }));
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  // Only use debounce for search
+    fetchRooms();
+  }, [dispatch]);
+
+  // Debounced search
   useDebounce({
     effect: () => {
       if (searchTerm) {
-        setFilteredMeetings(
-          meetingsData.meetings.filter(m =>
-            m.meetingTitle.toLowerCase().includes(searchTerm.toLowerCase())
+        setFilteredRooms(
+          rooms.filter(room =>
+            room.title.toLowerCase().includes(searchTerm.toLowerCase())
           )
         );
       } else {
-        setFilteredMeetings(meetingsData.meetings);
+        setFilteredRooms(rooms);
       }
     },
-    dependencies: [searchTerm, meetingsData],
+    dependencies: [searchTerm, rooms],
     delay: 500,
   });
 
-
+  const completedCount = 0; // No completed sessions in ongoing page
+  const ongoingCount = rooms.length;
 
   return (
     <section className="p-3 sm:p-5 md:p-7">
@@ -73,12 +77,12 @@ function Ongoing() {
         setOnSearch={setSearchTerm}
       />
       <MeetingList 
-        data={{ meetings: filteredMeetings }}
-        statusFilter="In Progress"
+        rooms={filteredRooms}
         buttonText="Join"
         buttonIcon={viewIcon}
         status="In Progress"
         buttonAction="join"
+        isLoading={isLoading}
       />
     </section>
   );
